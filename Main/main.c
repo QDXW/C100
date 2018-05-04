@@ -66,6 +66,7 @@ void main(void)
 	while(1)
 	{
 
+
 //		Exti_lock = ENABLE;
 //
 //		SystemManage_5V_Enabled();
