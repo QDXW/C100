@@ -48,7 +48,7 @@ void SignalSample_Sample_Init(void)
 	SignalSample_Sample_Strip_Sensor_Init();
 
 	/* Initialize signal LED */
-	SignalSample_Sample_LED_Init();
+//	SignalSample_Sample_LED_Init();
 
 	/* Initialize AD84XX */
 	SignalSample_Sample_AD84XX_Init();

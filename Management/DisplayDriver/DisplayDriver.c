@@ -44,60 +44,111 @@
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* config tft rst gpio */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6;
-    GPIO_Init(GPIOE, &GPIO_InitStructure);
-
-    /* config tft rst gpio */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-    /* config tft rst gpio */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-    /* config tft back_light gpio base on the PT4101 */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    /* config tft data lines base on FSMC
-	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 10
-	 */
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 |
-    		GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 |
-    		GPIO_Pin_10 ;
-    GPIO_Init(GPIOE, &GPIO_InitStructure);
-
-    /* config tft control lines base on FSMC
-	 * PD4-FSMC_NOE  :LCD-RD
-	 * PD5-FSMC_NWE  :LCD-WR
-	 * PD7-FSMC_NE1  :LCD-CS
-	 * PD11-FSMC_A16 :LCD-DC
-	 */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
-
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
+    GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//    /* config tft rst gpio */
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    /* config tft rst gpio */
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    /* config tft back_light gpio base on the PT4101 */
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+//    GPIO_Init(GPIOA, &GPIO_InitStructure);
+//
+//    /* config tft data lines base on FSMC
+//	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 10
+//	 */
+//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+//
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_14 | GPIO_Pin_15;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 |
+//    		GPIO_Pin_10;
+//    GPIO_Init(GPIOE, &GPIO_InitStructure);
+//
+//    /* config tft control lines base on FSMC
+//	 * PD4-FSMC_NOE  :LCD-RD
+//	 * PD5-FSMC_NWE  :LCD-WR
+//	 * PD7-FSMC_NE1  :LCD-CS
+//	 * PD11-FSMC_A16 :LCD-DC
+//	 */
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//
+//    /* tft control gpio init */
+//    GPIO_SetBits(GPIOD, GPIO_Pin_4);		 	// RD = 1
+//    GPIO_SetBits(GPIOD, GPIO_Pin_5);		 	// WR = 1
+//    GPIO_SetBits(GPIOD, GPIO_Pin_7);		 	// CS = 1
+//    GPIO_SetBits(GPIOD, GPIO_Pin_13);			// RST = 1
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 
-    /* tft control gpio init */
-    GPIO_SetBits(GPIOD, GPIO_Pin_4);		 	// RD = 1
-    GPIO_SetBits(GPIOD, GPIO_Pin_5);		 	// WR = 1
-    GPIO_SetBits(GPIOD, GPIO_Pin_7);		 	// CS = 1
-    GPIO_SetBits(GPIOD, GPIO_Pin_13);			// RST = 1
+       /* config tft rst gpio */
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_2;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       /* config tft back_light gpio base on the PT4101 */
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 ;
+       GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+       /* config tft data lines base on FSMC
+   	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 8 9 10
+   	 */
+       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+       GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_3;
+       GPIO_Init(GPIOE, &GPIO_InitStructure);
+
+       /* config tft control lines base on FSMC
+   	 * PD4-FSMC_NOE  :LCD-RD
+      * PD5-FSMC_NWE  :LCD-WR
+   	 * PD7-FSMC_NE1  :LCD-CS
+      * PD11-FSMC_A16 :LCD-DC
+   	 */
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 ;
+       GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+       /* tft control gpio init */
+
+       GPIO_SetBits(GPIOD, GPIO_Pin_13);		 // RST = 1
+       GPIO_SetBits(GPIOD, GPIO_Pin_4);		 // RD = 1
+       GPIO_SetBits(GPIOD, GPIO_Pin_5);		 // WR = 1
+       GPIO_SetBits(GPIOD, GPIO_Pin_7);		 //	CS = 1
 
     GPIO_ResetBits(GPIOE, GPIO_Pin_4);
+    GPIO_ResetBits(GPIOE, GPIO_Pin_3);
+    SystemManage_5V_Disabled();
 }
 
 /******************************************************************************/
@@ -123,38 +174,38 @@
 *******************************************************************************/
 static void LCD_FSMC_Config(void)
 {
-    FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-    FSMC_NORSRAMTimingInitTypeDef  p;
+	FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
+	FSMC_NORSRAMTimingInitTypeDef  p;
 
 
-    p.FSMC_AddressSetupTime = 0x02;	 		//地址建立时间
-    p.FSMC_AddressHoldTime = 0x00;	 		//地址保持时间
-    p.FSMC_DataSetupTime = 0x05;			//数据建立时间
-    p.FSMC_BusTurnAroundDuration = 0x00;
-    p.FSMC_CLKDivision = 0x00;
-    p.FSMC_DataLatency = 0x00;
+	p.FSMC_AddressSetupTime = 0x02;	 //地址建立时间
+	p.FSMC_AddressHoldTime = 0x00;	 //地址保持时间
+	p.FSMC_DataSetupTime = 0x05;		 //数据建立时间
+	p.FSMC_BusTurnAroundDuration = 0x00;
+	p.FSMC_CLKDivision = 0x00;
+	p.FSMC_DataLatency = 0x00;
 
-    p.FSMC_AccessMode = FSMC_AccessMode_B;	// 一般使用模式B来控制LCD
+	p.FSMC_AccessMode = FSMC_AccessMode_B;	 // 一般使用模式B来控制LCD
 
-    FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
-    FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_NOR;
-    FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
-    FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
-    FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
-    FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
-    FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
-    FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
+	FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
+	FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_NOR;
+	FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
+	FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+	FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+	FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
+	FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
 
-    FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+	FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
 
-    /* Enable FSMC Bank1_SRAM Bank */
-    FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
+	/* Enable FSMC Bank1_SRAM Bank */
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
 
 /*******************************************************************************
@@ -230,105 +281,101 @@ u16 ReadPixel(u16 x,u8 y)
 /******************************************************************************/
 void DisplayDriver_Init(void)
 {
-int a;
-LCD_GPIO_Config();
-LCD_FSMC_Config();
-Delay(20);
-LCD_Rst();
-//************* ILI9163C **********//
-WriteComm(0x11);				//Exit Sleep
-Delay(20);
+	LCD_GPIO_Config();
+	SignalSample_Sample_LED_Init();
+	LCD_FSMC_Config();
+	Delay(20);
+	LCD_Rst();
 
-WriteComm(0x26); 				//Set Default Gamma
-WriteData(0x04);
+	//************* ILI9163C **********//
+	WriteComm(0x11); //Exit Sleep
+	Delay(20);
 
-WriteComm(0xB1);
-WriteData(0x08);
-WriteData(0x10);
+	WriteComm(0x26); //Set Default Gamma
+	WriteData(0x04);
 
-WriteComm(0xC0); 				//Set VRH1[4:0] & VC[2:0] for VCI1 & GVDD
-WriteData(0x02);
-WriteData(0x00);
+	WriteComm(0xB1);
+	WriteData(0x08);
+	WriteData(0x10);
 
-WriteComm(0xC1); 				//Set BT[2:0] for AVDD & VCL & VGH & VGL
-WriteData(0x02);
+	WriteComm(0xC0); //Set VRH1[4:0] & VC[2:0] for VCI1 & GVDD
+	WriteData(0x02);
+	WriteData(0x00);
 
-WriteComm(0xC5); 				//Set VMH[6:0] & VML[6:0] for VOMH & VCOML
-WriteData(0x4C);
-WriteData(0x5E);
+	WriteComm(0xC1); //Set BT[2:0] for AVDD & VCL & VGH & VGL
+	WriteData(0x02);
 
-WriteComm(0xC7);
-WriteData(0x00);
+	WriteComm(0xC5); //Set VMH[6:0] & VML[6:0] for VOMH & VCOML
+	WriteData(0x4C);
+	WriteData(0x5E);
 
-WriteComm(0x3a); 				//Set Color Format
-WriteData(0x05);
+	WriteComm(0xC7);
+	WriteData(0x00);
 
-WriteComm(0x2A);				//Set Column Address
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x7F);
+	WriteComm(0x3a); //Set Color Format
+	WriteData(0x05);
 
-WriteComm(0x2B);				//Set Page Address
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x00);
-WriteData(0x9F);
+	WriteComm(0x2A); //Set Column Address
+	WriteData(0x00);
+	WriteData(0x00);
+	WriteData(0x00);
+	WriteData(0x7F);
 
-WriteComm(0x36);				//Set Scanning Direction
-WriteData(0xC0);
+	WriteComm(0x2B); //Set Page Address
+	WriteData(0x00);
+	WriteData(0x00);
+	WriteData(0x00);
+	WriteData(0x9F);
 
-WriteComm(0xB7);				//Set Source Output Direction
-WriteData(0x00);
+	WriteComm(0x36); //Set Scanning Direction
+	WriteData(0xC0);
 
-WriteComm(0xf2);				//Enable Gamma bit
-WriteData(0x01);
+	WriteComm(0xB7); //Set Source Output Direction
+	WriteData(0x00);
 
-WriteComm(0xE0);
-WriteData(0x3F);				//p1
-WriteData(0x22);				//p2
-WriteData(0x20);				//p3
-WriteData(0x24);				//p4
-WriteData(0x20);				//p5
-WriteData(0x0C);				//p6
-WriteData(0x4E);				//p7
-WriteData(0xB7);				//p8
-WriteData(0x3C);				//p9
-WriteData(0x19);				//p10
-WriteData(0x22);				//p11
-WriteData(0x1E);				//p12
-WriteData(0x02);				//p13
-WriteData(0x01);				//p14
-WriteData(0x00);				//p15
+	WriteComm(0xf2); //Enable Gamma bit
+	WriteData(0x01);
 
-WriteComm(0xE1);
-WriteData(0x00);				//p1
-WriteData(0x1B);				//p2
-WriteData(0x1F);				//p3
-WriteData(0x0B);				//p4
-WriteData(0x0F);				//p5
-WriteData(0x13);				//p6
-WriteData(0x31);				//p7
-WriteData(0x84);				//p8
-WriteData(0x43);				//p9
-WriteData(0x06);				//p10
-WriteData(0x1D);				//p11
-WriteData(0x21);				//p12
-WriteData(0x3D);				//p13
-WriteData(0x3E);				//p14
-WriteData(0x3F);				//p15
+	WriteComm(0xE0);
+	WriteData(0x3F);//p1
+	WriteData(0x22);//p2
+	WriteData(0x20);//p3
+	WriteData(0x24);//p4
+	WriteData(0x20);//p5
+	WriteData(0x0C);//p6
+	WriteData(0x4E);//p7
+	WriteData(0xB7);//p8
+	WriteData(0x3C);//p9
+	WriteData(0x19);//p10
+	WriteData(0x22);//p11
+	WriteData(0x1E);//p12
+	WriteData(0x02);//p13
+	WriteData(0x01);//p14
+	WriteData(0x00);//p15
 
-WriteComm(0x29);				// Display On
-Lcd_Light_ON;
+	WriteComm(0xE1);
+	WriteData(0x00);//p1
+	WriteData(0x1B);//p2
+	WriteData(0x1F);//p3
+	WriteData(0x0B);//p4
+	WriteData(0x0F);//p5
+	WriteData(0x13);//p6
+	WriteData(0x31);//p7
+	WriteData(0x84);//p8
+	WriteData(0x43);//p9
+	WriteData(0x06);//p10
+	WriteData(0x1D);//p11
+	WriteData(0x21);//p12
+	WriteData(0x3D);//p13
+	WriteData(0x3E);//p14
+	WriteData(0x3F);//p15
 
-	if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4))
-	{
-		Delay_ms_SW(2000);
-		if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4))
-		{
-			 GPIO_SetBits(GPIOB, GPIO_Pin_3);
-		}
-	}
+	WriteComm(0x29); // Display On
+
+	Lcd_Light_ON;
+
+	Delay_ms_SW(2500);
+	GPIO_SetBits(GPIOB, GPIO_Pin_3);
 }
 
 /*******************************************************************************

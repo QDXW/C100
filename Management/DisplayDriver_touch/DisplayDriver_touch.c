@@ -593,9 +593,6 @@ void DisplayDriver_Init_Touch(void)
 	FSMC_NORSRAMTimingInitTypeDef  readWriteTiming;
 	FSMC_NORSRAMTimingInitTypeDef  writeTiming;
 
-	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOD |
-			RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOG, ENABLE);
 	
 	/* CS */
 	GPIO_InitStructure.GPIO_Pin = DISPLAY_CS_PIN;

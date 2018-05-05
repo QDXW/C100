@@ -40,39 +40,40 @@ void main(void)
 #endif
 
 	SysTick_Init(SYSTICK_FREQ_1MS);		/* Initialize system tick timer */
-
-	PCF8563_Init();						/* PCF8563 Initialize */
-
-	TIM4_Int_Init();					/* TIM4 Initialize */
-
-	EXTIX_Init();						/* EXTIX Initialize */
-
-	QRCode_Init();						/* QRCode Initialize */
-
-	RotationMotor_Init();				/* RotationMotorDriver Initialize */
-
-	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
-
+//
+//	PCF8563_Init();						/* PCF8563 Initialize */
+//
+//	TIM4_Int_Init();					/* TIM4 Initialize */
+//
+//	EXTIX_Init();						/* EXTIX Initialize */
+//
+//	QRCode_Init();						/* QRCode Initialize */
+//
+//	RotationMotor_Init();				/* RotationMotorDriver Initialize */
+//
+//	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
+//
 	SignalSample_Sample_Init();			/* SignalSample Sample Initialize */
-
-	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
-
-	HostComm_Init();					/* HostComm Initialize */
-
-	Status_Init();						/* Status Initialize */
-
-	Storage_Flash_Init();				/* Storage Flash Initialize */
-
+//
+//	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
+//
+//	HostComm_Init();					/* HostComm Initialize */
+//
+//	Status_Init();						/* Status Initialize */
+//
+//	Storage_Flash_Init();				/* Storage Flash Initialize */
+	GPIO_SetBits(GPIOD, GPIO_Pin_2);
 	while(1)
 	{
 
-
 //		Exti_lock = ENABLE;
 //
-//		SystemManage_5V_Enabled();
-//		Delay_ms(1000);
-//		SystemManage_5V_Disabled();
-//		Delay_ms(1000);
+//		ScanMotorDriver_StartDetection();
+//		Delay_ms_SW(3000);
+		SystemManage_5V_Enabled();
+		Delay_ms_SW(1000);
+		SystemManage_5V_Disabled();
+		Delay_ms(1000);
 //
 //		RotationMotor_SelfCheck_StepDrive();
 //		ScanMotorDriver_StartDetection();
@@ -105,7 +106,7 @@ void main(void)
 //		Delay_ms(1000);
 //		SignalSample_SampleStrip();
 
-		Interface_Process(0);			/* User Interface */
+//		Interface_Process(0);			/* User Interface */
 	}
 }
 
@@ -159,7 +160,7 @@ void Status_Init(void)
 	Battery_Empty_ICO();
 #endif
 
-	RotationMotor_SelfCheck_StepDrive();
+//	RotationMotor_SelfCheck_StepDrive();
 //	ScanMotorDriver_SelfCheck_StepDrive();
 	Power_Open = 1;
 }
