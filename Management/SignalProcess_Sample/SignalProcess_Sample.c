@@ -462,7 +462,7 @@ void SignalSample_OutputSamples(uint16 sampleCount,uint16 *Sample_Data)
 
 	SignalProcess_sampleBuffer_BK[0] = sampleCount;
 	memcpy(&SignalProcess_sampleBuffer_BK[1], Sample_Data, sampleCount << 1);
-	memset(SignalProcess_outputBuffer,0,sizeof(SignalProcess_outputBuffer));
+	memset(&SignalProcess_outputBuffer[0],0,2*sizeof(SignalProcess_outputBuffer));
 
 	for (count = 0; count < totalLength; count++)
 	{
@@ -471,7 +471,8 @@ void SignalSample_OutputSamples(uint16 sampleCount,uint16 *Sample_Data)
 	}
 
 	HostComm_SendThrUSB(5 * count, SignalProcess_outputBuffer);
-//	HostComm_SendThrUSB(2, "\r\n");
+	Delay_ms(50);
+	HostComm_SendThrUSB(2, "\r\n");
 }
 
 /******************************************************************************/
@@ -531,14 +532,14 @@ void SignalSample_Sample_ExitCriticalArea(void)
 }
 
 /******************************************************************************/
-void SignalSample_SampleStrip(uint8 prog)
+void SignalSample_SampleStrip(void)
 {
 	uint16 moveSteps = MOTOR_SAMPLE_STEPS - 1;
 	/* 1st stage: prepare to sample */
 
 	/* 1.3 Enter critical area */
 	SignalSample_Sample_EnterCriticalArea();
-//	memset(SignalProcess_sampleBuffer,0,191);
+	memset(&SignalProcess_sampleBuffer[0],0,382);
 
 	/* 2nd stage: start timer, move motor per interval then sample */
 	/* 2.1 Initialize timer */
@@ -587,13 +588,13 @@ void SignalSample_SampleStrip(uint8 prog)
 	/* 3.2 Exit critical area */
 	SignalSample_Sample_ExitCriticalArea();
 
-//	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SignalSample_count,10);
+	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SignalSample_count,10);
 
 	/* Output samples */
 	SignalSample_OutputSamples(SignalSample_count,&SignalProcess_sampleBuffer[0]);
 	if(NowCup_Count <= Cup_Count)
 	{
-//		Data_Analysis();
+		Data_Analysis();
 	}
 }
 

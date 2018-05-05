@@ -130,7 +130,7 @@ void Acquisition_Signal(void)
 		{
 			RotationMotor_Input_StepDrive(Foreward_Rotation,42);
 		}
-		SignalSample_SampleStrip(0);
+		SignalSample_SampleStrip();
 
 		for(j = Step_Start;j < Step_Count;j++)		/* 每次进度条走十格 */
 		{

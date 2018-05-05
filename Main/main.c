@@ -65,7 +65,6 @@ void main(void)
 
 	while(1)
 	{
-
 //		Exti_lock = ENABLE;
 //
 //		ScanMotorDriver_StartDetection();
@@ -104,9 +103,9 @@ void main(void)
 //		DisplayDriver_Text16_B(4, 90, Black,White,cBuffer);
 //		Display_Time = 1;
 //		Delay_ms(1000);
-		SignalSample_SampleStrip();
+//		SignalSample_SampleStrip();
 
-//		Interface_Process(0);			/* User Interface */
+		Interface_Process(0);			/* User Interface */
 	}
 }
 

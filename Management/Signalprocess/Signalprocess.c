@@ -37,6 +37,9 @@ void Data_Analysis(void)
 			&SignalProcess_sampleBuffer[0],
 			SignalProcess_Alg_data.sampleLength, 10);
 
+	if(SignalProcess_Alg_data.posInfo.dist_Edge_Center  <= 30)
+		SignalProcess_Alg_data.posInfo.dist_Edge_Center = 40;
+
 	/* Look for C valley */
 	SignalProcess_Alg_data.calcInfo.indexC = Alg_GetValleyIndex(
 			&SignalProcess_sampleBuffer[0],
@@ -53,6 +56,8 @@ void Data_Analysis(void)
 //		return;
 //	}
 
+	if((SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center) >= 180)
+		SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center -= 10;
 	/* Look for T1 valley */
 	SignalProcess_Alg_data.calcInfo.indexT = Alg_GetValleyIndex(
 			&SignalProcess_sampleBuffer[0],

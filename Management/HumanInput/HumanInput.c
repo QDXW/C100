@@ -155,7 +155,7 @@ void Key_Confirm(void)
 				{
 					key_state_confirm = 0;
 					doubleClick = 0;
-					GPIO_ResetBits(GPIOE, GPIO_Pin_5);   //改动关掉
+					GPIO_SetBits(GPIOE, GPIO_Pin_5);   //改动关掉
 					EXTI_Key_Confirm_Enable();
 					LED = 1;
 				}

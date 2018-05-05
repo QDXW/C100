@@ -151,7 +151,7 @@ void SignalSample_Sample_Timer_Disabled(void);
 void SignalSample_Sample_EnterCriticalArea(void);
 void SignalSample_Sample_ExitCriticalArea(void);
 void SignalSample_OutputUint16_4C1S(uint16 value);
-void SignalSample_SampleStrip(uint8 prog);
+void SignalSample_SampleStrip(void);
 uint8 SignalSample_GetVbat(void);
 void SignalSample_Sample_LED_Init(void);
 void SignalSample_Sample_Strip_Sensor_Int(FunctionalState state);
