@@ -40,29 +40,29 @@ void main(void)
 #endif
 
 	SysTick_Init(SYSTICK_FREQ_1MS);		/* Initialize system tick timer */
-//
-//	PCF8563_Init();						/* PCF8563 Initialize */
-//
-//	TIM4_Int_Init();					/* TIM4 Initialize */
-//
-//	EXTIX_Init();						/* EXTIX Initialize */
-//
-//	QRCode_Init();						/* QRCode Initialize */
-//
-//	RotationMotor_Init();				/* RotationMotorDriver Initialize */
-//
-//	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
-//
+
+	PCF8563_Init();						/* PCF8563 Initialize */
+
+	TIM4_Int_Init();					/* TIM4 Initialize */
+
+	EXTIX_Init();						/* EXTIX Initialize */
+
+	QRCode_Init();						/* QRCode Initialize */
+
+	RotationMotor_Init();				/* RotationMotorDriver Initialize */
+
+	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
+
 	SignalSample_Sample_Init();			/* SignalSample Sample Initialize */
-//
-//	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
-//
-//	HostComm_Init();					/* HostComm Initialize */
-//
-//	Status_Init();						/* Status Initialize */
-//
-//	Storage_Flash_Init();				/* Storage Flash Initialize */
-	GPIO_SetBits(GPIOD, GPIO_Pin_2);
+
+	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
+
+	HostComm_Init();					/* HostComm Initialize */
+
+	Status_Init();						/* Status Initialize */
+
+	Storage_Flash_Init();				/* Storage Flash Initialize */
+
 	while(1)
 	{
 
@@ -70,10 +70,10 @@ void main(void)
 //
 //		ScanMotorDriver_StartDetection();
 //		Delay_ms_SW(3000);
-		SystemManage_5V_Enabled();
-		Delay_ms_SW(1000);
-		SystemManage_5V_Disabled();
-		Delay_ms(1000);
+//		SystemManage_5V_Enabled();
+//		Delay_ms_SW(1000);
+//		SystemManage_5V_Disabled();
+//		Delay_ms(1000);
 //
 //		RotationMotor_SelfCheck_StepDrive();
 //		ScanMotorDriver_StartDetection();
@@ -104,7 +104,7 @@ void main(void)
 //		DisplayDriver_Text16_B(4, 90, Black,White,cBuffer);
 //		Display_Time = 1;
 //		Delay_ms(1000);
-//		SignalSample_SampleStrip();
+		SignalSample_SampleStrip();
 
 //		Interface_Process(0);			/* User Interface */
 	}
@@ -160,7 +160,7 @@ void Status_Init(void)
 	Battery_Empty_ICO();
 #endif
 
-//	RotationMotor_SelfCheck_StepDrive();
-//	ScanMotorDriver_SelfCheck_StepDrive();
+	RotationMotor_SelfCheck_StepDrive();
+	ScanMotorDriver_SelfCheck_StepDrive();
 	Power_Open = 1;
 }

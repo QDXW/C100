@@ -44,107 +44,105 @@
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* config tft rst gpio */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 |GPIO_Pin_6;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-//    /* config tft rst gpio */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+    /* config tft rst gpio */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    /* config tft rst gpio */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    /* config tft back_light gpio base on the PT4101 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* config tft data lines base on FSMC
+	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 10
+	 */
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_14 | GPIO_Pin_15;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 |
+    		GPIO_Pin_10;
+    GPIO_Init(GPIOE, &GPIO_InitStructure);
+
+    /* config tft control lines base on FSMC
+	 * PD4-FSMC_NOE  :LCD-RD
+	 * PD5-FSMC_NWE  :LCD-WR
+	 * PD7-FSMC_NE1  :LCD-CS
+	 * PD11-FSMC_A16 :LCD-DC
+	 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+    /* tft control gpio init */
+    GPIO_SetBits(GPIOD, GPIO_Pin_4);		 	// RD = 1
+    GPIO_SetBits(GPIOD, GPIO_Pin_5);		 	// WR = 1
+    GPIO_SetBits(GPIOD, GPIO_Pin_7);		 	// CS = 1
+    GPIO_SetBits(GPIOD, GPIO_Pin_13);			// RST = 1
+
+//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+//       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 //
-//    /* config tft rst gpio */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       /* config tft rst gpio */
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_2;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    /* config tft back_light gpio base on the PT4101 */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-//    GPIO_Init(GPIOA, &GPIO_InitStructure);
+//       /* config tft back_light gpio base on the PT4101 */
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 ;
+//       GPIO_Init(GPIOA, &GPIO_InitStructure);
 //
-//    /* config tft data lines base on FSMC
-//	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 10
-//	 */
-//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+//       /* config tft data lines base on FSMC
+//   	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 8 9 10
+//   	 */
+//       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//       GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 //
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_14 | GPIO_Pin_15;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 |
-//    		GPIO_Pin_10;
-//    GPIO_Init(GPIOE, &GPIO_InitStructure);
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_3;
+//       GPIO_Init(GPIOE, &GPIO_InitStructure);
 //
-//    /* config tft control lines base on FSMC
-//	 * PD4-FSMC_NOE  :LCD-RD
-//	 * PD5-FSMC_NWE  :LCD-WR
-//	 * PD7-FSMC_NE1  :LCD-CS
-//	 * PD11-FSMC_A16 :LCD-DC
-//	 */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       /* config tft control lines base on FSMC
+//   	 * PD4-FSMC_NOE  :LCD-RD
+//      * PD5-FSMC_NWE  :LCD-WR
+//   	 * PD7-FSMC_NE1  :LCD-CS
+//      * PD11-FSMC_A16 :LCD-DC
+//   	 */
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-//    GPIO_Init(GPIOD, &GPIO_InitStructure);
+//       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 ;
+//       GPIO_Init(GPIOD, &GPIO_InitStructure);
 //
-//    /* tft control gpio init */
-//    GPIO_SetBits(GPIOD, GPIO_Pin_4);		 	// RD = 1
-//    GPIO_SetBits(GPIOD, GPIO_Pin_5);		 	// WR = 1
-//    GPIO_SetBits(GPIOD, GPIO_Pin_7);		 	// CS = 1
-//    GPIO_SetBits(GPIOD, GPIO_Pin_13);			// RST = 1
-
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-
-       /* config tft rst gpio */
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 |GPIO_Pin_2;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       /* config tft back_light gpio base on the PT4101 */
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 ;
-       GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-       /* config tft data lines base on FSMC
-   	 * data lines,FSMC-D0~D15: PD 14 15 0 1,PE 7 8 9 10 11 12 13 14 15,PD 8 9 10
-   	 */
-       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-       GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 |GPIO_Pin_1 | GPIO_Pin_10 | GPIO_Pin_14 | GPIO_Pin_15;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_3;
-       GPIO_Init(GPIOE, &GPIO_InitStructure);
-
-       /* config tft control lines base on FSMC
-   	 * PD4-FSMC_NOE  :LCD-RD
-      * PD5-FSMC_NWE  :LCD-WR
-   	 * PD7-FSMC_NE1  :LCD-CS
-      * PD11-FSMC_A16 :LCD-DC
-   	 */
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 ;
-       GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-       /* tft control gpio init */
-
-       GPIO_SetBits(GPIOD, GPIO_Pin_13);		 // RST = 1
-       GPIO_SetBits(GPIOD, GPIO_Pin_4);		 // RD = 1
-       GPIO_SetBits(GPIOD, GPIO_Pin_5);		 // WR = 1
-       GPIO_SetBits(GPIOD, GPIO_Pin_7);		 //	CS = 1
+//       /* tft control gpio init */
+//
+//       GPIO_SetBits(GPIOD, GPIO_Pin_13);		 // RST = 1
+//       GPIO_SetBits(GPIOD, GPIO_Pin_4);		 // RD = 1
+//       GPIO_SetBits(GPIOD, GPIO_Pin_5);		 // WR = 1
+//       GPIO_SetBits(GPIOD, GPIO_Pin_7);		 //	CS = 1
 
     GPIO_ResetBits(GPIOE, GPIO_Pin_4);
     GPIO_ResetBits(GPIOE, GPIO_Pin_3);
