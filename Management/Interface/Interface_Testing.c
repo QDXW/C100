@@ -12,12 +12,13 @@
 #include "SignalProcess_Sample.h"
 
 /******************************************************************************/
-extern uint8  Cup_Count;
-extern uint16 SignalSample_count;
-extern uint8 QRCode_existed;
-extern uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT];
 uint16 max = 0;
 uint8 NowCup_Count = 0;
+extern uint8  Cup_Count;
+extern uint8 QRCode_existed;
+uint16 BOUNDARY_VALUE = 2500;
+extern uint16 SignalSample_count;
+extern uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT];
 
 /******************************************************************************/
 block_attr_Testing block_Testing_1 = {
@@ -64,11 +65,11 @@ uint8 Interface_Testing(uint16 KeyCode)
 	UI_WindowBlocks_Testing = sizeof(UI_WindowBlocksAttrArray_Testing) >> 2;
 	UI_Draw_Window_Testing(UI_WindowBlocks_Testing);
 	Start_Postion = Get_Start_Postion();
-	RotationMotor_Input_StepDrive(Foreward_Rotation,Start_Postion + 42);
+	RotationMotor_Input_StepDrive(Foreward_Rotation,Start_Postion + 21);
 	if(Confirm_CUP)
 	{
 		Acquisition_Signal();
-		Storage_Record();
+//		Storage_Record();
 		UI_state = UI_STATE_RESULT;
 	}
 	else
@@ -122,6 +123,7 @@ void Acquisition_Signal(void)
 	/* 第二步:旋转360度，环绕杯子采集信号 */
 	for(NowCup_Count = 0;NowCup_Count<12;NowCup_Count++)
 	{
+		SignalSample_SampleStrip();
 		if(NowCup_Count%3 == 1)
 		{
 			RotationMotor_Input_StepDrive(Foreward_Rotation,43);
@@ -130,7 +132,6 @@ void Acquisition_Signal(void)
 		{
 			RotationMotor_Input_StepDrive(Foreward_Rotation,42);
 		}
-		SignalSample_SampleStrip();
 
 		for(j = Step_Start;j < Step_Count;j++)		/* 每次进度条走十格 */
 		{
@@ -151,6 +152,7 @@ uint16 Get_Start_Postion(void)
 	uint16 Start_Postion=0;
 	SignalSample_count = 0;
 	/* 第一步:扫描电机转到中间位置 */
+	memset(&SignalProcess_sampleBuffer[0],0,2*512);
 	ScanMotorDriver_PositionSensor_Int_Enable();
 	ScanMotorDriver_Goto_BasePosition();
 	ScanMotorDriver_Goto_CentrePosition();
@@ -167,6 +169,7 @@ uint16 Get_Start_Postion(void)
 	/* 1.对数据进行移动平均 */
 	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SIGNALSAMPLE_MAX_COUNT,15);
 //	SignalSample_OutputSamples(SignalSample_count,&SignalProcess_sampleBuffer[0]);
+	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
 	/* 2.有无杯子判断 */
 	if(max < BOUNDARY_VALUE)
@@ -202,6 +205,25 @@ uint16 Get_Start_Postion(void)
 		}
 	}
 	return Start_Postion;
+}
+
+/******************************************************************************/
+uint16 Get_sampleBuffer_Boundary_Value(void)
+{
+	uint16 i = 0;
+	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
+	{
+		if(BOUNDARY_VALUE >= SignalProcess_sampleBuffer[i])
+		{
+			BOUNDARY_VALUE = SignalProcess_sampleBuffer[i];
+		}
+	}
+
+	if(BOUNDARY_VALUE > 1500)
+	{
+		BOUNDARY_VALUE = 2500;
+	}
+	return BOUNDARY_VALUE;
 }
 
 /******************************************************************************/

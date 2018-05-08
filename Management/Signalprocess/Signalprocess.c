@@ -22,7 +22,7 @@ void Data_Analysis(void)
 
 //	memcpy(&SignalProcess_Alg_data.processBuffer[0],&SignalProcess_sampleBuffer[0], 2* SignalSample_count);
 //	SignalSample_OutputSamples(SignalSample_count,&SignalProcess_Alg_data.processBuffer[0]);
-//	SignalSample_OutputSamples(SignalSample_count - 50,&SignalProcess_sampleBuffer[0]);
+//	SignalSample_OutputSamples(SignalSample_count,&SignalProcess_sampleBuffer[0]);
 
 	SignalProcess_Alg_data.limitInfo.C_MIN = 0;
 	SignalProcess_Alg_data.posInfo.dist_Edge_Center = QR_Date.head.midC;
@@ -37,111 +37,112 @@ void Data_Analysis(void)
 			&SignalProcess_sampleBuffer[0],
 			SignalProcess_Alg_data.sampleLength, 10);
 
-	if(SignalProcess_Alg_data.posInfo.dist_Edge_Center  <= 30)
+	if(SignalProcess_Alg_data.posInfo.dist_Edge_Center  < 30)
 		SignalProcess_Alg_data.posInfo.dist_Edge_Center = 40;
 
 	/* Look for C valley */
 	SignalProcess_Alg_data.calcInfo.indexC = Alg_GetValleyIndex(
 			&SignalProcess_sampleBuffer[0],
-			SignalProcess_Alg_data.posInfo.dist_Edge_Center - 30,
-			SignalProcess_Alg_data.posInfo.dist_Edge_Center + 30);
+			SignalProcess_Alg_data.posInfo.dist_Edge_Center - 10,
+			SignalProcess_Alg_data.posInfo.dist_Edge_Center + 10);
 
 	/* Judge validity of C */
-	validity = Alg_JudgeCValidity(&SignalProcess_Alg_data.processBuffer[0],
-					SignalProcess_Alg_data.calcInfo.indexC,5,5);
+	validity = Alg_JudgeCValidity(&SignalProcess_sampleBuffer[0],
+					SignalProcess_Alg_data.calcInfo.indexC,4,4);
 
-//	if (0 == validity)
+	if (0 == validity)
+	{
+		SignalProcess_Alg_data.calcInfo.result = SIGNALPROCESS_RESULT_INVALID_C;
+		memcpy(Storage_Data.CH_data[NowCup_Count].Result,"No Data",7);
+		return;
+	}
+//
+//	if((SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center) >= 145)
+//		SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center = 65;
+//	/* Look for T1 valley */
+//	SignalProcess_Alg_data.calcInfo.indexT = Alg_GetValleyIndex(
+//			&SignalProcess_sampleBuffer[0],
+//			SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center - 10,
+//			SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center + 10);
+//
+//	/* Get base points: left of C */
+//	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1 > 0)
+//	{
+//		if (SignalProcess_Alg_data.calcInfo.indexC > SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1)
+//			SignalProcess_Alg_data.calcInfo.base1 =
+//					SignalProcess_Alg_data.calcInfo.indexC - SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1;
+//		else
+//			SignalProcess_Alg_data.calcInfo.base1 = 0;
+//
+//		/* Prepare data for fitting line */
+//		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
+//				SignalProcess_Alg_data.calcInfo.base1, &arrayXFit[0], &arrayYFit[0], fitArraySize);
+//	}
+
+//	/* Get base points: between C and the edge T */
+//	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak2 > 0)
+//	{
+//		SignalProcess_Alg_data.calcInfo.base2 =
+//				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak2;
+//
+//		/* Prepare data for fitting line */
+//		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
+//				SignalProcess_Alg_data.calcInfo.base2, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
+//	}
+//
+//	/* Get base points: between C and the edge T */
+//	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak3 > 0)
+//	{
+//		SignalProcess_Alg_data.calcInfo.base3 =
+//				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak3;
+//
+//		/* Prepare data for fitting line */
+//		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
+//				SignalProcess_Alg_data.calcInfo.base3, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
+//	}
+//
+//	/* Get base points: between T and edge */
+//	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak4 > 0)
+//	{
+//		SignalProcess_Alg_data.calcInfo.base4 =
+//				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak4;
+//
+//		/* Prepare data for fitting line */
+//		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
+//				SignalProcess_Alg_data.calcInfo.base4, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
+//	}
+//
+//	/* Fit line */
+//	Alg_FittingLine(arrayXFit, arrayYFit, fitArraySize, &SignalProcess_Alg_data.calcInfo.coefA,
+//			&SignalProcess_Alg_data.calcInfo.coefB);
+//
+//	/* Calculate area */
+//	SignalProcess_Alg_data.calcInfo.areaC = (uint32)Alg_CalcualteArea(&SignalProcess_sampleBuffer[0],
+//			SignalProcess_Alg_data.calcInfo.indexC, 12,
+//			&SignalProcess_Alg_data.calcInfo.coefA, &SignalProcess_Alg_data.calcInfo.coefB);
+//	SignalProcess_Alg_data.calcInfo.areaT = (uint32)Alg_CalcualteArea(&SignalProcess_sampleBuffer[0],
+//			SignalProcess_Alg_data.calcInfo.indexT, 12,
+//			&SignalProcess_Alg_data.calcInfo.coefA, &SignalProcess_Alg_data.calcInfo.coefB);
+
+//	/* C line judgment: Area C must be larger than MIN */
+//	if (SignalProcess_Alg_data.calcInfo.areaC < SignalProcess_Alg_data.limitInfo.C_MIN)
 //	{
 //		SignalProcess_Alg_data.calcInfo.result = SIGNALPROCESS_RESULT_INVALID_C;
 //		return;
 //	}
-
-	if((SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center) >= 180)
-		SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center -= 10;
-	/* Look for T1 valley */
-	SignalProcess_Alg_data.calcInfo.indexT = Alg_GetValleyIndex(
-			&SignalProcess_sampleBuffer[0],
-			SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center - 10,
-			SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_T1center + 10);
-
-	/* Get base points: left of C */
-	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1 > 0)
-	{
-		if (SignalProcess_Alg_data.calcInfo.indexC > SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1)
-			SignalProcess_Alg_data.calcInfo.base1 =
-					SignalProcess_Alg_data.calcInfo.indexC - SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak1;
-		else
-			SignalProcess_Alg_data.calcInfo.base1 = 0;
-
-		/* Prepare data for fitting line */
-		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
-				SignalProcess_Alg_data.calcInfo.base1, &arrayXFit[0], &arrayYFit[0], fitArraySize);
-	}
-
-	/* Get base points: between C and the edge T */
-	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak2 > 0)
-	{
-		SignalProcess_Alg_data.calcInfo.base2 =
-				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak2;
-
-		/* Prepare data for fitting line */
-		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
-				SignalProcess_Alg_data.calcInfo.base2, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
-	}
-
-	/* Get base points: between C and the edge T */
-	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak3 > 0)
-	{
-		SignalProcess_Alg_data.calcInfo.base3 =
-				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak3;
-
-		/* Prepare data for fitting line */
-		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
-				SignalProcess_Alg_data.calcInfo.base3, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
-	}
-
-	/* Get base points: between T and edge */
-	if (SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak4 > 0)
-	{
-		SignalProcess_Alg_data.calcInfo.base4 =
-				SignalProcess_Alg_data.calcInfo.indexC + SignalProcess_Alg_data.posInfo.dist_Ccenter_Peak4;
-
-		/* Prepare data for fitting line */
-		fitArraySize = Alg_MoveToFitArray(&SignalProcess_sampleBuffer[0],
-				SignalProcess_Alg_data.calcInfo.base4, &arrayXFit[fitArraySize], &arrayYFit[fitArraySize], fitArraySize);
-	}
-
-	/* Fit line */
-	Alg_FittingLine(arrayXFit, arrayYFit, fitArraySize, &SignalProcess_Alg_data.calcInfo.coefA,
-			&SignalProcess_Alg_data.calcInfo.coefB);
-
-	/* Calculate area */
-	SignalProcess_Alg_data.calcInfo.areaC = (uint32)Alg_CalcualteArea(&SignalProcess_sampleBuffer[0],
-			SignalProcess_Alg_data.calcInfo.indexC, 12,
-			&SignalProcess_Alg_data.calcInfo.coefA, &SignalProcess_Alg_data.calcInfo.coefB);
-	SignalProcess_Alg_data.calcInfo.areaT = (uint32)Alg_CalcualteArea(&SignalProcess_sampleBuffer[0],
-			SignalProcess_Alg_data.calcInfo.indexT, 12,
-			&SignalProcess_Alg_data.calcInfo.coefA, &SignalProcess_Alg_data.calcInfo.coefB);
-
-	/* C line judgment: Area C must be larger than MIN */
-	if (SignalProcess_Alg_data.calcInfo.areaC < SignalProcess_Alg_data.limitInfo.C_MIN)
-	{
-		SignalProcess_Alg_data.calcInfo.result = SIGNALPROCESS_RESULT_INVALID_C;
-		return;
-	}
-
-	/* Calculate C/T */
-	if ((SignalProcess_Alg_data.calcInfo.areaC > 0) && (SignalProcess_Alg_data.calcInfo.areaT > 0))
-	{
-		SignalProcess_Alg_data.calcInfo.ratioC_T = (float)SignalProcess_Alg_data.calcInfo.areaC / (float)SignalProcess_Alg_data.calcInfo.areaT;
-	}
-
-	if (SignalProcess_Alg_data.calcInfo.areaT == 0)
-	{
-		/* Indicate that T line is not detected */
-		SignalProcess_Alg_data.calcInfo.ratioC_T = -1;
-	}
-
+//
+//	/* Calculate C/T */
+//	if ((SignalProcess_Alg_data.calcInfo.areaC > 0) && (SignalProcess_Alg_data.calcInfo.areaT > 0))
+//	{
+//		SignalProcess_Alg_data.calcInfo.ratioC_T = (float)SignalProcess_Alg_data.calcInfo.areaC / (float)SignalProcess_Alg_data.calcInfo.areaT;
+//	}
+//
+//	if (SignalProcess_Alg_data.calcInfo.areaT == 0)
+//	{
+//		/* Indicate that T line is not detected */
+//		SignalProcess_Alg_data.calcInfo.ratioC_T = -1;
+//	}
+//
 	if(NowCup_Count <= Cup_Count)
 	{
 		if(SignalProcess_Alg_data.calcInfo.areaC >= Storage_Data.CH_data[NowCup_Count].threshold1)

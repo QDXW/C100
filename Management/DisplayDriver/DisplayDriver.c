@@ -95,6 +95,7 @@
     GPIO_SetBits(GPIOD, GPIO_Pin_7);		 	// CS = 1
     GPIO_SetBits(GPIOD, GPIO_Pin_13);			// RST = 1
 
+    GPIO_ResetBits(GPIOD, GPIO_Pin_2);
     GPIO_ResetBits(GPIOE, GPIO_Pin_4);
     GPIO_ResetBits(GPIOE, GPIO_Pin_3);
     SystemManage_5V_Disabled();

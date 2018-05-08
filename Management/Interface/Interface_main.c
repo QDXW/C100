@@ -22,7 +22,7 @@ extern uint8 page_tatol;
 #endif
 
 uint16 UI_WindowBlocks = 0;
-uint8 UI_state = UI_STATE_MAIN_WINDOW;
+uint8 UI_state = UI_STATE_QUICK;
 
 #if Drug_S100
 /******************************************************************************/

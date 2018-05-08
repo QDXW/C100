@@ -26,7 +26,7 @@ uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint16 SignalProcess_sampleBuffer_BK[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint8 SignalProcess_outputBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 
-uint8 SignalSample_resistorValue = 0;
+uint8 SignalSample_resistorValue = 14;
 uint8 SignalSample_resistorValueStored = 0;
 
 uint8 SignalProcess_output = 0;
@@ -591,7 +591,7 @@ void SignalSample_SampleStrip(void)
 	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SignalSample_count,10);
 
 	/* Output samples */
-	SignalSample_OutputSamples(SignalSample_count,&SignalProcess_sampleBuffer[0]);
+	SignalSample_OutputSamples(SignalSample_count - 30,&SignalProcess_sampleBuffer[0]);
 	if(NowCup_Count <= Cup_Count)
 	{
 		Data_Analysis();

@@ -13,14 +13,14 @@
 
 /******************************************************************************/
 #define  NO_CUP        		   		(0)
-#define  BOUNDARY_VALUE        		(912)
 
 /******************************************************************************/
 uint8 Confirm_CUP = 0;
 extern uint8 Exti_lock;
 extern uint8 key_state;
-extern uint8 NowCup_Count;
 extern uint8 Key_control;
+extern uint8 NowCup_Count;
+extern uint16 BOUNDARY_VALUE;
 uint16 UI_WindowBlocks_Testing = 0;
 
 /******************************************************************************/
@@ -36,6 +36,7 @@ uint16 Get_Start_Postion(void);
 extern void Acquisition_Signal(void);
 uint16 Get_sampleBuffer_Max_Value(void);
 void Get_sampleBuffer_Start_Position(void);
+uint16 Get_sampleBuffer_Boundary_Value(void);
 extern void UI_Draw_Window_Testing(uint16 blockNum);
 void SignalSample_Moving_Average_Data(uint16 *Data,uint16 Length,uint16 Period);
 

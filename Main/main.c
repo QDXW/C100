@@ -24,7 +24,8 @@ uint8 Display_Time = 1;
 void main(void)
 {
 //	uint8 cBuffer[20] = {0};
-//	uint8 asd = 1;
+	uint8 asd = 1;
+	uint16 asdhg = 1;
 
 	RCC_Configuration();				/* RCC Initialize */
 
@@ -79,7 +80,7 @@ void main(void)
 //		if(asd)
 //		{
 //			asdhg = Get_Start_Postion();
-//			RotationMotor_Input_StepDrive(1,asdhg + 42);
+//			RotationMotor_Input_StepDrive(1,asdhg + 21);
 //			ScanMotorDriver_Goto_CentrePosition();
 //		asd = 0;
 //		}
