@@ -118,8 +118,13 @@ void UI_Draw_block_Testing(block_attr_Testing* block)
 void Acquisition_Signal(void)
 {
 	uint8 j = 0,Step_Count = 19,Step_Start = 10;
+	uint8 i = 0;
 	NowCup_Count = 0;
 	Storage_Time();
+	for(i = 0;i < 12;i++)
+	{
+		memset(&Storage_Data.CH_data[i].Result[0],0,6);
+	}
 	/* 第二步:旋转360度，环绕杯子采集信号 */
 	for(NowCup_Count = 0;NowCup_Count<12;NowCup_Count++)
 	{
@@ -172,10 +177,12 @@ uint16 Get_Start_Postion(void)
 	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
 	/* 2.有无杯子判断 */
-	if(max < BOUNDARY_VALUE)
+	if(max < 1000 || BOUNDARY_VALUE < 650)
 	{
 		Confirm_CUP = NO_CUP;
+		DisplayDriver_Text16_B(4, 90, Black,White,"No Data!");
 		return Confirm_CUP;
+
 	}
 	else
 	{
@@ -211,6 +218,7 @@ uint16 Get_Start_Postion(void)
 uint16 Get_sampleBuffer_Boundary_Value(void)
 {
 	uint16 i = 0;
+	BOUNDARY_VALUE = 2500;
 	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
 	{
 		if(BOUNDARY_VALUE >= SignalProcess_sampleBuffer[i])
@@ -230,6 +238,7 @@ uint16 Get_sampleBuffer_Boundary_Value(void)
 uint16 Get_sampleBuffer_Max_Value(void)
 {
 	int j=0;
+	max = 0;
 	for(j = 0;j < SIGNALSAMPLE_MAX_COUNT;j++)
 	{
 		if(max < SignalProcess_sampleBuffer[j])

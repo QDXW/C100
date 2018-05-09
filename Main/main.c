@@ -29,7 +29,7 @@ void main(void)
 
 	RCC_Configuration();				/* RCC Initialize */
 
-	HumanInput_Init();					/* KEY HumanInput Initialize */
+//	HumanInput_Init();					/* KEY HumanInput Initialize */
 
 #if Drug_S100
 	DisplayDriver_Init();				/* LCD DisplayDriver Initialize */
@@ -41,31 +41,33 @@ void main(void)
 #endif
 
 	SysTick_Init(SYSTICK_FREQ_1MS);		/* Initialize system tick timer */
-
-	PCF8563_Init();						/* PCF8563 Initialize */
-
-	TIM4_Int_Init();					/* TIM4 Initialize */
-
-	EXTIX_Init();						/* EXTIX Initialize */
-
-	QRCode_Init();						/* QRCode Initialize */
-
-	RotationMotor_Init();				/* RotationMotorDriver Initialize */
-
-	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
-
-	SignalSample_Sample_Init();			/* SignalSample Sample Initialize */
-
-	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
-
-	HostComm_Init();					/* HostComm Initialize */
-
-	Status_Init();						/* Status Initialize */
-
-	Storage_Flash_Init();				/* Storage Flash Initialize */
+//
+//	PCF8563_Init();						/* PCF8563 Initialize */
+//
+//	TIM4_Int_Init();					/* TIM4 Initialize */
+//
+//	EXTIX_Init();						/* EXTIX Initialize */
+//
+//	QRCode_Init();						/* QRCode Initialize */
+//
+//	RotationMotor_Init();				/* RotationMotorDriver Initialize */
+//
+//	ScanMotorDriver_Init();				/* ScanMotorDriver Initialize */
+//
+//	SignalSample_Sample_Init();			/* SignalSample Sample Initialize */
+//
+//	USB_VirtualCOM_Init();				/* USB VirtualCOM Initialize */
+//
+//	HostComm_Init();					/* HostComm Initialize */
+//
+//	Status_Init();						/* Status Initialize */
+//
+//	Storage_Flash_Init();				/* Storage Flash Initialize */
 
 	while(1)
 	{
+
+
 //		Exti_lock = ENABLE;
 //
 //		ScanMotorDriver_StartDetection();
@@ -106,7 +108,7 @@ void main(void)
 //		Delay_ms(1000);
 //		SignalSample_SampleStrip();
 
-		Interface_Process(0);			/* User Interface */
+//		Interface_Process(0);			/* User Interface */
 	}
 }
 

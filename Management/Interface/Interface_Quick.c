@@ -179,13 +179,13 @@ uint8 Interface_Quick(uint16 KeyCode)
 	Exti_lock = ENABLE;
 	while (!QRCode_received)
 	{
-//		if (Key_control == 1)
-//		{
-//			UI_state = UI_STATE_KEY_STATE;
-//			key_state_confirm = 0;
-//			Exti_lock = DISABLE;
-//			return UI_STATE_RERUN;
-//		}
+		if (Key_control == 1)
+		{
+			UI_state = UI_STATE_KEY_STATE;
+			key_state_confirm = 0;
+			Exti_lock = DISABLE;
+			return UI_STATE_RERUN;
+		}
 	}
 	Exti_lock = DISABLE;
 

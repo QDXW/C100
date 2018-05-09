@@ -86,10 +86,9 @@ uint8 Interface_Insert_Cup(uint16 KeyCode)
 	Exti_lock = DISABLE;
 	UI_WindowBlocks_Insert_Cup = sizeof(UI_WindowBlocksAttrArray_Insert_Cup) >> 2;
 	UI_Draw_Window_Insert_Cup(UI_WindowBlocks_Insert_Cup);
-//	Exti_lock = ENABLE;
-//	while(!key_state);
-//	UI_state = UI_STATE_KEY_STATE;
-	UI_state = UI_STATE_TESTING;
+	Exti_lock = ENABLE;
+	while(!key_state);
+	UI_state = UI_STATE_KEY_STATE;
 	return UI_STATE_RERUN;
 }
 

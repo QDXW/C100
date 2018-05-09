@@ -95,60 +95,60 @@ void SysTick_Handler(void)
 		se_count = 0;								//重新定时1秒钟
 	}
 
-//	 if(key_fall_flag==1)							//发生按键按下事件
-//	 {
-//		 if(!GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4))//按键持续按下
-//		 {
-//			 if(key_holdon_ms <= 2000)
-//			 {
-//				 key_holdon_ms++;
-//			 }
-//			 else 									//按键按下到2000ms就判断长按时间成立，生成长按标志
-//			 {
-//				 key_holdon_ms = 0;
-//				 short_key_flag=0;					//清短按键标志
-//				 long_key_flag = 1;					//长按键标志置位
-//				 key_fall_flag = 0;					//清按键按下标志
-//				 short_key_down = 0;
-//			 }
-//		 }
-//		 else 										//按键抬起
-//		 {
-//			 if(key_holdon_ms>50)					//按下时间大于50ms，生成单击标志
-//			 {
-//				 key_holdon_ms=0;
-//				 short_key_flag=0;
-//				 long_key_flag =0;
-//				 key_fall_flag=0;
-//
-//				 //距离上次单击时间在100~500ms之间，则认为发生连击事件
-//				 if(keyupCnt > 50 && keyupCnt < 300)
-//				 {
-//					 doubleClick = TRUE;
-//				     short_key_flag=0;
-//				 }
-//				 keyUpFlag = TRUE;					//单击抬起按键后，生成按键抬起标志
-//			 }
-//			 else  									//按键持续时间小于50ms，忽略
-//			 {
-//				 key_holdon_ms = 0;
-//				 short_key_flag = 0;
-//				 long_key_flag = 0;
-//				 key_fall_flag = 0;
-//			 }
-//		 }
-//	 }
-//
-//	if(keyUpFlag)									//单击抬起后，启动计数，计数到500ms
-//		keyupCnt++;
-//	if(keyupCnt > 300)
-//	{
-//		short_key_flag = 1;
-//		keyupCnt = 0;
-//		keyUpFlag = FALSE;
-//	}
-//	Key_Confirm();									//此函数决不能有延时
-//
+	 if(key_fall_flag==1)							//发生按键按下事件
+	 {
+		 if(!GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4))//按键持续按下
+		 {
+			 if(key_holdon_ms <= 2000)
+			 {
+				 key_holdon_ms++;
+			 }
+			 else 									//按键按下到2000ms就判断长按时间成立，生成长按标志
+			 {
+				 key_holdon_ms = 0;
+				 short_key_flag=0;					//清短按键标志
+				 long_key_flag = 1;					//长按键标志置位
+				 key_fall_flag = 0;					//清按键按下标志
+				 short_key_down = 0;
+			 }
+		 }
+		 else 										//按键抬起
+		 {
+			 if(key_holdon_ms>50)					//按下时间大于50ms，生成单击标志
+			 {
+				 key_holdon_ms=0;
+				 short_key_flag=0;
+				 long_key_flag =0;
+				 key_fall_flag=0;
+
+				 //距离上次单击时间在100~500ms之间，则认为发生连击事件
+				 if(keyupCnt > 50 && keyupCnt < 300)
+				 {
+					 doubleClick = TRUE;
+				     short_key_flag=0;
+				 }
+				 keyUpFlag = TRUE;					//单击抬起按键后，生成按键抬起标志
+			 }
+			 else  									//按键持续时间小于50ms，忽略
+			 {
+				 key_holdon_ms = 0;
+				 short_key_flag = 0;
+				 long_key_flag = 0;
+				 key_fall_flag = 0;
+			 }
+		 }
+	 }
+
+	if(keyUpFlag)									//单击抬起后，启动计数，计数到500ms
+		keyupCnt++;
+	if(keyupCnt > 300)
+	{
+		short_key_flag = 1;
+		keyupCnt = 0;
+		keyUpFlag = FALSE;
+	}
+	Key_Confirm();									//此函数决不能有延时
+
 	EXTI_Key_Confirm_Enable();
 }
 
@@ -212,43 +212,43 @@ void EXTI3_IRQHandler(void)
 /******************************************************************************/
 void EXTI4_IRQHandler(void)
 {
-//	if(Exti_lock)
-//	{
-//		if(EXTI_GetITStatus(EXTI_Line4))	 		//确认按键
-//		{
-//			key_fall_flag = 1;						//确认按键
-//			EXTI_ClearITPendingBit(EXTI_Line4);		//清除LINE4上的中断标志位
-//			EXTI_Key_Confirm_Disable();
-//		}
-//	}
+	if(Exti_lock)
+	{
+		if(EXTI_GetITStatus(EXTI_Line4))	 		//确认按键
+		{
+			key_fall_flag = 1;						//确认按键
+			EXTI_ClearITPendingBit(EXTI_Line4);		//清除LINE4上的中断标志位
+			EXTI_Key_Confirm_Disable();
+		}
+	}
 	EXTI_ClearITPendingBit(EXTI_Line4);			 	//清除LINE4上的中断标志位
 }
 
 /******************************************************************************/
 void EXTI9_5_IRQHandler(void)
 {
-//#if Drug_S100
-//	if(Exti_lock)
-//	{
-//		if(EXTI_GetITStatus(EXTI_Line8))	 		//向右按键
-//		{
-//			Delay_ms_SW(Time_ms);
-//			if(EXTI_GetITStatus(EXTI_Line8))	 	//向右按键
-//			{
-//				Key_Right();
-//			}
-//		}
-//
-//		if(EXTI_GetITStatus(EXTI_Line9))	 		//向右按键
-//		{
-//			Delay_ms_SW(Time_ms);
-//			if(EXTI_GetITStatus(EXTI_Line9))	 	//向左按键
-//			{
-//				Key_Left();
-//			}
-//		}
-//	}
-//#endif
+#if Drug_S100
+	if(Exti_lock)
+	{
+		if(EXTI_GetITStatus(EXTI_Line8))	 		//向右按键
+		{
+			Delay_ms_SW(Time_ms);
+			if(EXTI_GetITStatus(EXTI_Line8))	 	//向右按键
+			{
+				Key_Right();
+			}
+		}
+
+		if(EXTI_GetITStatus(EXTI_Line9))	 		//向右按键
+		{
+			Delay_ms_SW(Time_ms);
+			if(EXTI_GetITStatus(EXTI_Line9))	 	//向左按键
+			{
+				Key_Left();
+			}
+		}
+	}
+#endif
 
 	EXTI_ClearITPendingBit(EXTI_Line8);  			//清除LINE8上的中断标志位
 	EXTI_ClearITPendingBit(EXTI_Line9);  			//清除LINE9上的中断标志位
