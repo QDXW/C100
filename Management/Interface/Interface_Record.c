@@ -56,7 +56,7 @@ block_attr_Record block_Record_Name = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.Product_name,
-		132,   42,
+		110,   42,
 		BLACK,WHITE
 	},
 };
@@ -391,14 +391,14 @@ block_attr_Record block_Record_CH13 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[12].TName,
 		12,   219,
 		BLACK,WHITE
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[12].Result,
 		72,  219,
 		BLACK,WHITE
 	},
@@ -413,14 +413,14 @@ block_attr_Record block_Record_CH14 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[13].TName,
 		122,   219,
 		BLACK,WHITE
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[13].Result,
 		182,  219,
 		BLACK,WHITE
 	},
@@ -435,14 +435,14 @@ block_attr_Record block_Record_CH15 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[14].TName,
 		12,   235,
 		BLACK,WHITE
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[14].Result,
 		72,  235,
 		BLACK,WHITE
 	},
@@ -457,14 +457,14 @@ block_attr_Record block_Record_CH16 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[15].TName,
 		122,   235,
 		BLACK,WHITE
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[15].Result,
 		182,  235,
 		BLACK,WHITE
 	},
@@ -568,6 +568,9 @@ uint8 Interface_Record(uint16* xpos,uint16* ypos)
 		Display_Time = 0;
 		DisplayDriver_Fill(11,123,119,249,WHITE);
 		DisplayDriver_Fill(121,123,228,249,WHITE);
+		DisplayDriver_Fill(110,41,228,59,WHITE);
+		DisplayDriver_Fill(64,63,210,80,WHITE);
+		DisplayDriver_Fill(38,83,160,101,WHITE);
 		sprintf(kBuffer,"%02d",reagent_Strip[0]);
 		DisplayDriver_Text16_Back(113, 255, BLACK,Interface_Back,kBuffer);
 		Display_Time = 1;

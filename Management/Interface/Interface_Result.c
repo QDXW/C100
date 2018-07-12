@@ -339,14 +339,14 @@ block_attr_Result block_Result_CH13 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[12].TName,
 		14,   223,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[12].Result,
 		74,  223,
 		BLACK,Interface_Back
 	},
@@ -361,14 +361,14 @@ block_attr_Result block_Result_CH14 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[13].TName,
 		124,   223,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[13].Result,
 		184,  223,
 		BLACK,Interface_Back
 	},
@@ -383,14 +383,14 @@ block_attr_Result block_Result_CH15 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[14].TName,
 		14,   243,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[14].Result,
 		74,  243,
 		BLACK,Interface_Back
 	},
@@ -405,14 +405,14 @@ block_attr_Result block_Result_CH16 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"AXG",
+		Storage_Data.CH_data[15].TName,
 		124,   243,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		Storage_Data.CH_data[15].Result,
 		184,  243,
 		BLACK,Interface_Back
 	},

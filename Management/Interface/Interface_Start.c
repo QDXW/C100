@@ -347,7 +347,7 @@ block_attr_Start block_Start_CH13 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		QR_Date_Analyze.ch_data[12].TName,
 		40,  205,
 		BLACK,Interface_Back
 	},
@@ -369,7 +369,7 @@ block_attr_Start block_Start_CH14 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		QR_Date_Analyze.ch_data[13].TName,
 		150,  205,
 		BLACK,Interface_Back
 	},
@@ -391,7 +391,7 @@ block_attr_Start block_Start_CH15 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		QR_Date_Analyze.ch_data[14].TName,
 		40,  222,
 		BLACK,Interface_Back
 	},
@@ -413,54 +413,10 @@ block_attr_Start block_Start_CH16 = {
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"Neg--",
+		QR_Date_Analyze.ch_data[15].TName,
 		150,  222,
 		BLACK,Interface_Back
 	},
-};
-
-/******************************************************************************/
-block_attr_Start block_Start_deleted = {
-	UI_STATE_QUICK,						/* Interface Touch rect */
-
-	ENABLE,									/* Display Picture */
-	{
-		Confirmation,
-		84,   279,
-		72,   30
-	},
-
-	ENABLE,									/* Display HZ16X8 */
-	{
-		"Have deleted",
-		32,   150,
-		RED,WHITE,
-	},
-
-	DISABLE,								/* Display HZ16X8 */
-	{0},
-};
-
-/******************************************************************************/
-block_attr_Start block_Start_Scan = {
-	UI_STATE_MAIN_WINDOW,					/* Interface Touch rect */
-
-	ENABLE,									/* Display Picture */
-	{
-		UI_Return,
-		0,   26,
-		45,  40
-	},
-
-	ENABLE,									/* Display HZ16X8 */
-	{
-		"Scan again!",
-		70,   168,
-		RED,WHITE,
-	},
-
-	DISABLE,								/* Display HZ16X8 */
-	{0},
 };
 
 /******************************************************************************/
@@ -508,12 +464,6 @@ block_attr_Start* UI_WindowBlocksAttrArray_Start[][18] = {/* Window: Standard en
 		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,
 		&block_Start_CH12,&block_Start_CH13,&block_Start_CH14,&block_Start_CH15,
 		&block_Start_CH16},
-};
-
-/******************************************************************************/
-block_attr_Start* UI_WindowBlocksAttrArray_Delete[]= {
-		&block_Start_deleted,
-		&block_Start_Scan,
 };
 
 /******************************************************************************/

@@ -209,12 +209,19 @@ uint8 QRCode_Identify(void)
 		memcpy(&Storage_Data.Product_SN[0], &QR_Date.head.SN[0], sizeof(QR_Date.head.SN));
 
 		/* 头信息计算提取  */
-//		Cup_Count = QR_Date.head.stripNum;
 		Action_time = QR_Date.head.time;
 		Storage_Data.StripNum = QR_Date.head.stripNum;
 
-		switch (12)
+		switch (16)
 		{
+			case 16:
+				memcpy(&QR_Date.ch_data[15], &QRCode_Buffer[headLineSize + 15 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
+			case 15:
+				memcpy(&QR_Date.ch_data[14], &QRCode_Buffer[headLineSize + 14 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
+			case 14:
+				memcpy(&QR_Date.ch_data[13], &QRCode_Buffer[headLineSize + 13 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
+			case 13:
+				memcpy(&QR_Date.ch_data[12], &QRCode_Buffer[headLineSize + 12 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
 			case 12:
 				memcpy(&QR_Date.ch_data[11], &QRCode_Buffer[headLineSize + 11 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
 			case 11:
@@ -244,7 +251,7 @@ uint8 QRCode_Identify(void)
 				break;
 		}
 
-		for(QR_Date_Conut = 0; QR_Date_Conut < 12; QR_Date_Conut++)
+		for(QR_Date_Conut = 0; QR_Date_Conut < 16; QR_Date_Conut++)
 		{
 			if(QR_Date.ch_data[QR_Date_Conut].Switch_Bool)
 			{
@@ -253,7 +260,7 @@ uint8 QRCode_Identify(void)
 			}
 		}
 
-		for(QR_Date_Conut = 0; QR_Date_Conut < 12; QR_Date_Conut++)
+		for(QR_Date_Conut = 0; QR_Date_Conut < 16; QR_Date_Conut++)
 		{
 			memcpy(&Storage_Data.CH_data[QR_Date_Conut], &QR_Date_Analyze.ch_data[QR_Date_Conut], sizeof(QRCODE_SINGLE_LINE));
 		}
@@ -274,6 +281,7 @@ void Clear_Data(void)
 {
 	Cup_Count = 0;
 	memset(&QR_Date, 0, sizeof(QRCODE_STRUCT));
+	memset(&QR_Date_Analyze, 0, sizeof(QRCODE_STRUCT));
 	memset(&QRCode_Buffer, 0, sizeof(QRCode_Buffer));
 	memset(&Storage_Data, 0, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 	memset(&SignalProcess_sampleBuffer, 0, sizeof(SignalProcess_sampleBuffer));

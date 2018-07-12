@@ -99,7 +99,7 @@ void Acquisition_Signal(void)
 	QR_Date_SignalProcess_Alg_data();
 
 	/* 采样与结果存储*/
-	for(NowCup_Count = 0;NowCup_Count< 12;NowCup_Count++)
+	for(NowCup_Count = 0;NowCup_Count< 16;NowCup_Count++)
 	{
 		if(QR_Date.ch_data[NowCup_Count].Switch_Bool)
 		{

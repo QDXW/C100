@@ -65,6 +65,7 @@ typedef struct {
 /******************************************************************************/
 typedef struct {
     uint8 TName[8];
+    uint8 Invalue;
     float threshold1;
     float threshold2;
     float threshold3;
@@ -77,7 +78,7 @@ typedef struct {
 	uint8 Product_SN[10];
 	uint8 StripNum;
 	STORAGE_TIME Product_Time;
-	STORAGE_SINGLE_LINE CH_data[12];
+	STORAGE_SINGLE_LINE CH_data[16];
 } STORAGE_SINGLE_DATA_STRUCT;
 
 /******************************************************************************/

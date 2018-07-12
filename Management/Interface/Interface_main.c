@@ -172,7 +172,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Main,
 			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
-	Exti_lock = ENABLE;
+//	Exti_lock = ENABLE;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
 }
