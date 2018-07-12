@@ -4,13 +4,26 @@
  * Mail: han_liu_zju@sina.com
  * Date: 2014.12 ~ Now
  ******************************************************************************/
-#include "Font.h"
 #include "fsmc_sram.h"
 #include "DisplayDriver_touch.h"
 #include "DisplayDriver_FontLib.h"
 
 /******************************************************************************/
 _lcd_dev lcddev;
+
+/******************************************************************************/
+void RCC_Configuration(void)
+{
+/* Enable the FSMC Clock */
+RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
+
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB
+			| RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD| RCC_APB2Periph_GPIOE
+			| RCC_APB2Periph_AFIO , ENABLE);
+
+	/* Disable JTAG but enable SWD because PB3/4 are used for GPIO */
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+}
 
 /******************************************************************************/
 u16 LCD_RD_DATA(void)
@@ -246,99 +259,6 @@ void LCD_Display_Dir(u8 dir)
 /****************************************************************************/
 void Driver_Init_9341(void)
 {
-#ifdef HONGRUIBO_NEW_GLASS
-	LCD_WR_REG(0xCF);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0xAA);
-	LCD_WR_DATA(0XE0);
-
-	LCD_WR_REG(0xED);
-	LCD_WR_DATA(0x67);
-	LCD_WR_DATA(0x03);
-	LCD_WR_DATA(0X12);
-	LCD_WR_DATA(0X81);
-
-	LCD_WR_REG(0xE8);
-	LCD_WR_DATA(0x8A);
-	LCD_WR_DATA(0x01);
-	LCD_WR_DATA(0x78);
-
-	LCD_WR_REG(0xCB);
-	LCD_WR_DATA(0x39);
-	LCD_WR_DATA(0x2C);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0x34);
-	LCD_WR_DATA(0x02);
-
-	LCD_WR_REG(0xF7);
-	LCD_WR_DATA(0x20);
-
-	LCD_WR_REG(0xEA);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0x00);
-	LCD_WR_REG(0xC0); 						//Power control
-	LCD_WR_DATA(0x23); 						//VRH[5:0]
-	LCD_WR_REG(0xC1); 						//Power control
-	LCD_WR_DATA(0x11); 						//SAP[2:0];BT[3:0]
-
-	LCD_WR_REG(0xC5); 						//VCM control
-	LCD_WR_DATA(0x43);
-	LCD_WR_DATA(0x4c);
-
-	LCD_WR_REG(0xC7); 						//VCM control2
-	LCD_WR_DATA(0xA0);
-
-	LCD_WR_REG(0x36); 						// Memory Access Control
-	LCD_WR_DATA(0x48);
-	LCD_WR_REG(0x3A); 						// Memory Access Control
-	LCD_WR_DATA(0x05);
-	LCD_WR_REG(0xB6); 						//Set Gamma
-	LCD_WR_DATA(0x0A);
-	LCD_WR_DATA(0x02);
-	LCD_WR_REG(0xF2); 						// 3Gamma Function Disable
-	LCD_WR_DATA(0x00);
-	LCD_WR_REG(0x26); 						//Gamma curve selected
-	LCD_WR_DATA(0x01);
-
-	LCD_WR_REG(0xE0);
-	LCD_WR_DATA( 0x1f);						//p1  //0f
-	LCD_WR_DATA( 0x36);						//p2  //30
-	LCD_WR_DATA( 0x36);						//p3
-	LCD_WR_DATA( 0x3A);						//p4
-	LCD_WR_DATA( 0x0C);						//p5
-	LCD_WR_DATA( 0x05);						//p6
-	LCD_WR_DATA( 0x4F);						//p7
-	LCD_WR_DATA( 0x87);						//p8
-	LCD_WR_DATA( 0x3C);						//p9
-	LCD_WR_DATA( 0x08);						//p10
-	LCD_WR_DATA( 0x11);						//p11
-	LCD_WR_DATA( 0x35);						//p12
-	LCD_WR_DATA( 0x19);						//p13
-	LCD_WR_DATA( 0x13);						//p14
-	LCD_WR_DATA( 0x00);						//p15
-
-	LCD_WR_REG(0xE1);
-	LCD_WR_DATA( 0x00);						//p1
-	LCD_WR_DATA( 0x09);						//p2
-	LCD_WR_DATA( 0x09);						//p3
-	LCD_WR_DATA( 0x05);						//p4
-	LCD_WR_DATA( 0x13);						//p5
-	LCD_WR_DATA( 0x0A);						//p6
-	LCD_WR_DATA( 0x30);						//p7
-	LCD_WR_DATA( 0x78);						//p8
-	LCD_WR_DATA( 0x43);						//p9
-	LCD_WR_DATA( 0x07);						//p10
-	LCD_WR_DATA( 0x0E);						//p11
-	LCD_WR_DATA( 0x0A);						//p12
-	LCD_WR_DATA( 0x26);						//p13
-	LCD_WR_DATA( 0x2C);						//p14
-	LCD_WR_DATA( 0x1f);						//p15
-
-	LCD_WR_REG(0x11); 						//Exit Sleep
-	Delay_ms_SW(120);
-	LCD_WR_REG(0x21);
-	LCD_WR_REG(0x29);						//Display on
-#else
 	LCD_WR_REG(0xCF);
 	LCD_WR_DATA(0x00);
 	LCD_WR_DATA(0xC1);
@@ -456,7 +376,6 @@ void Driver_Init_9341(void)
 	Delay_ms_SW(200);
 	LCD_WR_REG(0x29); 						//display on
 	LCD_WR_REG(0x2c);
-#endif
 }
 
 /******************************************************************************/
@@ -593,6 +512,25 @@ void DisplayDriver_Init_Touch(void)
 	FSMC_NORSRAMTimingInitTypeDef  readWriteTiming;
 	FSMC_NORSRAMTimingInitTypeDef  writeTiming;
 
+	/* PE6: MOTOR2 EN */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
+
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//
+//	/* config tft rst gpio */
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+//	GPIO_Init(GPIOE, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+
+	    /* config tft rst gpio */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	/* CS */
 	GPIO_InitStructure.GPIO_Pin = DISPLAY_CS_PIN;
@@ -605,11 +543,10 @@ void DisplayDriver_Init_Touch(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(DISPLAY_RST_PORT, &GPIO_InitStructure);
-	
+
 	/* PortD */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_4|GPIO_Pin_5
-			|GPIO_Pin_11|GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10|GPIO_Pin_14
-			|GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_4|GPIO_Pin_5 |
+			GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_11|GPIO_Pin_10|GPIO_Pin_14 |GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
@@ -681,6 +618,8 @@ void DisplayDriver_Init_Touch(void)
 	if(lcddev.id==0X9341)
 	{
 		Driver_Init_9341();
+		Delay_ms_SW(800);
+		GPIO_SetBits(GPIOB, GPIO_Pin_3);
 	}
 	else
 	{
@@ -692,6 +631,6 @@ void DisplayDriver_Init_Touch(void)
 	LCD_Display_Dir(0); /* Vertical */
 
 	/* Fill color */
-	DisplayDriver_Clear_Touch(White);
+	DisplayDriver_Clear_Touch(WHITE);
 }
 /******************************************************************************/

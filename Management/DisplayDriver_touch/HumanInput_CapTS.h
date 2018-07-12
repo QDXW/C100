@@ -8,9 +8,7 @@
 #define __MANAGEMENT_HUMANINPUT_HUMANINPUT_CAPTS_H_
 
 /******************************************************************************/
-#include "main.h"
-#include "comDef.h"
-#include "stm32f10x.h"
+#include "Project_File.h"
 
 /******************************************************************************/
 #define CAPTS_CLICK_MAX_TOUCHES              (0x20)
@@ -67,6 +65,7 @@ extern TouchPointRefTypeDef TPR_Structure;
 
 /******************************************************************************/
 void HumanInput_CapTS_Init(void);
+void CapTS_Exint_Init(void);
 uint8 HumanInput_CapTS_SelfTestAndInit(void);
 void HumanInput_CapTS_Process(void);
 void CapTS_EnterDeepSleep(void);

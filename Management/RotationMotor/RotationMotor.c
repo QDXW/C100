@@ -6,16 +6,14 @@
  */
 
 /******************************************************************************/
-#include "stm32f10x.h"
 #include "RotationMotor.h"
-#include "RotationMotorDriver_PositionSensor.h"
 
 /******************************************************************************/
 #define Time_10us  (180)
 
 /******************电机正反转控制*************************************************/
-uint16 Step1[8] = {0x10,0x30,0x20,0x60,0x40,0xc0,0x80,0x90};   //电机正转
-uint16 Step2[8] = {0x90,0x80,0xc0,0x40,0x60,0x20,0x30,0x10};   //电机反转
+uint16 Step1[9] = {0x10,0x30,0x20,0x60,0x40,0xc0,0x80,0x90,0xFF};   //电机正转
+uint16 Step2[9] = {0x90,0x80,0xc0,0x40,0x60,0x20,0x30,0x10,0xFF};   //电机反转
 
 /******************************************************************************/
 void RotationMotor_Init(void)
@@ -32,10 +30,15 @@ void RotaMotorDriver_GPIO_Init(void)
    /* RotationMotor Pin Initialize PE 11 12 13 14 */
    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_InitStruct.GPIO_Pin  = RotaMotorDriver_IN1_PIN |
-		   RotaMotorDriver_IN2_PIN |RotaMotorDriver_IN3_PIN |
-		   RotaMotorDriver_IN4_PIN|RotaMotorDriver_EN_PIN;
+		   RotaMotorDriver_IN2_PIN |RotaMotorDriver_IN3_PIN;
    GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-   GPIO_Init(GPIOE,&GPIO_InitStruct);
+   GPIO_Init(RotaMotorDriver_IN1_PORT,&GPIO_InitStruct);
+
+   /* RotationMotor Pin Initialize PE 11 12 13 14 */
+   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
+   GPIO_InitStruct.GPIO_Pin  = RotaMotorDriver_IN4_PIN|RotaMotorDriver_EN_PIN;
+   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_Init(RotaMotorDriver_IN4_PORT,&GPIO_InitStruct);
 
    RotaMotorDriver_Control(MOTOR_DISABLED);
 }
@@ -86,23 +89,30 @@ void RotationMotor_Input_StepDrive(uint8 Rotation_Direction,uint16 Step)
 }
 
 /******************************************************************************/
-static void RotationMotor_PIN(uint8 Rotation_Direction,u8 MUTU)
+void RotationMotor_PIN(uint8 Rotation_Direction,u8 MUTU)
 {
 
 	switch(Rotation_Direction)
 	{
 		case Reversal_Rotation:
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN1_PIN,(Step2[MUTU]&0x10));   //电机反转
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN2_PIN,(Step2[MUTU]&0x20));
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN3_PIN,(Step2[MUTU]&0x40));
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN4_PIN,(Step2[MUTU]&0x80));
+			GPIO_WriteBit(RotaMotorDriver_IN1_PORT,RotaMotorDriver_IN1_PIN,(Step2[MUTU]&0x10));   //电机反转
+			GPIO_WriteBit(RotaMotorDriver_IN2_PORT,RotaMotorDriver_IN2_PIN,(Step2[MUTU]&0x20));
+			GPIO_WriteBit(RotaMotorDriver_IN3_PORT,RotaMotorDriver_IN3_PIN,(Step2[MUTU]&0x40));
+			GPIO_WriteBit(RotaMotorDriver_IN4_PORT,RotaMotorDriver_IN4_PIN,(Step2[MUTU]&0x80));
 		break;
 
 		case Foreward_Rotation:
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN1_PIN,(Step1[MUTU]&0x10));   //电机正转
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN2_PIN,(Step1[MUTU]&0x20));
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN3_PIN,(Step1[MUTU]&0x40));
-			GPIO_WriteBit(GPIOE,RotaMotorDriver_IN4_PIN,(Step1[MUTU]&0x80));
+			GPIO_WriteBit(RotaMotorDriver_IN1_PORT,RotaMotorDriver_IN1_PIN,(Step1[MUTU]&0x10));   //电机正转
+			GPIO_WriteBit(RotaMotorDriver_IN2_PORT,RotaMotorDriver_IN2_PIN,(Step1[MUTU]&0x20));
+			GPIO_WriteBit(RotaMotorDriver_IN3_PORT,RotaMotorDriver_IN3_PIN,(Step1[MUTU]&0x40));
+			GPIO_WriteBit(RotaMotorDriver_IN4_PORT,RotaMotorDriver_IN4_PIN,(Step1[MUTU]&0x80));
+		break;
+
+		case 2:
+			GPIO_WriteBit(RotaMotorDriver_IN1_PORT,RotaMotorDriver_IN1_PIN,(Step1[8]&0x10));
+			GPIO_WriteBit(RotaMotorDriver_IN2_PORT,RotaMotorDriver_IN2_PIN,(Step1[8]&0x20));
+			GPIO_WriteBit(RotaMotorDriver_IN3_PORT,RotaMotorDriver_IN3_PIN,(Step1[8]&0x40));
+			GPIO_WriteBit(RotaMotorDriver_IN4_PORT,RotaMotorDriver_IN4_PIN,(Step1[8]&0x80));
 		break;
 
 		default:
@@ -114,7 +124,6 @@ static void RotationMotor_PIN(uint8 Rotation_Direction,u8 MUTU)
 void RotationMotor_StepDrive_Min(uint8 Rotation_Direction)
 {
 	uint8 Mutually;
-	SystemManage_5V_Enabled();
 	RotaMotorDriver_Control(MOTOR_ENABLED);
 	for(Mutually = 0;Mutually< 8;Mutually++)
 	{
@@ -122,5 +131,4 @@ void RotationMotor_StepDrive_Min(uint8 Rotation_Direction)
 		Delay_us(Time_10us);
 	}
 	RotaMotorDriver_Control(MOTOR_DISABLED);
-	SystemManage_5V_Disabled();
 }

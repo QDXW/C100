@@ -9,25 +9,24 @@
 #define MANAGEMENT_ROTATIONMOTOR_MOTOR_H_
 
 /******************************************************************************/
-#include "stm32f10x.h"
-#include "comDef.h"
+#include "Project_File.h"
 
 /******************************************************************************/
-/* PE11 */
-#define RotaMotorDriver_IN1_PORT     (GPIOE)
-#define RotaMotorDriver_IN1_PIN      (GPIO_Pin_11)
-/* PE12 */
-#define RotaMotorDriver_IN2_PORT     (GPIOE)
-#define RotaMotorDriver_IN2_PIN      (GPIO_Pin_12)
-/* PE13 */
-#define RotaMotorDriver_IN3_PORT     (GPIOE)
-#define RotaMotorDriver_IN3_PIN      (GPIO_Pin_13)
-/* PE14 */
-#define RotaMotorDriver_IN4_PORT     (GPIOE)
-#define RotaMotorDriver_IN4_PIN      (GPIO_Pin_14)
-/* PE15 */
-#define RotaMotorDriver_EN_PORT      (GPIOE)
-#define RotaMotorDriver_EN_PIN       (GPIO_Pin_15)
+/* PC6 */
+#define RotaMotorDriver_IN1_PORT     (GPIOC)
+#define RotaMotorDriver_IN1_PIN      (GPIO_Pin_6)
+/* PC7 */
+#define RotaMotorDriver_IN2_PORT     (GPIOC)
+#define RotaMotorDriver_IN2_PIN      (GPIO_Pin_7)
+/* PC8 */
+#define RotaMotorDriver_IN3_PORT     (GPIOC)
+#define RotaMotorDriver_IN3_PIN      (GPIO_Pin_8)
+/* PA8 */
+#define RotaMotorDriver_IN4_PORT     (GPIOA)
+#define RotaMotorDriver_IN4_PIN      (GPIO_Pin_8)
+/* PA11 */
+#define RotaMotorDriver_EN_PORT      (GPIOA)
+#define RotaMotorDriver_EN_PIN       (GPIO_Pin_11)
 
 #define MOTOR_DISABLED     		 		0
 #define MOTOR_ENABLED    		 		1
@@ -41,7 +40,7 @@ void RotationMotor_Init(void);
 void RotaMotorDriver_GPIO_Init(void);
 void RotaMotorDriver_Control(uint8 enabled);
 void RotationMotor_SelfCheck_StepDrive(void);
-void RotationMotor_StepDrive_Min(uint8 Rotation_Direction);
+extern void RotationMotor_StepDrive_Min(uint8 Rotation_Direction);
 void RotationMotor_PIN(uint8 Rotation_Direction,uint8 MUTU);
 void RotationMotor_Input_StepDrive(uint8 Rotation_Direction,uint16 Step);
 

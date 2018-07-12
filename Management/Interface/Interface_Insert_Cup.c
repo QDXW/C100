@@ -4,92 +4,65 @@
  *  Created on: 2018Äê3ÔÂ19ÈÕ
  *      Author: Administrator
  */
-
+/******************************************************************************/
 #include "Interface_Insert_Cup.h"
 
 /******************************************************************************/
-block_attr_Insert_Cup block_Insert_Cup_Back = {
-	ENABLE,									/*Interface Insert_Cup rect*/
-	{
-		0,   20,
-		128, 160,
-		BACKCOLOR_CONTENT_BACK
-	},
-
-	DISABLE,								/*Display HZ16X8*/
-	{0},
-};
-
-/******************************************************************************/
 block_attr_Insert_Cup block_Insert_Cup_Notice = {
-	ENABLE,									/*Interface Insert_Cup rect*/
+	UI_STATE_MAIN_WINDOW,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
 	{
-		8,   42,
-		112, 20,
-		BACKCOLOR_CONTENT_BAR
+		UI_Return,
+		0,   22,
+		50,  45
 	},
 
-	ENABLE,									/*Display HZ16X8*/
+	DISABLE,									/*Display HZ16X8*/
 	{
 		"Notice",
-		10,   44,
-		Black,BACKCOLOR_CONTENT_BAR,
-		BACKCOLOR_CONTENT_BAR
+		15,   64,
+		RED,Interface_Bar,
 	},
 };
 
 /******************************************************************************/
 block_attr_Insert_Cup block_Insert_Cup_Please = {
-		ENABLE,								/* Interface Insert_Cup rect */
-		{
-			8,   60,
-			112, 80,
-			White
-		},
+	UI_STATE_TESTING,
 
-	ENABLE,									/* Display HZ16X8 */
+	ENABLE,							/* Display HZ16X8 */
 	{
-		"Please put",
-		24,   75,
-		Red,White,
-		White
+		Confirmation,
+		84, 263,
+		72,  57
 	},
-};
-
-/******************************************************************************/
-block_attr_Insert_Cup block_Insert_Cup_Cup = {
-	DISABLE,								/* Interface Insert_Cup rect */
-	{0},
 
 	ENABLE,									/* Display HZ16X8 */
 	{
-		"in the cup!",
-		20,   95,
-		Red,White,
-		White
+		"Insert Cup",
+		80,   164,
+		BLACK,WHITE
 	},
 };
 
 /******************************************************************************/
 block_attr_Insert_Cup* UI_WindowBlocksAttrArray_Insert_Cup[] = {/* Window: Insert_Cup entry */
-		&block_Insert_Cup_Back,
 		&block_Insert_Cup_Notice,
 		&block_Insert_Cup_Please,
-		&block_Insert_Cup_Cup,
 };
 
 /******************************************************************************/
-uint8 Interface_Insert_Cup(uint16 KeyCode)
+uint8 Interface_Insert_Cup(uint16* xpos,uint16* ypos)
 {
-	QRCode_Trigger_Disabled();
-	Interface_Key = 1;
-	Exti_lock = DISABLE;
-	UI_WindowBlocks_Insert_Cup = sizeof(UI_WindowBlocksAttrArray_Insert_Cup) >> 2;
-	UI_Draw_Window_Insert_Cup(UI_WindowBlocks_Insert_Cup);
-	Exti_lock = ENABLE;
-	while(!key_state);
-	UI_state = UI_STATE_KEY_STATE;
-	return UI_STATE_RERUN;
+	uint8 state = 0;
+	UI_Background_Plate_Cup();
+	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
+	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Insert_Cup) >> 2;
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Insert_Cup,sizeof(UI_WindowBlocksAttrArray_Insert_Cup));
+	UI_Draw_Window_Insert_Cup(UI_WindowBlocks);
+	UI_WindowBlocks = 2;
+	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+	return state;
 }
 
 /******************************************************************************/
@@ -109,20 +82,27 @@ void UI_Draw_Window_Insert_Cup(uint16 blockNum)
 void UI_Draw_Block_Insert_Cup(block_attr_Insert_Cup* block)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)				/* 1. Draw Rect */
+	if (block->pic_enabled)						/* 2. Draw picture */
 	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
+		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+				block->pic_attr.offsetX,block->pic_attr.offsetY);
 	}
-	if (block->char_enabled)				/* 2. Draw character */
-	{
 
-			DisplayDriver_Text16_B(
-					block->char_attr.offsetX,block->char_attr.offsetY,
-					block->char_attr.color,block->char_attr.faceColor,
-					block->char_attr.str);
+	if (block->char_enabled)					/* 4. Draw character */
+	{
+		DisplayDriver_Text16_Touch(
+				block->char_attr.offsetX,block->char_attr.offsetY,
+				block->char_attr.color,block->char_attr.backColor,
+				block->char_attr.str);
 	}
 	Display_Time = 1;
-	key_state = DISABLE;
+}
+
+/******************************************************************************/
+void UI_Background_Plate_Cup(void)
+{
+	Display_Time = 0;
+	DisplayDriver_Fill(0,22,240,320,Interface_Back);
+	DisplayDriver_Fill(10,62,229,260,WHITE);
+	Display_Time = 1;
 }

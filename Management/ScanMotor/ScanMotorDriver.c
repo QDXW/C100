@@ -6,11 +6,11 @@
  */
 /******************************************************************************/
 #include "ScanMotorDriver.h"
-#include "ScanMotorDriver_PositionSensor.h"
 
 /******************************************************************************/
 unsigned int CCR2_Val = 45000;
 uint8 ScanMotorDriver_InBasePosition = 0;
+uint8 MotorDriver_Ctr = 0;
 
 /******************************************************************************/
 void Delay_SW(__IO uint32 nCount)
@@ -73,10 +73,9 @@ void ScanMotorDriver_Control(uint8 enabled) {
 /******************************************************************************/
 void ScanMotorDriver_MoveOneStep(uint8 dir) {
 #define MOTOR_QUICK_DELAY	 0X2000
-#define MOTOR_SLOW_DELAY 	 0X4000
+#define MOTOR_SLOW_DELAY 	 0X3800
 
 	uint8 index = 0;
-	SystemManage_5V_Enabled();
 	ScanMotorDriver_Control(MOTOR_ENABLED);
 	while (index < 4)
 	{
@@ -136,13 +135,13 @@ void ScanMotorDriver_MoveOneStep(uint8 dir) {
 		Delay_SW(MOTOR_SLOW_DELAY);
 	}
 	ScanMotorDriver_Control(MOTOR_DISABLED);
-	SystemManage_5V_Disabled();
 }
 
 /******************************************************************************/
 void ScanMotorDriver_Move(uint8 direction, uint32 steps)
 {
 	/* Enable motor driver */
+//	ScanMotorDriver_Control(MOTOR_ENABLED);
 
 	/* Goto base position */
 	if (direction == ScanMotorDriver_DIR_IN)
@@ -155,22 +154,16 @@ void ScanMotorDriver_Move(uint8 direction, uint32 steps)
 	}
 	else if ((direction == ScanMotorDriver_DIR_OUT) && (steps > 0))
 	{
-	#if TIME_MEASUREMENT_ENABLED
-			Alarm_Time_Pin_High();
-	#endif
-			/* Move out per steps */
-			while (steps--)
-			{
-				ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_OUT);
-			}
-	#if TIME_MEASUREMENT_ENABLED
-			Alarm_Time_Pin_Low();
-	#endif
-		}
-		else
+		/* Move out per steps */
+		while (steps--)
 		{
-			/* Do nothing */
+			ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_OUT);
 		}
+	}
+	else
+	{
+		/* Do nothing */
+	}
 
 	/* Disable motor driver */
 //	ScanMotorDriver_Control(MOTOR_DISABLED);
@@ -274,10 +267,12 @@ void ScanMotorDriver_SelfCheck_StepDrive(void)
 void SystemManage_5V_Enabled(void)
 {
 	GPIO_SetBits(GPIOE, GPIO_Pin_6);
+	MotorDriver_Ctr = 1;
 }
 
 /******************************************************************************/
 void SystemManage_5V_Disabled(void)
 {
 	GPIO_ResetBits(GPIOE, GPIO_Pin_6);
+	MotorDriver_Ctr = 0;
 }

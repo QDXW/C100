@@ -42,12 +42,17 @@
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //棕色
-#define BRRED 			 0XFC07 //棕红色
-#define GRAY  			 0X8430 //灰色
-#define DARKBLUE      	 0X01CF	//深蓝色
-#define LIGHTBLUE      	 0X7D7C	//浅蓝色  
-#define GRAYBLUE       	 0X5458 //灰蓝色
+#define BROWN 			 0XBC40 			//棕色
+#define Thint_Line 		 0XFC07 			//棕红色
+#define GRAY  			 0X8430			 	//灰色
+#define DARKBLUE      	 0X01CF				//深蓝色
+#define LIGHTBLUE      	 0X7D7C				//浅蓝色
+#define GRAYBLUE       	 0X5458 			//灰蓝色
+#define Interface_Bar    0X0AF8 			//状态栏颜色
+#define Interface_Back   0X04FF 			//背景颜色
+#define Thint_Line       0X457F 			//浅白线颜色
+#define CYAN_Line   	 0X1C5C 			//灰线颜色
+#define Thint_GREEN   	 0X47E7 			//进度条颜色
 
 /******************************************************************************/
 #define LCD_BASE        ((u32)(0x60000000 | 0x0001FFFE))
@@ -67,11 +72,7 @@
 #define D2U_L2R  6
 #define D2U_R2L  7
 
-#ifdef HONGRUIBO_NEW_GLASS
-#define DFT_SCAN_DIR  R2L_U2D
-#else
 #define DFT_SCAN_DIR  L2R_U2D
-#endif
 
 /******************************************************************************/
 typedef struct
@@ -97,6 +98,7 @@ void DisplayDriver_Init_Touch(void);
 void DisplayDriver_Control_BL(uint8 state);
 void RA8875_WAITSTATUS(void);
 void LCD_WriteRAM_Prepare(void);
+extern void RCC_Configuration(void);
 void LCD_WriteReg(u16 LCD_Reg,u16 LCD_RegValue);
 
 #endif /* __MANAGEMENT_DISPLAYDRIVER_DISPLAYDRIVER_H_ */

@@ -12,25 +12,25 @@
 #include "Interface_main.h"
 
 /******************************************************************************/
-#define HOSTCOMM_USART (USART2)
-#define HOSTCOMM_USART_IRQN (USART2_IRQn)
-#define HOSTCOMM_TX_PORT (GPIOA)
-#define HOSTCOMM_TX_PIN (GPIO_Pin_2)
-#define HOSTCOMM_RX_PORT (GPIOA)
-#define HOSTCOMM_RX_PIN (GPIO_Pin_3)
-#define PASSWORD_MAX_LENGTH (100)
-#define TESTNAME_MAX_LENGTH (30)
-#define UI_DATA_TRANSFER_ON (1)
-#define UI_DATA_TRANSFER_OFF (0)
+#define HOSTCOMM_USART 				(USART1)
+#define HOSTCOMM_USART_IRQN 		(USART1_IRQn)
+#define HOSTCOMM_TX_PORT 			(GPIOA)
+#define HOSTCOMM_TX_PIN 			(GPIO_Pin_9)
+#define HOSTCOMM_RX_PORT 			(GPIOA)
+#define HOSTCOMM_RX_PIN 			(GPIO_Pin_10)
+#define PASSWORD_MAX_LENGTH 		(100)
+#define TESTNAME_MAX_LENGTH 		(30)
+#define UI_DATA_TRANSFER_ON 		(1)
+#define UI_DATA_TRANSFER_OFF 		(0)
 
-#define DEVICE_AREA_SIZE           (50)
-#define FLASH_CALI_STATUS_ADDR     ((0X08000000 + 0x80000) - DEVICE_AREA_SIZE)
+#define DEVICE_AREA_SIZE           	(50)
+#define FLASH_CALI_STATUS_ADDR     	((0X08000000 + 0x80000) - DEVICE_AREA_SIZE)
 
 /******************************************************************************/
 /* Size information */
 #define SIZE_REC_BUFFER              (3*1024)
 #define SIZE_CMD_BUFFER              (2*1024 + 100)
-#define SIZE_RESP_BUFFER             (100)
+#define SIZE_RESP_BUFFER             (512)
 #define SIZE_HEAD_LEN                (3)
 #define SIZE_LEN_HEAD_CMD_CRC        (6)
 #define SIZE_PASSWORD                (14)
@@ -102,6 +102,9 @@ enum cmdCode {
 	CMD_CODE_APP_WRITE_RESISTOR,
 
 	CMD_CODE_APP_SET_CALC_PARAMETERS = 40,
+
+	CMD_CODE_APP_SEND_C_T = 0x70,
+	CMD_CODE_APP_SEND_RAWDATA = 0x71,
 };
 
 /* Bin file attribute */
@@ -134,7 +137,6 @@ extern uint16 HostComm_RecBufSize;
 /******************************************************************************/
 extern uint16 HostComm_Cmd_Respond(void);
 extern void HostComm_Init(void);
-extern void HostComm_Process(void);
 extern void HostComm_Send_LIS(uint8 *data);
 extern void HostComm_Send_Char(uint8 data);
 extern void HostComm_Send_String(uint8 *strPtr);
@@ -142,8 +144,7 @@ extern void HostComm_Send(USART_TypeDef* USARTx, uint8 *Data,...);
 char *itoa(int32 value, char *string, int radix);
 uint16 HostComm_CalculateCRC(uint8 * message,uint32 length,
 uint16 remainder, uint16 xorMask);
-extern void HostComm_SendThrUSB(uint16 len, uint8 *srcPtr);
-extern void HostComm_Report_ReadRecords_LastOne(void);
-extern void HostComm_Report_ReadRecords(HOSTCOMM_REPORT_ATTR data);
+extern void HostComm_Cmd_Send_RawData(uint16 length, uint8 dataBuf[]);
+extern void HostComm_Cmd_Send_C_T(uint16 CValue, uint16 TValue);
 
 #endif /* __MANAGEMENT_HOSTCOMM_HOSTCOMM_H_ */

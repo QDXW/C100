@@ -9,30 +9,21 @@
 #define MANAGEMENT_INTERFACE_INTERFACE_QUICK_H_
 
 /******************************************************************************/
-#include "Interface_main.h"
-#include "comDef.h"
-
-/******************************************************************************/
-extern uint8 Cup_Exist;
-extern uint8 Exti_lock;
-extern uint8 key_state;
-extern uint8 Key_control;
-extern uint8 Interface_Key;
-uint16 UI_WindowBlocks_Quick = 0;
-uint16 UI_WindowBlocks_Quick_font = 0;
+#include "Project_File.h"
 
 /******************************************************************************/
 typedef struct {
-	uint8 rect_enabled; 				/* Support rectangular or not */
-	rect_attr rect_attr;				/* Rectangular attribute */
-	uint8 char_enabled;					/* Support char or not */
-	char_attr char_attr;				/* char attribute */
+	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;					/* picture attribute */
+	uint8 char_enabled;					/* Support char or not */
+	char_attr char_attr;				/* char attribute */
 } block_attr_Quick;
 
 /******************************************************************************/
 extern void UI_Draw_Window_Quick(uint16 blockNum);
 void UI_Draw_Window_Quick_font(uint16 blockNum);
+void UI_Background_Plate_Quick (void);
+uint8 Quick_Touch_Check(block_attr_Quick* block,uint16* xpos,uint16* ypos);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_QUICK_H_ */

@@ -9,9 +9,7 @@
 #define MANAGEMENT_STORAGE_FLASH_STORAGE_FLASH_H_
 
 /******************************************************************************/
-#include "main.h"
-#include "comDef.h"
-#include "stm32f10x.h"
+#include "Project_File.h"
 
 /******************************************************************************/
 #define W25Q80 	0XEF13
@@ -45,7 +43,7 @@
 #define ITEM_MAX_ONEPAGE_EXTENSION1 10
 
 /******************************************************************************/
-extern uint16 reagent_Strip[3];
+extern uint16 reagent_Strip[4];
 
 /******************************************************************************/
 typedef struct {
@@ -86,6 +84,7 @@ typedef struct {
 extern STORAGE_SINGLE_DATA_STRUCT Storage_Data;
 
 /******************************************************************************/
+extern void Printer_BLE_Print(STORAGE_SINGLE_DATA_STRUCT *content);
 extern void Storage_Flash_Init(void);
 extern void Storage_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);
 extern void Storage_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);

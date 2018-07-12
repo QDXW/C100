@@ -4,11 +4,7 @@
  * Mail: han_liu_zju@sina.com
  * Date: 2014.12 ~ Now
  ******************************************************************************/
-#include "Font.h"
-#include "stm32f10x.h"
-#include "stm32f10x_i2c.h"
 #include "HumanInput_CapTS.h"
-#include "DisplayDriver_touch.h"
 
 /******************************************************************************/
 const u16 CapTS_TPX_TBL[5]=
@@ -40,8 +36,6 @@ TouchInfo CapTS_Touch_Min; /* Minimal */
 TouchInfo CapTS_Touch_LF; /* Liftoff */
 
 uint32 TouchCount = 0;
-uint16 xPos = 0;
-uint16 yPos = 0;
 
 /******************************************************************************/
 void CapTS_Write_Regsister(uint16 reg, uint8* pBuffer, uint8 NumByteToWrite);
@@ -79,6 +73,8 @@ void CapTS_GPIO_Configuration(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(CAPTS_RST_PORT, &GPIO_InitStructure);
+
+	CapTS_Exint_Init();
 }
 
 /******************************************************************************/
@@ -148,12 +144,6 @@ void HumanInput_CapTS_Init(void)
 	CapTS_RCC_Configuration();
 	CapTS_GPIO_Configuration();
 	CapTS_I2C_Configuration();
-
-#if CAPTS_INT_ENABLED
-	/* Initialize external interrupt */
-	CapTS_Exint_Init();
-#endif
-
 	HumanInput_CapTS_Reset();
 }
 
@@ -509,7 +499,7 @@ void HumanInput_CapTS_Process(void)
 void HumanInput_TouchScreen_Process(void)
 {
 	/* Capacitive touchscreen */
-	if(TPR_Structure.TouchSta & TP_COORD_UD)
+if(TPR_Structure.TouchSta & TP_COORD_UD)
 	{
 		/* Clear flag */
 		TPR_Structure.TouchSta &= ~TP_COORD_UD;

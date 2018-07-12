@@ -4,7 +4,6 @@
  * Mail: han_liu_zju@sina.com
  * Date: 2014.12 ~ Now
  ******************************************************************************/
-#include "DisplayDriver.h"
 #include "DisplayDriver_API.h"
 #include "DisplayDriver_FontLib.h"
 
@@ -97,6 +96,128 @@ void DisplayDriver_DrawBmp(const uint8* bmpbit,uint16 x, uint16 y)
 }
 
 /******************************************************************************/
+void DisplayDriver_DrawPic_Touch(const uint8* src, uint16 bc, uint16 x, uint16 y)
+{
+//	uint32 size,ip = 0;
+	u16 i,j;
+//	u16 width = 0;
+//	u16 height = 0;
+//	u16 temp;
+
+	unsigned short w,h,rgb[255];
+	unsigned char i1,i2,cc,gnum;
+
+	/* Get width and height from source file */
+	w=(*(src)<<8)+(*(src+1));
+	h=(*(src+2)<<8)+(*(src+3));
+
+	DisplayDriver_SetCursor(x, y);
+	WriteCommand(GRAM_COLOR);
+
+	gnum=*(src+4);
+
+	for (i=0;i<gnum;i++)
+		rgb[i]=((*(src+5+i*2))<<8)+(*(src+6+i*2));
+	src+=5+gnum*2;
+
+	/* Row by row */
+	for (j=0;j<h;j++)
+	{
+		DisplayDriver_SetCursor(x, y + j);
+		LCD_WriteRAM_Prepare();
+		/* Write one row data */
+		i=0;
+		while (i<w)	{
+			cc=*src++;
+			if (cc==0xff)	{
+				cc=*src++;
+				i2=*src++;
+				if (rgb[cc]==0xf81f) {
+					for (i1=0;i1<i2;i1++)
+						WriteData(DisplayDriver_SwapBlueRed(bc));
+				}
+				else {
+					for (i1=0;i1<i2;i1++)
+						WriteData(DisplayDriver_SwapBlueRed(rgb[cc]));
+				}
+				i+=i2;
+			}
+			else {
+				if (rgb[cc]==0xf81f) {
+					WriteData(DisplayDriver_SwapBlueRed(bc));
+				}
+				else {
+					WriteData(DisplayDriver_SwapBlueRed(rgb[cc]));
+				}
+				i++;
+			}
+
+		}
+	}
+}
+
+/******************************************************************************/
+void DisplayDriver_Text16_Touch(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s)
+{
+	unsigned char i,j;
+	unsigned short k;
+
+	while(*s)
+	{
+		if( *s < 0x80 )
+		{
+			k=*s;
+			if (k>32)
+				k-=32;
+			else
+				k=0;
+
+			for(i=0;i<16;i++)
+				for(j=0;j<8;j++)
+				{
+					if(asc16[k*16+i]&(0x80>>j))
+						DisplayDriver_DrawPoint(x+j,y+i,fc);
+				}
+			s++;x+=8;
+		}
+	}
+}
+
+/******************************************************************************/
+void DisplayDriver_Text16_Back(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s)
+{
+	unsigned char i,j;
+	unsigned short k;
+
+	while(*s)
+	{
+		if( *s < 0x80 )
+		{
+			k=*s;
+			if (k>32)
+				k-=32;
+			else
+				k=0;
+
+			for(i=0;i<16;i++)
+				for(j=0;j<8;j++)
+				{
+					if(asc16[k*16+i]&(0x80>>j))
+						DisplayDriver_DrawPoint(x+j,y+i,fc);
+					else
+					{
+						if (fc!=bc)
+							DisplayDriver_DrawPoint(x+j,y+i,bc);
+					}
+				}
+			s++;x+=8;
+		}
+	}
+}
+
+/******************************************************************************/
 void DisplayDriver_TextAny(unsigned short x, unsigned short y, unsigned char w,
 		unsigned char h, unsigned short fc, unsigned short bc,
 		const unsigned char *s, unsigned short addr)
@@ -117,6 +238,7 @@ void DisplayDriver_TextAny(unsigned short x, unsigned short y, unsigned char w,
                                DisplayDriver_DrawPoint(x+j*8+k,y+i,bc);
                       }
               }
+              s++;x+=8;
       }
 }
 
@@ -298,6 +420,55 @@ void DisplayDriver_DrawPoint(u16 x,u16 y, u16 color)
 }
 
 /******************************************************************************/
+void DisplayDriver_DrawStraight_Line(u16 startx,u16 starty, u16 endx,u16 endy,u16 color)
+{
+	uint16 x = 0,y = 0;
+	if(startx == endx)
+	{
+		if(starty <= endy)
+		{
+			for(y = starty;y < endy;y++)
+			{
+				DisplayDriver_SetCursor(startx,y);
+				LCD_WriteRAM_Prepare();
+				WriteData(color);
+			}
+		}
+		else
+		{
+			for(y = endy;y < starty;y++)
+			{
+				DisplayDriver_SetCursor(startx,y);
+				LCD_WriteRAM_Prepare();
+				WriteData(color);
+			}
+		}
+	}
+
+	if(starty == endy)
+	{
+		if(startx <= endx)
+		{
+			for(x = startx;x < endx;x++)
+			{
+				DisplayDriver_SetCursor(x,starty);
+				LCD_WriteRAM_Prepare();
+				WriteData(color);
+			}
+		}
+		else
+		{
+			for(x = endx;x < startx;x++)
+			{
+				DisplayDriver_SetCursor(x,starty);
+				LCD_WriteRAM_Prepare();
+				WriteData(color);
+			}
+		}
+	}
+}
+
+/******************************************************************************/
 void DisplayDriver_Fill(u16 start_x,u16 start_y,u16 end_x,u16 end_y,u16 color)
 {
 	u16 i,j;
@@ -318,10 +489,10 @@ void DisplayDriver_Fill(u16 start_x,u16 start_y,u16 end_x,u16 end_y,u16 color)
 /******************************************************************************/
 void DisplayDriver_DrawRectangle(u16 start_x,u16 start_y,u16 end_x,u16 end_y, u16 color)
 {
-	DisplayDriver_DrawLine(start_x,start_y,end_x,start_y, color);
-	DisplayDriver_DrawLine(start_x,start_y,start_x,end_y, color);
-	DisplayDriver_DrawLine(start_x,end_y,end_x,end_y, color);
-	DisplayDriver_DrawLine(end_x,start_y,end_x,end_y, color);
+	DisplayDriver_DrawStraight_Line(start_x,start_y,end_x,start_y, color);
+	DisplayDriver_DrawStraight_Line(start_x,start_y,start_x,end_y, color);
+	DisplayDriver_DrawStraight_Line(start_x,end_y,end_x,end_y, color);
+	DisplayDriver_DrawStraight_Line(end_x,start_y,end_x,end_y, color);
 }
 
 /******************************************************************************/
@@ -351,5 +522,15 @@ void DisplayDriver_DrawCircle(u16 x_postion,u16 y_postion,u8 radius, u16 color)
 			di += 10 + 4 * (a - b);
 			b--;
 		}
+	}
+}
+
+/******************************************************************************/
+void DisplayDriver_DrawCircle_Solid(u16 x_postion,u16 y_postion,u8 radius, u16 color)
+{
+	uint8 radius_lenght = 0;
+	for(radius_lenght = 0;radius_lenght <= radius;radius_lenght++)
+	{
+		DisplayDriver_DrawCircle(x_postion,y_postion,radius_lenght,color);
 	}
 }

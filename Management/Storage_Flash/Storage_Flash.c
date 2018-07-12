@@ -4,11 +4,8 @@
  *  Created on: 2018Äê4ÔÂ18ÈÕ
  *      Author: Administrator
  */
-#include "string.h"
-#include "HostComm.h"
+/******************************************************************************/
 #include "Storage_Flash.h"
-#include "SystemManage_RTC.h"
-#include "SignalProcess_Sample.h"
 
 /******************************************************************************/
 u16 W25QXX_TYPE = W25Q128;
@@ -16,7 +13,7 @@ u16 W25QXX_TYPE = W25Q128;
 #define BUFFER_SIZE (sizeof(STORAGE_SINGLE_DATA_STRUCT))
 uint8 Storage_writeBuffer[BUFFER_SIZE];
 uint8 Storage_readBuffer[BUFFER_SIZE];
-uint16 reagent_Strip[3] = {0};
+uint16 reagent_Strip[4] = {0};
 
 #define DEFAULT_VALUE (0XFF)
 /* Head */
@@ -366,46 +363,47 @@ void Storage_Clear(void)
 /******************************************************************************/
 uint8 Storage_Record(void)
 {
-	uint8 status = 0;
 	Get_reagent_TestNum();
 	memcpy(Storage_writeBuffer, &Storage_Data, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 	Storage_Write(Storage_writeBuffer, (reagent_Strip[0] *4096),sizeof(STORAGE_SINGLE_DATA_STRUCT));
-	return status;
 }
 
 /******************************************************************************/
 uint8 Read_Record(void)
 {
-	uint8 status = 1;
-	uint8 Information[12] = 0;
+	uint8 Information[10] = 0;
 	memset(Information,0,sizeof(Information));
 	memset(&Storage_Data, 0, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 	if(Read_first)
 	{
-		Storage_Read(Information,0x00,3);
-		memcpy(&reagent_Strip[0],Information,3);
+		Storage_Read(Information,0x00,8);
+		memcpy(&reagent_Strip[0],Information,8);
 		Read_first = 0;
 	}
 
-	if(reagent_Strip[0] == 0)
+	if((reagent_Strip[0] > 500) || (reagent_Strip[0] == 0))
+	{
+		reagent_Strip[0] = 0;
+		reagent_Strip[1] = 0;
 		return 0;
+	}
 	Storage_Read(Storage_writeBuffer,(reagent_Strip[0] *4096),sizeof(STORAGE_SINGLE_DATA_STRUCT));
 	memcpy(&Storage_Data,Storage_writeBuffer,sizeof(STORAGE_SINGLE_DATA_STRUCT));
-	return status;
 }
 
 /******************************************************************************/
 void Get_reagent_TestNum(void)
 {
-	uint8 Information[12] = 0;
+	uint8 Information[10] = 0;
+	reagent_Strip[3] = 65535;
 	memset(Information,0,sizeof(Information));
-	Storage_Read(Information,0x00,3);
-	memcpy(&reagent_Strip[0],Information,3);
+	Storage_Read(Information,0x00,8);
+	memcpy(reagent_Strip,Information,8);
 	reagent_Strip[0] += 1;
-	if(reagent_Strip[0] > 100)
+	if(reagent_Strip[0] > 500)
 	{
-		reagent_Strip[0] = 1;
-		reagent_Strip[1] = 100;
+		reagent_Strip[0] = 500;
+		reagent_Strip[1] = 500;
 		reagent_Strip[2] = 1;
 	}
 
@@ -413,8 +411,8 @@ void Get_reagent_TestNum(void)
 	{
 		reagent_Strip[1] = reagent_Strip[0];
 	}
-	memcpy(Information,&reagent_Strip[0],3);
-	Storage_Write(Information, 0x00, 3);
+	memcpy(Information,&reagent_Strip[0],8);
+	Storage_Write(Information, 0x00, 8);
 }
 
 /******************************************************************************/

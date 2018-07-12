@@ -6,173 +6,98 @@
  */
 
 /******************************************************************************/
-#include "PIC_Interface.h"
-#include "Storage_Flash.h"
 #include "Interface_main.h"
-#include "SystemManage_RTC.h"
+#include "Standard.pic"
+#include "Quick.pic"
+#include "Record.pic"
+#include "Setting.pic"
+#include "Open_face.pic"
+#include "Open_HZ.pic"
+#include "statusbar_bat.pic"
+#include "statusbar_charging.pic"
+#include "Blutooth_Ico.pic"
 
 /******************************************************************************/
-uint8 Cup_Count = 0;
-uint8 Read_first = 1;
-
-#if Drug_S100
-extern uint8 page_Num;
-extern uint8 Page_Flag;
-extern uint8 page_tatol;
-#endif
-
+extern uint8 Power_Open,Touch_Success = 0;
+uint16 xPos = 0, yPos = 0;
+uint8 Touch_Flag = 0,Touch_Pre = 0,Read_first = 1,Cup_Count = 0,Pic_Count = 0;
+uint8 Record_Display = 1,Stored_Record = 1;
 uint16 UI_WindowBlocks = 0;
 uint8 UI_state = UI_STATE_MAIN_WINDOW;
 
-#if Drug_S100
 /******************************************************************************/
 block_attr block_standard = {
-		ENABLE,									/* Interface Main rect */
-		{
-			0,   20,
-			128, 160,
-			BACKCOLOR_CONTENT_BACK
-		},
-
+		UI_STATE_STANDARD,
 		ENABLE,									/* Display Picture */
 		{
-			gImage_PIC_Standard,
-			12, 24,
-			45, 45
+			Standard,
+			7,  28,
+			106, 106
 		},
 
 		ENABLE,									/* Display HZ16X8 */
 		{
 			"Standard",
-			0,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			63,  20,
-			63,  160,
-			Light_Gray
+			28,  138,
+			WHITE,WHITE,
+			Interface_Back
 		},
 };
 
 /******************************************************************************/
 block_attr block_quick = {
-		DISABLE,
-		{0},
-
+		UI_STATE_QUICK,
 		ENABLE,									/* Display Picture */
 		{
-			gImage_PIC_Quick,
-			71,  24,
-			45,  45
+			Quick,
+			127,  28,
+			106, 106
 		},
 
 		ENABLE,									/* Display HZ16X8 */
 		{
 			"Quick",
-			74,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			64,  20,
-			64,  160,
-			Thint_Blue
+			160,  138,
+			WHITE,WHITE,
+			Interface_Back
 		},
 };
 
 /******************************************************************************/
 block_attr block_record = {
-		DISABLE,
-		{0},
-
+		UI_STATE_RECORD,
 		ENABLE,									/* Display Picture */
 		{
-			gImage_PIC_Record,
-			12,  94,
-			45, 45
+			Record,
+			7,  187,
+			106, 106
 		},
 
 		ENABLE,									/* Display HZ16X8 */
 		{
 			"Record",
-			12,  141,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			0,    90,
-			128,  90,
-			Light_Gray
+			36,  297,
+			WHITE,WHITE,
+			Interface_Back
 		},
 };
 
 /******************************************************************************/
 block_attr block_settings = {
-		DISABLE,
-		{0},
-
+		UI_STATE_SETTING,
 		ENABLE,									/* Display Picture */
 		{
-			gImage_PIC_Setting,
-			71, 94,
-			45, 45
+			Setting,
+			127, 187,
+			106, 106
 		},
 
 		ENABLE,									/* Display HZ16X8 */
 		{
-			"Setting",
-			68,  141,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			0,    91,
-			128,  91,
-			Thint_Blue
-		},
-};
-
-/******************************************************************************/
-block_font_attr block_font = {
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Standard",
-			0,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Quick",
-			74,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Record",
-			12,  141,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Setting",
-			68,  141,
-			White,Magenta,
-			Baby_Blue
+			"Settings",
+			148,  297,
+			WHITE,WHITE,
+			Interface_Back
 		},
 };
 
@@ -183,196 +108,73 @@ block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
 		&block_record,
 		&block_settings,
 };
-block_font_attr* UI_WindowBlocksAttrArray_Main_font[] = {
-		&block_font,
-};
-#endif
-
-#if Drug_C100
 /******************************************************************************/
-block_attr block_standard = {
-		ENABLE,									/* Interface Main rect */
-		{
-			0,   20,
-			128, 160,
-			BACKCOLOR_CONTENT_BACK
-		},
-
-		ENABLE,									/* Display Picture */
-		{
-			gImage_PIC_Standard,
-			12, 24,
-			45, 45
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Standard",
-			0,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			63,  20,
-			63,  160,
-			Light_Gray
-		},
-};
-
-/******************************************************************************/
-block_attr block_quick = {
-		DISABLE,
-		{0},
-
-		ENABLE,									/* Display Picture */
-		{
-			gImage_PIC_Quick,
-			71,  24,
-			45,  45
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Quick",
-			74,  71,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			64,  20,
-			64,  160,
-			Thint_Blue
-		},
-};
-
-/******************************************************************************/
-block_attr block_record = {
-		DISABLE,
-		{0},
-
-		ENABLE,									/* Display Picture */
-		{
-			gImage_PIC_Record,
-			12,  94,
-			45, 45
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Record",
-			12,  141,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			0,    90,
-			128,  90,
-			Light_Gray
-		},
-};
-
-/******************************************************************************/
-block_attr block_settings = {
-		DISABLE,
-		{0},
-
-		ENABLE,									/* Display Picture */
-		{
-			gImage_PIC_Setting,
-			71, 94,
-			45, 45
-		},
-
-		ENABLE,									/* Display HZ16X8 */
-		{
-			"Setting",
-			68,  141,
-			White,Magenta,
-			Baby_Blue
-		},
-
-		ENABLE,									/* Parting line */
-		{
-			0,    91,
-			128,  91,
-			Thint_Blue
-		},
-};
-
-/******************************************************************************/
-block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
-		&block_standard,
-		&block_quick,
-		&block_record,
-		&block_settings,
-};
-
-#endif
+block_attr* UI_WindowBlocksAttrArray[20] = {0};
 
 /******************************************************************************/
 void UI_Draw_Block(block_attr* block);
-void UI_Draw_Block_font(block_font_attr* block);
 
 /******************************************************************************/
-uint8 Interface_Process(uint16* KeyCode)
+uint8 Interface_Process(uint16* xpos,uint16* ypos)
 {
 	/* Define each state */
-	static uint8 (* const UI_stateMachine[UI_STATE_MAX_STATE_NUM])(uint16) =
+	static uint8 (* const UI_stateMachine[UI_STATE_MAX_STATE_NUM])(uint16* xpos,uint16* ypos) =
 	{
-			Interface_Main,					/* Interface Main Display */
-			Interface_Key_Event,			/* Interface Key Event */
-			Interface_Main_font,			/* Interface Main font Display */
-			Interface_Start,				/* Interface Start Display */
-			Interface_Quick,				/* Interface Quick Display */
-			Interface_Record,				/* Interface Record Display */
-			Interface_Setting,				/* Interface Setting Display */
-			Interface_Testing,				/* Interface Test Display */
-			Interface_Quick_font,			/* Interface Quick font Display */
-			Interface_Result,				/* Interface Result Display */
-			Interface_Result_2,				/* Interface Start Display */
-			Interface_Insert_Cup,			/* Interface insert cup Display */
-			Interface_Start_font,			/* Interface Start font Display */
-			Interface_Record_2				/* Interface Record2 Display */
+			Interface_Main_Window_Process,
+			Interface_Main,						/* Interface Main Display */
+			Interface_Standard,					/* Interface Main Display */
+			Interface_Start,					/* Interface Start Display */
+			Interface_Quick,					/* Interface Quick Display */
+			Interface_Record,					/* Interface Record Display */
+			Interface_Setting,					/* Interface Setting Display */
+			Interface_Testing,					/* Interface Test Display */
+			Interface_Result,					/* Interface Result Display */
+			Interface_Insert_Cup,				/* Interface insert cup Display */
+			Interface_Delete,					/* Interface Delete Display */
+			Interface_Down_Time_Process,		/* Interface Down Time Display */
+			Interface_Buetooth_Process,			/* Interface Buetooth Display */
+			Interface_About_Machine,			/* Interface About Machine Display */
+			Interface_System_Time,				/* Interface About Machine Display */
+			Interface_Set_Time_Process,			/* Interface About Machine Display */
+			Interface_Quick_Touch_Process,		/* Interface About Machine Display */
+			Interface_Down_Time_Touch_Process,	/* Interface About Machine Display */
+			Interface_Result_Touch_Process,		/* Interface Result Touch Display */
+			Interface_Invalue_Code_Process,		/* Interface Result Touch Display */
+			Interface_Invalid_Touch_Process,	/* Interface Result Touch Display */
+			Interface_Record_Demand_Process,	/* Interface Result Touch Display */
+
 	};
 	uint8 state;
 	do										/* Polling each state */
 	{
 		if (UI_state < UI_STATE_MAX_STATE_NUM)
 		{
-			state = UI_stateMachine[UI_state](*KeyCode);
+			state = UI_stateMachine[UI_state](&xPos,&yPos);
 		}
-		*KeyCode = 0;	/* Clear touch information to avoid repeated respond */
+		xPos = 0;	/* Clear touch information to avoid repeated respond */
+		yPos = 0;
 	} while(state & UI_STATE_RERUN);
 
-	return UI_STATE_RERUN;
+	return state;
 }
 
 /******************************************************************************/
-uint8 Interface_Main(uint16 KeyCode)
+uint8 Interface_Main(uint16* xpos,uint16* ypos)
 {
-#if Drug_S100
-	Exti_lock = DISABLE;
-	Interface_Key = DISABLE;
-	key_state_confirm = 0;
+	uint8 state = 0;
+	Enter_Sleep = 1;
+	Read_first = 1,Record_Display = 1;
+	Interface_Reord = 0,Stored_Record = 1;
 	QRCode_Trigger_Disabled();
+	UI_Background_Plate_Main();
+	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Main) >> 2;
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Main,
+			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
-	UI_state = UI_STATE_MAIN_FONT;
-#endif
-
-#if Drug_C100
-	QRCode_Trigger_Disabled();
-	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Main) >> 2;
-	UI_Draw_Window(UI_WindowBlocks);
-#endif
-
-	return UI_STATE_RERUN;
+	Exti_lock = ENABLE;
+	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+	return state;
 }
 
 /******************************************************************************/
@@ -389,318 +191,21 @@ void UI_Draw_Window(uint16 blockNum)
 void UI_Draw_Block(block_attr* block)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)					/* 1. Draw Rect */
-	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
-	}
-
 	if (block->pic_enabled)						/* 2. Draw picture */
 	{
-		DisplayDriver_DrawPic(block->pic_attr.offsetX,
-				block->pic_attr.offsetY, block->pic_attr.width,
-				block->pic_attr.height,block->pic_attr.src);
-	}
-
-	if (block->line_enabled)					/* 3.Parting line */
-	{
-		DisplayDriver_DrawLine(block->Parting_line_attr.startX,
-				block->Parting_line_attr.startY,
-				block->Parting_line_attr.endX,
-				block->Parting_line_attr.endY,
-				block->Parting_line_attr.color);
+		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+				block->pic_attr.offsetX,block->pic_attr.offsetY);
 	}
 
 	if (block->char_enabled)					/* 4. Draw character */
 	{
-			DisplayDriver_Text16_B(
+		DisplayDriver_Text16_Touch(
 					block->char_attr.offsetX,block->char_attr.offsetY,
-					block->char_attr.color,block->char_attr.faceColor,
+					block->char_attr.color,block->char_attr.backColor,
 					block->char_attr.str);
 	}
 	Display_Time = 1;
 }
-
-/******************************************************************************/
-uint8 Interface_Key_Event(uint16 KeyCode)
-{
-#if  Drug_S100
-	switch(Interface_Key)
-	{
-		case 0:
-			switch(key_state_confirm)
-			{
-				case 0:
-					UI_state = UI_STATE_MAIN_FONT;
-				break;
-
-				case 1:
-					UI_state = Key_control + 2;
-					key_state_confirm = DISABLE;
-					key_state = 1;
-					Key_control = 1;
-				break;
-
-				default:
-				break;
-			}
-		break;
-
-		case 1:
-			switch(key_state_confirm)
-			{
-				case 1:
-					UI_state = UI_STATE_TESTING;
-					key_state_confirm = DISABLE;
-					Key_control = 1;
-				break;
-				case 2:
-					UI_state = UI_STATE_START_FONT;
-					key_state_confirm = DISABLE;
-					Key_control = 1;
-				break;
-
-				default:
-				break;
-			}
-		break;
-
-		case 2:
-			switch(key_state_confirm)
-			{
-				case 0:
-					if(Key_control == 1 && Page_Flag)
-					{
-						UI_state = UI_STATE_RESULT;
-					}
-					if(Key_control == 2 && (!Page_Flag))
-					{
-						UI_state = UI_STATE_RESULT_2;
-					}
-				break;
-
-				case 1:
-					UI_state = UI_STATE_MAIN_WINDOW;
-					Interface_Key = DISABLE;
-					Key_control = 1;
-					key_state = 1;
-					key_state_confirm = DISABLE;
-				break;
-
-				default:
-				break;
-			}
-		break;
-
-		case 3:
-			switch(key_state_confirm)
-			{
-				case 0:
-					if(Key_control == 1)
-					{
-						UI_state = UI_STATE_MAIN_WINDOW;
-						Interface_Key = DISABLE;
-						Key_control = 1;
-						key_state = 1;
-						key_state_confirm = DISABLE;
-					}
-				break;
-
-				default:
-				break;
-			}
-		break;
-
-		case 4:
-			switch(key_state_confirm)
-			{
-				case 0:
-					switch(Key_control)
-					{
-						case 1:
-							if (page_Num == 1 && reagent_Strip[0] == 1)
-							{
-								reagent_Strip[0] = 1;
-							}
-							else if (page_Num == 1)
-							{
-								reagent_Strip[0]--;
-								if (reagent_Strip[0] < 1)
-									reagent_Strip[0]  = reagent_Strip[1];
-							}
-							UI_state = UI_STATE_RECORD;
-
-						break;
-
-						case 2:
-							if (page_Num == 1 && reagent_Strip[0] >= 100 && page_tatol == 1)
-							{
-								reagent_Strip[0] = 100;
-								UI_state = UI_STATE_RECORD;
-							}
-							else
-							{
-								if (page_Num == 1 && page_tatol == 1)
-								{
-									reagent_Strip[0]++;
-									if (reagent_Strip[0] > reagent_Strip[1])
-										reagent_Strip[0] = 1;
-									UI_state = UI_STATE_RECORD;
-								}
-
-								if (page_Num == 1 && page_tatol == 2)
-								{
-									UI_state = UI_STATE_RECORD2;
-								}
-
-								if (page_Num == 2 && page_tatol == 2)
-								{
-									reagent_Strip[0]++;
-									if (reagent_Strip[0] > reagent_Strip[1])
-										reagent_Strip[0] = reagent_Strip[1];
-									UI_state = UI_STATE_RECORD;
-								}
-							}
-						break;
-
-						default:
-						break;
-					}
-
-				break;
-
-				case 1:
-					UI_state = UI_STATE_MAIN_WINDOW;
-					Interface_Key = DISABLE;
-					Key_control = 1;
-					key_state = 1;
-					key_state_confirm = DISABLE;
-				break;
-
-				default:
-				break;
-			}
-		break;
-
-		default:
-		break;
-	}
-#endif
-
-#if Drug_C100
-
-
-#endif
-}
-
-#if Drug_S100
-/******************************************************************************/
-uint8 Interface_Main_font(uint16 KeyCode)
-{
-	Exti_lock = DISABLE;
-	UI_WindowBlocks = 0;
-	Read_first = 1;
-	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Main_font) >> 2;
-	UI_Draw_Window_font(UI_WindowBlocks);
-	Exti_lock = ENABLE;
-	while(!key_state);
-	UI_state = UI_STATE_KEY_STATE;
-	return UI_STATE_RERUN;
-}
-
-/******************************************************************************/
-void UI_Draw_Window_font(uint16 blockNum)
-{
-	uint8 blockIndex = 0;
-	if(key_state)								/* Draw blocks one by one */
-	{
-		for (blockIndex = 0; blockIndex < blockNum; blockIndex++)
-		{
-			UI_Draw_Block_font(UI_WindowBlocksAttrArray_Main_font[blockIndex]);
-		}
-	}
-}
-
-/******************************************************************************/
-void UI_Draw_Block_font(block_font_attr* block)
-{
-	Display_Time = 0;
-	if (block->char1_enabled)				/* 2. Draw character */
-	{
-		if(Key_control == 1)
-		{
-			DisplayDriver_Text16_B(
-					block->char1_attr.offsetX,block->char1_attr.offsetY,
-					block->char1_attr.color,block->char1_attr.backColor,
-					block->char1_attr.str);
-		}
-		else
-		{
-			DisplayDriver_Text16_B(
-					block->char1_attr.offsetX,block->char1_attr.offsetY,
-					block->char1_attr.color,block->char1_attr.faceColor,
-					block->char1_attr.str);
-		}
-	}
-
-	if (block->char2_enabled)				/* 2. Draw character */
-	{
-		if(Key_control == 2)
-		{
-			DisplayDriver_Text16_B(
-					block->char2_attr.offsetX,block->char2_attr.offsetY,
-					block->char2_attr.color,block->char2_attr.backColor,
-					block->char2_attr.str);
-		}
-		else
-		{
-			DisplayDriver_Text16_B(
-					block->char2_attr.offsetX,block->char2_attr.offsetY,
-					block->char2_attr.color,block->char2_attr.faceColor,
-					block->char2_attr.str);
-		}
-	}
-
-	if (block->char3_enabled)				/* 2. Draw character */
-	{
-		if(Key_control == 3)
-		{
-			DisplayDriver_Text16_B(
-					block->char3_attr.offsetX,block->char3_attr.offsetY,
-					block->char3_attr.color,block->char3_attr.backColor,
-					block->char3_attr.str);
-		}
-		else
-		{
-			DisplayDriver_Text16_B(
-					block->char3_attr.offsetX,block->char3_attr.offsetY,
-					block->char3_attr.color,block->char3_attr.faceColor,
-					block->char3_attr.str);
-		}
-	}
-
-	if (block->char4_enabled)				/* 2. Draw character */
-	{
-		if(Key_control == 4)
-		{
-			DisplayDriver_Text16_B(
-					block->char4_attr.offsetX,block->char4_attr.offsetY,
-					block->char4_attr.color,block->char4_attr.backColor,
-					block->char4_attr.str);
-		}
-		else
-		{
-			DisplayDriver_Text16_B(
-					block->char4_attr.offsetX,block->char4_attr.offsetY,
-					block->char4_attr.color,block->char4_attr.faceColor,
-					block->char4_attr.str);
-		}
-	}
-	Display_Time = 1;
-	key_state = DISABLE;
-}
-#endif
 
 /******************************************************************************/
 void UI_Draw_Status_Bar(void)					/* UI Draw Status Bar and Battery */
@@ -710,41 +215,161 @@ void UI_Draw_Status_Bar(void)					/* UI Draw Status Bar and Battery */
 	sprintf((char*)tbuf,"%02d:%02d",SystemManage_CurrentTime.hour,
 			SystemManage_CurrentTime.min);
 	Display_Time = 0;
-	DisplayDriver_Text16_B(12,2,White,BACKCOLOR_CONTENT_BAR,tbuf);
+	DisplayDriver_Text16_Back(10,2,WHITE,Interface_Bar,tbuf);
 	Display_Time = 1;
 }
 
 /******************************************************************************/
-void Battery_Empty_ICO(void)
+uint8 Interface_Main_Window_Process(uint16* xpos,uint16* ypos)
 {
-#if Drug_S100
-	int i = 0;
-	Display_Time = 0;
-	DisplayDriver_DrawLine(101,5,120,5,White);
-	DisplayDriver_DrawLine(101,6,120,6,White);
-
-	DisplayDriver_DrawLine(101,5,101,16,White);
-	DisplayDriver_DrawLine(102,5,102,16,White);
-
-	DisplayDriver_DrawLine(101,16,120,16,White);
-	DisplayDriver_DrawLine(101,15,120,15,White);
-
-	DisplayDriver_DrawLine(120,16,120,12,White);
-	DisplayDriver_DrawLine(121,15,121,12,White);
-	DisplayDriver_DrawLine(120,6,120,9,White);
-	DisplayDriver_DrawLine(121,6,121,9,White);
-
-	DisplayDriver_DrawLine(122,8,123,8,White);
-	DisplayDriver_DrawLine(122,9,123,9,White);
-	DisplayDriver_DrawLine(122,10,123,10,White);
-	DisplayDriver_DrawLine(122,11,123,11,White);
-	DisplayDriver_DrawLine(122,12,123,12,White);
-	DisplayDriver_DrawLine(122,13,123,13,White);
-	for(i= 104;i<120;)
+	Touch_Check (xpos,ypos);
+}
+/******************************************************************************/
+uint8 Touch_Check (uint16* xpos,uint16* ypos)
+{
+	uint8 blockIndex = 0,state = 0;						/* Draw blocks one by one */
+	if((xpos != 0) || (ypos != 0))
 	{
-		Lcd_ColorBox(i,8,3,6,White);
-		i += 4;
+		for (blockIndex = 0; blockIndex < UI_WindowBlocks; blockIndex++)
+		{
+			UI_Touch_Check(UI_WindowBlocksAttrArray[blockIndex],xpos,ypos);
+			if(Touch_Success)
+			{
+				Touch_Success = 0;
+				return UI_STATE_RERUN;
+			}
+		}
 	}
+	return state;
+}
+
+/******************************************************************************/
+void UI_Touch_Check(block_attr* block,uint16* xpos,uint16* ypos)
+{
+	uint16 startX = 0,endX = 0;
+	uint16 startY = 0,endY = 0;
+	startX = block->pic_attr.offsetX;
+	endX = startX + block->pic_attr.width;
+	startY = block->pic_attr.offsetY;
+	endY = startY + block->pic_attr.height;
+	if(block->Interface_Status)
+	{
+		if((startX < *xpos) && (*xpos < endX) && (startY < *ypos) && (*ypos < endY))
+		{
+			UI_state = block->Interface_Status;
+			Pic_Count = block->pic_attr.count;
+			Touch_Success = 1;
+		}
+	}
+}
+
+/******************************************************************************/
+void UI_Background_Plate_Main (void)
+{
+	Display_Time = 0;
+	DisplayDriver_Fill(0,22,240,320,Interface_Back);
+	DisplayDriver_DrawStraight_Line(119,22,119,320,CYAN_Line);
+	DisplayDriver_DrawStraight_Line(120,22,120,320,Thint_Line);
+	DisplayDriver_DrawStraight_Line(0,170,240,170,CYAN_Line);
+	DisplayDriver_DrawStraight_Line(0,171,240,171,Thint_Line);
 	Display_Time = 1;
-#endif
+}
+
+/******************************************************************************/
+void Status_Init(void)
+{
+	GPIO_SetBits(GPIOD, GPIO_Pin_2);
+	Display_Time = 0;
+	DisplayDriver_Fill(0,20,240,320,Interface_Back);
+	DisplayDriver_Fill(0,0,240,21,0X0AF8);
+	DisplayDriver_DrawPic_Touch(Open_face,Interface_Bar,15,35);
+	DisplayDriver_DrawPic_Touch(statusbar_bat,Interface_Bar,200,2);
+	DisplayDriver_DrawPic_Touch(Blutooth_Ico,Interface_Bar,180,3);
+	DisplayDriver_Text16_Touch(11,290,WHITE,Interface_Bar,"A good assistant for doctor!");
+	Display_Time = 1;
+	SystemManage_5V_Enabled();
+//	RotationMotor_SelfCheck_StepDrive();
+//	ScanMotorDriver_SelfCheck_StepDrive();
+	SystemManage_5V_Disabled();
+	Power_Open = 1;
+	HumanInput_CapTS_Int(ENABLE);
+}
+
+/******************************************************************************/
+void Battery_Display (void)
+{
+	int i = 0;
+
+	adcx = Get_Adc_Average(ADC_Channel_11,10);
+	temp = (float)adcx*(5.185/4096.0);
+
+	DisplayDriver_Fill(103,7,118,8,Interface_Bar);
+	if((!Power_Open) || (UI_state == UI_STATE_TESTING))
+	{
+		temp += 0.36;
+	}
+
+	if((GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12)) && (temp < 3.6))
+	{
+		DisplayDriver_Fill(203,7,104,15,RED);
+	}
+	else
+	{
+		if(temp > 4.1)
+		{
+			DisplayDriver_Fill(203,6,218,13,0x7EF);
+		}
+		else if(temp > 4.0)
+		{
+			DisplayDriver_Fill(203,6,215,13,0x7EF);
+		}
+		else if(temp > 3.9)
+		{
+			DisplayDriver_Fill(203,6,212,13,0x7EF);
+		}
+		else if(temp > 3.8)
+		{
+			DisplayDriver_Fill(203,6,209,13,0x7EF);
+		}
+		else if(temp > 3.7)
+		{
+			DisplayDriver_Fill(203,6,206,13,0x7EF);
+		}
+		else if(temp > 3.65)
+		{
+			DisplayDriver_Fill(202,5,202,14,RED);
+		}
+		else
+		{
+//			SystemManage_CheckPowerOff();
+		}
+	}
+
+
+	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
+	{
+		DisplayDriver_DrawPic_Touch(statusbar_charging,Interface_Bar,225,1);
+	}
+	else
+	{
+		DisplayDriver_Fill(225,0,240,20,Interface_Bar);
+	}
+}
+
+/******************************************************************************/
+void Bluetooth_Connection (void)
+{
+	if (Printer_isConnected())
+	{
+		if (!Bluetooth_Connect)
+		{
+			DisplayDriver_DrawPic_Touch(Blutooth_Ico,Interface_Bar,170,3);
+			Bluetooth_Connect = 1;
+		}
+	}
+	else
+	{
+		DisplayDriver_Fill(169,2,181,20,Interface_Bar);
+		Bluetooth_Connect = 0;
+	}
 }

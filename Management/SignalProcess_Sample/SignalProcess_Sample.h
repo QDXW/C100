@@ -9,9 +9,7 @@
 #define MANAGEMENT_SIGNALPROCESS_SAMPLE_SIGNALPROCESS_SAMPLE_H_
 
 /******************************************************************************/
-#include "main.h"
-#include "ScanMotorDriver.h"
-#include "comDef.h"
+#include "Project_File.h"
 
 /******************************************************************************/
 #define STRIP_SENSOR_PORT              (GPIOC)

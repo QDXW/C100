@@ -8,7 +8,6 @@
 #define ADC_TIMER_PERIOD (60)
 
 /******************************************************************************/
-#include "DisplayDriver.h"
 #include "SignalProcess_Sample.h"
 
 /******************************************************************************/
@@ -26,15 +25,12 @@ uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint16 SignalProcess_sampleBuffer_BK[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint8 SignalProcess_outputBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 
-uint8 SignalSample_resistorValue = 14;
+uint8 SignalSample_resistorValue = 8;
 uint8 SignalSample_resistorValueStored = 0;
 
 uint8 SignalProcess_output = 0;
 
-#if RL_A3000
-void SignalSample_Sample_ADG1609_Init(void);
-void SignalSample_Sample_Select_Channel(CH_ENUM ch);
-#endif
+//uint8 SignalBuffer[500] = {0};
 
 /******************************************************************************/
 void SignalSample_Sample_Strip_Sensor_Init(void);
@@ -44,11 +40,8 @@ void SignalSample_Sample_SetResistor(void);
 /******************************************************************************/
 void SignalSample_Sample_Init(void)
 {
-	/* Strip position sensor */
-	SignalSample_Sample_Strip_Sensor_Init();
-
 	/* Initialize signal LED */
-//	SignalSample_Sample_LED_Init();
+	SignalSample_Sample_LED_Init();
 
 	/* Initialize AD84XX */
 	SignalSample_Sample_AD84XX_Init();
@@ -57,11 +50,6 @@ void SignalSample_Sample_Init(void)
 	SignalSample_Sample_SetResistor();
 
 	SignalSample_Sample_Timer_Init();
-
-#if RL_A3000
-	/* Initialize ADG1609 */
-	SignalSample_Sample_ADG1609_Init();
-#endif
 
 	/* Initialize ADC */
 	SignalSample_Sample_ADC_Init();
@@ -545,7 +533,7 @@ void SignalSample_SampleStrip(void)
 	/* 2.1 Initialize timer */
 	SignalSample_Sample_Timer_Init();
 
-	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1))
+	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
 	{
 		SignalSample_count = 191;
 		/* 2.2 Move motor per interval, then sample */
@@ -571,7 +559,7 @@ void SignalSample_SampleStrip(void)
 	{
 		SignalSample_count = 0;
 		/* Move until slider reaches base position */
-		while (!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1))
+		while (!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
 		{
 			/* Timer notifies */
 			ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_IN);
@@ -587,15 +575,9 @@ void SignalSample_SampleStrip(void)
 
 	/* 3.2 Exit critical area */
 	SignalSample_Sample_ExitCriticalArea();
-
-	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SignalSample_count,10);
-
-	/* Output samples */
-	SignalSample_OutputSamples(SignalSample_count - 30,&SignalProcess_sampleBuffer[0]);
-	if(NowCup_Count <= Cup_Count)
-	{
-		Data_Analysis();
-	}
+//	memset(SignalBuffer,0,500);
+//	memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count << 1);
+//	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
 }
 
 

@@ -8,8 +8,7 @@
 #define __MANAGEMENT_STMFLASH_STMFLASH_H_
 
 /******************************************************************************/
-#include "main.h"
-#include "comDef.h"
+#include "Project_File.h"
 
 #define DEVICE_AREA_SIZE           (50)
 #define FLASH_CALI_STATUS_ADDR     (0X08000000 + 0x80000)

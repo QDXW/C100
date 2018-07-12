@@ -13,11 +13,11 @@
 
 /******************************************************************************/
 #define ROTA_POSSEN_INT_PORT      (GPIOA)
-#define ROTA_POSSEN_INT_PIN       (GPIO_Pin_2)
-#define ROTA_POSSEN_INT_EXTI      (EXTI_Line2)
+#define ROTA_POSSEN_INT_PIN       (GPIO_Pin_1)
+#define ROTA_POSSEN_INT_EXTI      (EXTI_Line1)
 #define ROTA_POSSEN_EXTI_PORT     (GPIO_PortSourceGPIOA)
-#define ROTA_POSSEN_EXTI_PIN      (GPIO_PinSource2)
-#define ROTA_POSSEN_EXTI_CH       (EXTI2_IRQn)
+#define ROTA_POSSEN_EXTI_PIN      (GPIO_PinSource1)
+#define ROTA_POSSEN_EXTI_CH       (EXTI1_IRQn)
 
 #define ROTA_POSSEN_INT_STATE()\
 	(GPIO_ReadInputDataBit(ROTA_POSSEN_INT_PORT, ROTA_POSSEN_INT_PIN))

@@ -9,8 +9,7 @@
 #define MANAGEMENT_SCANMOTOR_SCANScanMotorDriver_H_
 
 /******************************************************************************/
-#include "main.h"
-#include "comDef.h"
+#include "Project_File.h"
 
 /******************************************************************************/
 /* PE11 */
@@ -36,20 +35,15 @@
 #define ScanMotorDriver_DIR_IN    	 	1
 
 /******************************************************************************/
-#if RL_A3000
-#define MOTOR_TOTAL_STEPS        (253) /* 模具打出的机器 */
-#define MOTOR_HALF_STEPS         (126)
-#define MOTOR_GOTO_DET_POS_STEPS (23) /* 模具打出的机器 */
-#else
-#define MOTOR_TOTAL_STEPS        (240)
-#define MOTOR_HALF_STEPS         (144)
+#define MOTOR_TOTAL_STEPS        (235)
+#define MOTOR_HALF_STEPS         (125)
 #define MOTOR_GOTO_DET_POS_STEPS (50)
-#endif
 
 #define MOTOR_SAMPLE_STEPS       (MOTOR_TOTAL_STEPS - MOTOR_GOTO_DET_POS_STEPS)
 
 /******************************************************************************/
 extern uint8 ScanMotorDriver_InBasePosition;
+extern uint8 MotorDriver_Ctr;
 
 /******************************************************************************/
 extern void ScanMotorDriver_Enable(void);

@@ -5,8 +5,6 @@
  * Date: 2014.12 ~ Now
  ******************************************************************************/
 #include "stmflash.h"
-#include "QRCode.h"
-#include "SystemManage_RTC.h"
 
 extern QRCODE_STRUCT QR_Date; 
 

@@ -6,10 +6,6 @@
  */
 
 #include "USB.h"
-#include "Comm_FIFO.h"
-#include "hw_config.h"
-#include "HostComm.h"
-#include "comDef.h"
 
 /******************************************************************************/
 void USB_BasicInit(void);
@@ -17,7 +13,7 @@ void USB_BasicInit(void);
 /******************************************************************************/
 void USB_VirtualCOM_Init(void)
 {
-    USB_BasicInit();
+//    USB_BasicInit();
     USB_Config();
 	Comm_FIFO_Init(&RxDataFIFO);
 }
@@ -29,12 +25,12 @@ void USB_BasicInit(void)
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_WriteBit(GPIOA, GPIO_Pin_8, Bit_RESET);
+//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+//	GPIO_Init(GPIOA, &GPIO_InitStructure);
+//	GPIO_WriteBit(GPIOA, GPIO_Pin_8, Bit_RESET);
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 	TIM_TimeBaseStructure.TIM_Period = 9;

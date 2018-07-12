@@ -7,449 +7,532 @@
 
 /******************************************************************************/
 #include "Interface_Start.h"
-#include "QRCode.h"
 
-/******************************************************************************/
-block_attr_Start block_Start_Back = {
-	ENABLE,								/*Interface Start rect*/
-	{
-		0,   20,
-		128, 140,
-		BACKCOLOR_CONTENT_BACK
-	},
-	DISABLE,							/*Display HZ16X8*/
-	{0},
-};
-
-/******************************************************************************/
+/*******************************************************************************
+ * Interface_Start
+ * 开始界面屏幕显示内容
+ * ****************************************************************************/
 block_attr_Start block_Start_Name = {
-	ENABLE,								/*Interface Start rect*/
+	UI_STATE_MAIN_WINDOW,
+
+	ENABLE,							/* Display HZ16X8 */
 	{
-		3,   24,
-		122, 132,
-		White
+		UI_Return,
+		0,   22,
+		50,  45,
+		0
 	},
-	ENABLE,								/*Display HZ16X8*/
+
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"Name:",
-		4,   25,
-		Black,White,
-		White
+		12,   64,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,									/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		QR_Date.head.name,
-		44,   25,
-		Black,White,
-		White
+		54,   64,
+		BLACK,Interface_Back
 	},
-
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_Number = {
-	DISABLE,							/*Interface Start rect*/
-	{0},
+block_attr_Start block_Start_SN = {
+	UI_STATE_INSERT_CUP,
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,							/* Interface Start rect */
+	{
+		Confirmation,
+		144,  258,
+		72,   62
+	},
+
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"SN:",
-		4,   41,
-		Black,White,
-		White
+		12,   84,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,									/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		QR_Date.head.SN,
-		44,   41,
-		Black,White,
-		White
+		38 ,   84,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_1 = {
-	DISABLE,							/*Interface Start rect*/
-	{0},
+block_attr_Start block_Start_CH1 = {
+	UI_STATE_DELETE,
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,							/* Interface Start rect */
+	{
+		Delete,
+		24,   258,
+		72,   62
+	},
+
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"1:",
-		4,   57,
-		Black,White,
-		White
+		12,   103,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,									/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch1_data.TName,
-		20,   57,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[0].TName,
+		32,   103,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_2 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH2 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"2:",
-		4,   73,
-		Black,White,
-		White
+		122,   103,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch2_data.TName,
-		20,   73,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[1].TName,
+		142,   103,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_3 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH3 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"3:",
-		4,   89,
-		Black,White,
-		White
+		12,   120,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch3_data.TName,
-		20,   89,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[2].TName,
+		32,  120,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_4 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH4 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"4:",
-		4,   105,
-		Black,White,
-		White
+		122,   120,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch4_data.TName,
-		20,   105,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[3].TName,
+		142,  120,
+		BLACK,Interface_Back
 	},
-
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_5 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH5 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"5:",
-		4,   121,
-		Black,White,
-		White
+		12,   137,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch5_data.TName,
-		20,   121,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[4].TName,
+		32,  137,
+		BLACK,Interface_Back
 	},
 };
-
 /******************************************************************************/
-block_attr_Start block_Start_6 = {
-	DISABLE,							/*Interface Standard rect*/
+block_attr_Start block_Start_CH6 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"6:",
-		4,   137,
-		Black,White,
-		White
+		122,   137,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch6_data.TName,
-		20,   137,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[5].TName,
+		142,  137,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_7 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH7 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"7:",
-		68,   57,
-		Black,White,
-		White
+		12,   154,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch7_data.TName,
-		86,   57,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[6].TName,
+		32,  154,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_8 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH8 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"8:",
-		68,   73,
-		Black,White,
-		White
+		122,   154,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch8_data.TName,
-		86,   73,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[7].TName,
+		142,  154,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_9 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH9 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"9:",
-		68,   89,
-		Black,White,
-		White
+		12,   171,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch9_data.TName,
-		86,   89,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[8].TName,
+		32,  171,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_10 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH10 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"10:",
-		68,   105,
-		Black,White,
-		White
+		122,   171,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch10_data.TName,
-		86,   105,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[9].TName,
+		150,  171,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_11 = {
-	DISABLE,							/*Interface Start rect*/
+block_attr_Start block_Start_CH11 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"11:",
-		68,   121,
-		Black,White,
-		White
+		12,   188,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch11_data.TName,
-		86,   121,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[10].TName,
+		40,  188,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_12 = {
-	DISABLE,							/*Interface Standard rect*/
+block_attr_Start block_Start_CH12 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
 		"12:",
-		68,   137,
-		Black,White,
-		White
+		122,   188,
+		BLACK,Interface_Back
 	},
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
 	{
-		QR_Date.ch12_data.TName,
-		86,   137,
-		Black,White,
-		White
+		QR_Date_Analyze.ch_data[11].TName,
+		150,  188,
+		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Start block_Start_Blank= {
-	ENABLE,								/*Interface Start rect*/
+block_attr_Start block_Start_CH13 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
+
+	ENABLE,								/* Display HZ16X8 */
 	{
-		3,   24,
-		122, 132,
-		White
+		"13:",
+		12,   205,
+		BLACK,Interface_Back
 	},
 
-	DISABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"Neg--",
+		40,  205,
+		BLACK,Interface_Back
+	},
+};
+
+/******************************************************************************/
+block_attr_Start block_Start_CH14 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
 
-	DISABLE,								/*Display HZ16X8*/
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"14:",
+		122,   205,
+		BLACK,Interface_Back
+	},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"Neg--",
+		150,  205,
+		BLACK,Interface_Back
+	},
+};
+
+/******************************************************************************/
+block_attr_Start block_Start_CH15 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
 	{0},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"15:",
+		12,   222,
+		BLACK,Interface_Back
+	},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"Neg--",
+		40,  222,
+		BLACK,Interface_Back
+	},
+};
+
+/******************************************************************************/
+block_attr_Start block_Start_CH16 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"16:",
+		122,   222,
+		BLACK,Interface_Back
+	},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		"Neg--",
+		150,  222,
+		BLACK,Interface_Back
+	},
 };
 
 /******************************************************************************/
 block_attr_Start block_Start_deleted = {
-	DISABLE,							/*Interface Start rect*/
-	{0},
+	UI_STATE_QUICK,						/* Interface Touch rect */
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,									/* Display Picture */
 	{
-		"Have deleted",
-		12,   60,
-		Red,White,
-		White
+		Confirmation,
+		84,   279,
+		72,   30
 	},
 
-	DISABLE,								/*Display HZ16X8*/
+	ENABLE,									/* Display HZ16X8 */
+	{
+		"Have deleted",
+		32,   150,
+		RED,WHITE,
+	},
+
+	DISABLE,								/* Display HZ16X8 */
 	{0},
 };
 
 /******************************************************************************/
 block_attr_Start block_Start_Scan = {
-	DISABLE,							/*Interface Start rect*/
-	{0},
+	UI_STATE_MAIN_WINDOW,					/* Interface Touch rect */
 
-	ENABLE,								/*Display HZ16X8*/
+	ENABLE,									/* Display Picture */
 	{
-		"Scan again!",
-		12,   80,
-		Red,White,
-		White
+		UI_Return,
+		0,   26,
+		45,  40
 	},
 
-	DISABLE,								/*Display HZ16X8*/
+	ENABLE,									/* Display HZ16X8 */
+	{
+		"Scan again!",
+		70,   168,
+		RED,WHITE,
+	},
+
+	DISABLE,								/* Display HZ16X8 */
 	{0},
 };
 
 /******************************************************************************/
-block_attr_Start* UI_WindowBlocksAttrArray_Start[][15] = {/* Window: Start entry */
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7,
-		&block_Start_8},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7,
-		&block_Start_8,&block_Start_9},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7,
-		&block_Start_8,&block_Start_9,&block_Start_10},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7,
-		&block_Start_8,&block_Start_9,&block_Start_10,&block_Start_11},
-{&block_Start_Back,&block_Start_Name,&block_Start_Number,&block_Start_1,&block_Start_2,
-		&block_Start_3,&block_Start_4,&block_Start_5,&block_Start_6,&block_Start_7,
-		&block_Start_8,&block_Start_9,&block_Start_10,&block_Start_11,&block_Start_12},
+block_attr_Start* UI_WindowBlocksAttrArray_Start[][18] = {/* Window: Standard entry */
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,&block_Start_CH12},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,
+		&block_Start_CH12,&block_Start_CH13},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,
+		&block_Start_CH12,&block_Start_CH13,&block_Start_CH14},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,
+		&block_Start_CH12,&block_Start_CH13,&block_Start_CH14,&block_Start_CH15},
+{&block_Start_Name,&block_Start_SN,&block_Start_CH1,&block_Start_CH2,&block_Start_CH3,
+		&block_Start_CH4,&block_Start_CH5,&block_Start_CH6,&block_Start_CH7,
+		&block_Start_CH8,&block_Start_CH9,&block_Start_CH10,&block_Start_CH11,
+		&block_Start_CH12,&block_Start_CH13,&block_Start_CH14,&block_Start_CH15,
+		&block_Start_CH16},
 };
 
 /******************************************************************************/
-block_attr_Start* UI_WindowBlocksAttrArray_Start_font[] = {/* Window: Start entry */
-		&block_Start_Blank,
+block_attr_Start* UI_WindowBlocksAttrArray_Delete[]= {
 		&block_Start_deleted,
 		&block_Start_Scan,
 };
 
 /******************************************************************************/
-uint8 Interface_Start(uint16 KeyCode)
+uint8 Interface_Start(uint16* xpos,uint16* ypos)
 {
-	Exti_lock = DISABLE;
-	doubleClick = 0;
-	Interface_Key = 1;
+	uint8 state = 0;
 	QRCode_Trigger_Disabled();
-	if(Cup_Count != 0)
-	{
-		UI_WindowBlocks_Start = sizeof(UI_WindowBlocksAttrArray_Start[Cup_Count-1]) >> 2;
-		UI_Draw_Window_Start(UI_WindowBlocks_Start);
-		Exti_lock = ENABLE;
-//		UI_state = UI_STATE_TESTING;
-//		Delay_ms(1000);
-		UI_state = UI_STATE_KEY_STATE;
-		while(!key_state);
-	}
-	else
-	{
-			UI_state = UI_STATE_QUICK;
-	}
-
-	return UI_STATE_RERUN;
+	UI_Background_Plate_Start();
+	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
+	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Start[Cup_Count-1]) >> 2;
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Start[Cup_Count-1],12);
+	UI_Draw_Window_Start(UI_WindowBlocks);
+	UI_WindowBlocks = 3;
+	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+	return state;
 }
 
 /******************************************************************************/
 void UI_Draw_block_Start(block_attr_Start* block);
-void UI_Draw_block_Start_font(block_attr_Start* block);
 
 /******************************************************************************/
 void UI_Draw_Window_Start(uint16 blockNum)
@@ -468,89 +551,46 @@ void UI_Draw_Window_Start(uint16 blockNum)
 void UI_Draw_block_Start(block_attr_Start* block)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)				/* 1. Draw Rect*/
+	if (block->pic_enabled)						/* 2. Draw picture */
 	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
+		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+				block->pic_attr.offsetX,block->pic_attr.offsetY);
 	}
-	if (block->char_enabled)				/* 2. Draw character */
-	{
 
-		DisplayDriver_Text16_B(
+	if (block->char_enabled)					/* 4. Draw character */
+	{
+		DisplayDriver_Text16_Touch(
 				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.faceColor,
+				block->char_attr.color,block->char_attr.backColor,
 				block->char_attr.str);
 	}
 
-	if (block->char_enabled2)				/* 2. Draw character */
+	if (block->char1_enabled)					/* 4. Draw character */
 	{
-
-		DisplayDriver_Text16_B(
-				block->char_attr2.offsetX,block->char_attr2.offsetY,
-				block->char_attr2.color,block->char_attr2.faceColor,
-				block->char_attr2.str);
+		DisplayDriver_Text16_Touch(
+				block->char1_attr.offsetX,block->char1_attr.offsetY,
+				block->char1_attr.color,block->char1_attr.backColor,
+				block->char1_attr.str);
 	}
 	Display_Time = 1;
-	key_state = DISABLE;
 }
 
-/******************************************************************************/
-uint8 Interface_Start_font(uint16 KeyCode)
+uint8 Interface_Delete(uint16* xpos,uint16* ypos)
 {
-	Exti_lock = DISABLE;
-	Interface_Key = 1;
-	QRCode_Trigger_Disabled();
-	UI_WindowBlocks_Start_font = sizeof(UI_WindowBlocksAttrArray_Start_font) >> 2;
-	UI_Draw_Start_font(UI_WindowBlocks_Start_font);
+	uint8 state = 0;
 	Clear_Data();
-	Exti_lock = ENABLE;
-	Delay_ms(2000);
 	UI_state = UI_STATE_QUICK;
-	return UI_STATE_RERUN;
+	return state;
 }
 
 /******************************************************************************/
-void UI_Draw_Start_font(uint16 blockNum)
-{
-	uint8 blockIndex = 0;
-	if(key_state)								/* Draw blocks one by one */
-	{
-		for (blockIndex = 0; blockIndex < blockNum; blockIndex++)
-		{
-			UI_Draw_block_Start_font(UI_WindowBlocksAttrArray_Start_font[blockIndex]);
-		}
-	}
-}
-
-/******************************************************************************/
-void UI_Draw_block_Start_font(block_attr_Start* block)
+void UI_Background_Plate_Start (void)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)				/* 1. Draw Rect*/
-	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
-	}
-	if (block->char_enabled)				/* 2. Draw character */
-	{
-
-		DisplayDriver_Text16_B(
-				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.faceColor,
-				block->char_attr.str);
-	}
-
-	if (block->char_enabled2)				/* 2. Draw character */
-	{
-
-		DisplayDriver_Text16_B(
-				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.faceColor,
-				block->char_attr.str);
-	}
-
+	DisplayDriver_Fill(0,22,240,320,Interface_Back);
+	DisplayDriver_Fill(10,62,229,256,WHITE);
+	DisplayDriver_DrawStraight_Line(0,82,229,82,Interface_Back);
+	DisplayDriver_DrawStraight_Line(0,102,229,102,Interface_Back);
+	DisplayDriver_DrawStraight_Line(120,102,120,256,Interface_Back);
 	Display_Time = 1;
-	key_state = DISABLE;
 }

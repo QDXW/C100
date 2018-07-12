@@ -7,197 +7,53 @@
 #include "Interface_Quick.h"
 
 /******************************************************************************/
-uint8 QRCode_existed = 0;
-uint8 Cup_Exist = 0;
-extern uint8 QRCode_received;
-extern const unsigned char gImage_Left_arrow[1050];
+block_attr_Quick block_Quick_Scan = {
+	UI_STATE_MAIN_WINDOW,								/* Interface Quick rect */
 
-/******************************************************************************/
-block_attr_Quick block_Quick_1 = {
-	ENABLE,								/* Interface Quick rect */
+	ENABLE,							/* Display HZ16X8 */
 	{
-		0,   20,
-		128, 140,
-		BACKCOLOR_CONTENT_BACK
+		UI_Return,
+		0,   22,
+		50,  45,
+		5
 	},
 
-	DISABLE,							/* Display HZ16X8 */
-	{0},
-
-	DISABLE,							/* Display Picture */
-	{0},
+	ENABLE,
+	{
+		"Scan the QR code",
+		56,   169,
+		BLACK,WHITE
+	},
 };
-
-/******************************************************************************/
-block_attr_Quick block_Quick_2 = {
-	ENABLE,								/* Interface Quick rect */
-	{
-		7,   62,
-		114, 78,
-		White
-	},
-
-
-	ENABLE,								/* Display HZ16X8 */
-	{
-		"Scan the QR",
-		15,   82,
-		Black,White,
-		White
-	},
-
-	DISABLE,							/* Display Picture */
-	{0},
-};
-
-/******************************************************************************/
-block_attr_Quick block_Quick_3 = {
-	ENABLE,								/* Interface Quick rect */
-	{
-		7,   40,
-		114, 22,
-		BACKCOLOR_CONTENT_BAR
-	},
-	ENABLE,								/*Display HZ16X8*/
-	{
-		"Notice",
-		9,   43,
-		Red,BACKCOLOR_CONTENT_BAR,
-		BACKCOLOR_CONTENT_BAR
-	},
-
-	DISABLE,							/* Display Picture */
-	{0},
-};
-
-/******************************************************************************/
-block_attr_Quick block_Quick_4 = {
-	DISABLE,							/*Interface Quick rect */
-	{0},
-
-	ENABLE,								/*Display HZ16X8*/
-	{
-		"code",
-		52,   100,
-		Black,White,
-		White
-	},
-
-	ENABLE,								/* Display Picture */
-	{
-		gImage_Left_arrow,
-		5, 142,
-		35, 15
-	}
-};
-
-/******************************************************************************/
-block_attr_Quick block_Quick_5 = {
-	ENABLE,								/*Interface Quick rect */
-	{
-		7,   62,
-		114, 78,
-		White
-	},
-
-	ENABLE,								/*Display HZ16X8*/
-	{
-		"Invalid QR",
-		15,   70,
-		Red,White,
-		White
-	},
-
-	DISABLE,							/* Display Picture */
-	{0},
-};
-
-/******************************************************************************/
-block_attr_Quick block_Quick_6 = {
-	DISABLE,							/*Interface Quick rect */
-	{0},
-
-	ENABLE,								/*Display HZ16X8*/
-	{
-		"code",
-		52,   88,
-		Red,White,
-		White
-	},
-
-	DISABLE,							/* Display Picture */
-	{0},
-};
-
-/******************************************************************************/
-block_attr_Quick block_Quick_7 = {
-	DISABLE,							/*Interface Quick rect */
-	{0},
-
-	ENABLE,								/*Display HZ16X8*/
-	{
-		"Scan Again!",
-		20,   108,
-		Red,White,
-		White
-	},
-
-	DISABLE,							/* Display Picture */
-	{0},
-};
-
 
 /******************************************************************************/
 block_attr_Quick* UI_WindowBlocksAttrArray_Quick[] = {/* Window: Standard entry */
-		&block_Quick_1,
-		&block_Quick_2,
-		&block_Quick_3,
-		&block_Quick_4,
-};
-
-/******************************************************************************/
-block_attr_Quick* UI_WindowBlocksAttrArray_Quick_font[] = {/* Window: Standard entry */
-		&block_Quick_5,
-		&block_Quick_6,
-		&block_Quick_7,
+		&block_Quick_Scan,
 };
 
 /******************************************************************************/
 void UI_Draw_Block_Quick(block_attr_Quick* block);
-void UI_Draw_Block_Quick_Font(block_attr_Quick* block);
 
 /******************************************************************************/
-uint8 Interface_Quick(uint16 KeyCode)
+uint8 Interface_Quick(uint16* xpos,uint16* ypos)
 {
-	Key_control = 2;
-	Exti_lock = DISABLE;
-	QRCode_existed = 0;
-	Interface_Key = 3;
-	UI_WindowBlocks_Quick = sizeof(UI_WindowBlocksAttrArray_Quick) >> 2;
-	UI_Draw_Window_Quick(UI_WindowBlocks_Quick);
+	uint8 state = 0;
+	Enter_Sleep = 0;
+	if(Cup_Count != 0)
+	{
+		UI_state = UI_STATE_START;
+		return state;
+	}
+	UI_Background_Plate_Quick();
+	QRCode_Trigger_Disabled();
+	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
+	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Quick) >> 2;
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Quick,sizeof(UI_WindowBlocksAttrArray_Quick));
+	UI_Draw_Window_Quick(UI_WindowBlocks);
 	QRCode_Trigger_Enabled();
-	Exti_lock = ENABLE;
-	while (!QRCode_received)
-	{
-		if (Key_control == 1)
-		{
-			UI_state = UI_STATE_KEY_STATE;
-			key_state_confirm = 0;
-			Exti_lock = DISABLE;
-			return UI_STATE_RERUN;
-		}
-	}
-	Exti_lock = DISABLE;
-
-	if (QRCode_existed)
-	{
-		UI_state = UI_STATE_INSERT_CUP;
-	}
-	Delay_ms(1500);
-	QRCode_existed = 0;
-	QRCode_received = 0;
-	key_state_confirm = 0;
-	return UI_STATE_RERUN;
+	UI_WindowBlocks = 1;
+	UI_state = UI_STATE_QUICK_TOUCH_PROCESS;
+	return state;
 }
 
 /******************************************************************************/
@@ -214,69 +70,76 @@ void UI_Draw_Window_Quick(uint16 blockNum)
 void UI_Draw_Block_Quick(block_attr_Quick* block)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)				/* 1. Draw Rect*/
-	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
-	}
-	if (block->char_enabled)				/* 2. Draw character */
-	{
-
-			DisplayDriver_Text16_B(
-					block->char_attr.offsetX,block->char_attr.offsetY,
-					block->char_attr.color,block->char_attr.faceColor,
-					block->char_attr.str);
-	}
-
 	if (block->pic_enabled)						/* 2. Draw picture */
 	{
-		DisplayDriver_DrawPic(block->pic_attr.offsetX,
-				block->pic_attr.offsetY, block->pic_attr.width,
-				block->pic_attr.height,block->pic_attr.src);
+		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+				block->pic_attr.offsetX,block->pic_attr.offsetY);
+	}
+
+	if (block->char_enabled)					/* 4. Draw character */
+	{
+		DisplayDriver_Text16_Touch(
+				block->char_attr.offsetX,block->char_attr.offsetY,
+				block->char_attr.color,block->char_attr.backColor,
+				block->char_attr.str);
 	}
 	Display_Time = 1;
-	key_state = DISABLE;
 }
 
 /******************************************************************************/
-uint8 Interface_Quick_font(uint16 KeyCode)
-{
-	UI_WindowBlocks_Quick_font = sizeof(UI_WindowBlocksAttrArray_Quick_font) >> 2;
-	UI_Draw_Window_Quick_font(UI_WindowBlocks_Quick_font);
-	UI_state = UI_STATE_QUICK;
-	Delay_ms(2000);
-	return UI_STATE_RERUN;
-}
-
-/******************************************************************************/
-void UI_Draw_Window_Quick_font(uint16 blockNum)
-{
-	uint8 blockIndex = 0;					/* Draw blocks one by one */
-	for (blockIndex = 0; blockIndex < blockNum; blockIndex++)
-	{
-		UI_Draw_Block_Quick_Font(UI_WindowBlocksAttrArray_Quick_font[blockIndex]);
-	}
-}
-
-/******************************************************************************/
-void UI_Draw_Block_Quick_Font(block_attr_Quick* block)
+void UI_Background_Plate_Quick (void)
 {
 	Display_Time = 0;
-	if (block->rect_enabled)				/* 1. Draw Rect*/
-	{
-		Lcd_ColorBox(block->rect_attr.startX, block->rect_attr.startY,
-				block->rect_attr.width, block->rect_attr.height,
-				block->rect_attr.color);
-	}
-	if (block->char_enabled)				/* 2. Draw character */
-	{
-
-			DisplayDriver_Text16_B(
-					block->char_attr.offsetX,block->char_attr.offsetY,
-					block->char_attr.color,block->char_attr.faceColor,
-					block->char_attr.str);
-	}
+	DisplayDriver_Fill(0,22,240,320,Interface_Back);
+	DisplayDriver_Fill(10,62,229,270,WHITE);
 	Display_Time = 1;
-	key_state = DISABLE;
+}
+
+/******************************************************************************/
+uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
+{
+	uint8 state = 0;
+	Quick_Down_time = 1;
+	if(QRCode_received)
+	{
+		if (QRCode_existed)
+		{
+			UI_state = UI_STATE_INSERT_CUP;
+			QRCode_received = 0;
+			QRCode_existed = 0;
+			Quick_Down_time = 0;
+		}
+		else
+		{
+			UI_state = UI_STATE_INVALUE_CODE_PROCESS;
+			QRCode_received = 0;
+			Quick_Down_time = 0;
+		}
+	}
+	else
+	{
+		if (Quick_Second > 20)
+		{
+			UI_state = UI_STATE_MAIN_WINDOW;
+			Quick_Down_time = 0;
+			Quick_Second = 0;
+		}
+		Quick_Touch_Check(UI_WindowBlocksAttrArray_Quick[0],xpos,ypos);
+	}
+	return state;
+}
+
+/******************************************************************************/
+uint8 Quick_Touch_Check(block_attr_Quick* block,uint16* xpos,uint16* ypos)
+{
+	if((xpos != 0) || (ypos != 0))
+	{
+		if((0 < *xpos) && (*xpos < 45) && (22 < *ypos) && (*ypos < 65))
+		{
+			UI_state = block->Interface_Status;
+			Pic_Count = block->pic_attr.count;
+			Quick_Down_time = 0;
+			return UI_STATE_RERUN;
+		}
+	}
 }

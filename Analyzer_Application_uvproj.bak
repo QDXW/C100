@@ -349,7 +349,7 @@
               <MiscControls>--diag_suppress=870</MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER, USE_STM3210E_EVAL</Define>
               <Undefine></Undefine>
-              <IncludePath>.\System\CM3;.\System\FWlib\inc;.\System\Startup;.\ISR;.\Main;.\Management\DisplayDriver;.\Management\HumanInput;.\Management\Interface;.\Management\RotationMotor;.\Management\ScanMotor;.\Management\Common_CRC;.\Management\QRCode;.\Management\SystemManage_RTC;.\Management\SignalProcess_Sample;.\USB;.\USB\comm;.\USB\lib;.\USB\src;.\USB\USB_Communication;.\Management\Signalprocess;.\Management\TIMER;.\Management\Storage_Flash;.\Management\DisplayDriver_touch</IncludePath>
+              <IncludePath>.\System\CM3;.\System\FWlib\inc;.\System\Startup;.\ISR;.\Main;.\Management\HumanInput;.\Management\Interface;.\Management\RotationMotor;.\Management\ScanMotor;.\Management\Common_CRC;.\Management\QRCode;.\Management\SystemManage_RTC;.\Management\SignalProcess_Sample;.\USB;.\USB\comm;.\USB\lib;.\USB\src;.\USB\USB_Communication;.\Management\Signalprocess;.\Management\TIMER;.\Management\Storage_Flash;.\Management\DisplayDriver_touch;.\Management\UI_Picture;.\Management\Battery_ADC;.\Management\Bluetooth_Print</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -551,21 +551,6 @@
               <FilePath>.\Management\RotationMotor\RotationMotor.c</FilePath>
             </File>
             <File>
-              <FileName>DisplayDriver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\DisplayDriver\DisplayDriver.c</FilePath>
-            </File>
-            <File>
-              <FileName>DisplayDriver_FontLib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\DisplayDriver\DisplayDriver_FontLib.c</FilePath>
-            </File>
-            <File>
-              <FileName>Font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\DisplayDriver\Font.c</FilePath>
-            </File>
-            <File>
               <FileName>HumanInput.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Management\HumanInput\HumanInput.c</FilePath>
@@ -641,11 +626,6 @@
               <FilePath>.\Management\SignalProcess_Sample\SignalProcess_Sample.c</FilePath>
             </File>
             <File>
-              <FileName>Interface_Result_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\Interface\Interface_Result_2.c</FilePath>
-            </File>
-            <File>
               <FileName>Interface_Insert_Cup.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Management\Interface\Interface_Insert_Cup.c</FilePath>
@@ -666,21 +646,6 @@
               <FilePath>.\Management\Storage_Flash\Storage_Flash.c</FilePath>
             </File>
             <File>
-              <FileName>Interface_Record_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\Interface\Interface_Record_2.c</FilePath>
-            </File>
-            <File>
-              <FileName>DisplayDriver_API.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\DisplayDriver_touch\DisplayDriver_API.c</FilePath>
-            </File>
-            <File>
-              <FileName>DisplayDriver_FontLib_touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Management\DisplayDriver_touch\DisplayDriver_FontLib_touch.c</FilePath>
-            </File>
-            <File>
               <FileName>DisplayDriver_touch.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Management\DisplayDriver_touch\DisplayDriver_touch.c</FilePath>
@@ -694,6 +659,51 @@
               <FileName>HumanInput_CapTS.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Management\DisplayDriver_touch\HumanInput_CapTS.c</FilePath>
+            </File>
+            <File>
+              <FileName>DisplayDriver_API.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\DisplayDriver_touch\DisplayDriver_API.c</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_Standard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_Standard.c</FilePath>
+            </File>
+            <File>
+              <FileName>Project_File.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Project_File.c</FilePath>
+            </File>
+            <File>
+              <FileName>Battery_ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Battery_ADC\Battery_ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>Printer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Bluetooth_Print\Printer.c</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_About_Machine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_About_Machine.c</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_System_Time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_System_Time.c</FilePath>
+            </File>
+            <File>
+              <FileName>DisplayDriver_FontLib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\DisplayDriver_touch\DisplayDriver_FontLib.c</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_Buetooth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_Buetooth.c</FilePath>
             </File>
           </Files>
         </Group>

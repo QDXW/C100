@@ -9,9 +9,7 @@
 #define MANAGEMENT_QRCODE_QRCODE_H_
 
 /******************************************************************************/
-#include "comDef.h"
-#include "stm32f10x.h"
-#include "Interface_main.h"
+#include "Project_File.h"
 
 /******************************************************************************/
 #define QRCODE_TEST_NAME_MAX         (8)
@@ -20,6 +18,7 @@
 #define QRCODE_TRIG_PORT      		 (GPIOA)
 #define QRCODE_TRIG_PIN         	 (GPIO_Pin_3)
 
+#if	 LCD_OLD
 #define QRCODE_TX_PORT      		 (GPIOA)
 #define QRCODE_TX_PIN         		 (GPIO_Pin_9)
 
@@ -29,8 +28,21 @@
 #define QRCODE_USART          		 (USART1)
 #define QRCODE_USART_IRQN          	 (USART1_IRQn)
 
+#else
+
+#define QRCODE_TX_PORT      		 (GPIOC)
+#define QRCODE_TX_PIN         		 (GPIO_Pin_10)
+
+#define QRCODE_RX_PORT     			 (GPIOC)
+#define QRCODE_RX_PIN        		 (GPIO_Pin_11)
+
+#define QRCODE_USART          		 (USART3)
+#define QRCODE_USART_IRQN          	 (USART3_IRQn)
+#endif
+
 /******************************************************************************/
 extern uint16 QRCode_count;
+extern uint8 Action_time;
 extern uint8 QRCode_existed;
 extern uint8 QRCode_received;
 extern uint8 QRCode_Buffer[QRCODE_BUFFER_SIZE];
@@ -48,11 +60,23 @@ typedef struct {
     uint8 distC_Base3;
     uint8 distC_Base4;
     uint8 stripNum;
+    uint16 searchHalfRadius_C;
+    uint16 searchHalfRadius_T;
+    uint16 areaC_HalfRadius;
+    uint16 areaT_HalfRadius;
+    uint16 winSize;
+    uint8 limitEnabled;
+    uint8 value;
+    uint16 C_stepSize;
+    uint16 C_magnitude;
+    uint16 C_MIN;
+    uint16 reserved;
 } QRCODE_HEAD_STRUCT;
 
 /******************************************************************************/
 typedef struct {
     uint8 TName[QRCODE_TEST_NAME_MAX];
+    uint8 Switch_Bool;
     float threshold1;
     float threshold2;
     float threshold3;
@@ -61,22 +85,12 @@ typedef struct {
 /******************************************************************************/
 typedef struct {
     QRCODE_HEAD_STRUCT head;
-    QRCODE_SINGLE_LINE ch1_data;
-    QRCODE_SINGLE_LINE ch2_data;
-    QRCODE_SINGLE_LINE ch3_data;
-    QRCODE_SINGLE_LINE ch4_data;
-    QRCODE_SINGLE_LINE ch5_data;
-    QRCODE_SINGLE_LINE ch6_data;
-    QRCODE_SINGLE_LINE ch7_data;
-    QRCODE_SINGLE_LINE ch8_data;
-    QRCODE_SINGLE_LINE ch9_data;
-    QRCODE_SINGLE_LINE ch10_data;
-    QRCODE_SINGLE_LINE ch11_data;
-    QRCODE_SINGLE_LINE ch12_data;
+    QRCODE_SINGLE_LINE ch_data[12];
 } QRCODE_STRUCT;
 
 /******************************************************************************/
 extern QRCODE_STRUCT QR_Date;
+extern QRCODE_STRUCT QR_Date_Analyze;
 
 /******************************************************************************/
 extern void Clear_Data(void);

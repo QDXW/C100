@@ -13,11 +13,11 @@
 
 /******************************************************************************/
 #define POSSEN_INT_PORT      (GPIOA)
-#define POSSEN_INT_PIN       (GPIO_Pin_1)
-#define POSSEN_INT_EXTI      (EXTI_Line1)
+#define POSSEN_INT_PIN       (GPIO_Pin_2)
+#define POSSEN_INT_EXTI      (EXTI_Line2)
 #define POSSEN_EXTI_PORT     (GPIO_PortSourceGPIOF)
-#define POSSEN_EXTI_PIN      (GPIO_PinSource1)
-#define POSSEN_EXTI_CH       (EXTI1_IRQn)
+#define POSSEN_EXTI_PIN      (GPIO_PinSource2)
+#define POSSEN_EXTI_CH       (EXTI2_IRQn)
 
 #define CAN_POSSEN_INT_STATE()\
 	(GPIO_ReadInputDataBit(POSSEN_INT_PORT, POSSEN_INT_PIN))
