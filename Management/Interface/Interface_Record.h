@@ -27,9 +27,10 @@ typedef struct {
 } block_attr_Record;
 
 /******************************************************************************/
-void UI_Draw_Window_Record(uint16 blockNum);
+void Data_Changer(void);
+void Page_Display(void);
 void UI_Background_Plate_Record (void);
 void UI_Background_Plate_Record_NO (void);
-void Data_Changer(void);
+void UI_Draw_Window_Record(uint16 blockNum);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_RECORD_H_ */

@@ -17,14 +17,14 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 		if(!Bluetooth_switch)
 		{
 			DisplayDriver_Fill(48,288,72,310,Interface_Back);
-			DisplayDriver_Text16_Touch(52, 288,BLACK,BLACK,"ON");
+			DisplayDriver_Text16_Touch(52, 288,WHITE,WHITE,"ON");
 			GPIO_SetBits(GPIOE, GPIO_Pin_4);
 			Bluetooth_switch = 1;
 		}
 		else
 		{
 			DisplayDriver_Fill(48,288,72,310,Interface_Back);
-			DisplayDriver_Text16_Touch(48,288,BLACK,BLACK,"OFF");
+			DisplayDriver_Text16_Touch(48,288,WHITE,WHITE,"OFF");
 			GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 			GPIO_ResetBits(GPIOC, GPIO_Pin_9);
 			Bluetooth_switch = 0;

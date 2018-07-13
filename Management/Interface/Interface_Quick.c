@@ -51,7 +51,7 @@ uint8 Interface_Quick(uint16* xpos,uint16* ypos)
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Quick,sizeof(UI_WindowBlocksAttrArray_Quick));
 	UI_Draw_Window_Quick(UI_WindowBlocks);
 	QRCode_Trigger_Enabled();
-	UI_WindowBlocks = 1;
+	UI_WindowBlocks = 2;
 	UI_state = UI_STATE_QUICK_TOUCH_PROCESS;
 	return state;
 }

@@ -18,11 +18,6 @@
 #include "Blutooth_Ico.pic"
 
 /******************************************************************************/
-extern uint8 Power_Open,Touch_Success = 0;
-uint16 xPos = 0, yPos = 0;
-uint8 Touch_Flag = 0,Touch_Pre = 0,Read_first = 1,Cup_Count = 0,Pic_Count = 0;
-uint8 Record_Display = 1,Stored_Record = 1;
-uint16 UI_WindowBlocks = 0;
 uint8 UI_state = UI_STATE_MAIN_WINDOW;
 
 /******************************************************************************/

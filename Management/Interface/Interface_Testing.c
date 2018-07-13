@@ -9,9 +9,8 @@
 
 /******************************************************************************/
 uint16 max = 0;
-uint8 NowCup_Count = 0,Storage_Data_Conut = 0;
+uint8 Storage_Data_Conut = 0;
 uint8 Zero_Count = 0,Forever_Value = 2;
-extern uint8  Cup_Count;
 uint16 BOUNDARY_VALUE = 2500;
 extern uint16 SignalSample_count;
 extern uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT];

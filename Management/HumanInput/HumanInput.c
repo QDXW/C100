@@ -7,9 +7,7 @@
 #include "HumanInput.h"
 
 /******************************************************************************/
-extern uint8 Power_Open;
-extern uint8 LED = 0,HSEStartUpStatusPwr = 0;
-extern uint8 key_fall_flag,short_key_flag,doubleClick,long_key_flag;
+uint8 LED = 0,HSEStartUpStatusPwr = 0;
 
 /*******************************************************************************
 	º¯ÊýÃû£ºHumanInput_Init

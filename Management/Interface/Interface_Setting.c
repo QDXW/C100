@@ -43,7 +43,7 @@ block_attr_Setting block_Setting_system = {
 	{
 		"About Machine",
 		8,   154,
-		BLACK,WHITE
+		WHITE,WHITE
 	},
 };
 
@@ -63,7 +63,7 @@ block_attr_Setting block_Setting_Time = {
 	{
 		"System Time",
 		140,  154,
-		BLACK,WHITE
+		WHITE,WHITE
 	},
 };
 
@@ -83,7 +83,7 @@ block_attr_Setting block_Setting_Blutooth_OFF = {
 	{
 		"OFF",
 		48,  288,
-		BLACK,WHITE
+		WHITE,WHITE
 	},
 };
 
@@ -103,7 +103,7 @@ block_attr_Setting block_Setting_Blutooth_ON = {
 	{
 		"ON",
 		52,  288,
-		BLACK,WHITE
+		WHITE,WHITE
 	},
 };
 

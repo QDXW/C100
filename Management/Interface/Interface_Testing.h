@@ -16,10 +16,6 @@
 
 /******************************************************************************/
 uint8 Confirm_CUP = 0;
-extern uint8 Exti_lock;
-extern uint8 NowCup_Count;
-extern uint16 BOUNDARY_VALUE;
-uint16 UI_WindowBlocks_Testing = 0;
 
 /******************************************************************************/
 typedef struct {

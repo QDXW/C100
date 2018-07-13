@@ -8,14 +8,9 @@
 /******************************************************************************/
 #include "QRCode.h"
 
+/******************************************************************************/
 QRCODE_STRUCT QR_Date;
 QRCODE_STRUCT QR_Date_Analyze;
-uint8 QRCode_received = 0;
-uint8 QRCode_existed = 0;
-uint8 Action_time = 0;
-uint16 QRCode_count = 0;
-extern uint16 SignalProcess_sampleBuffer[512];
-uint8 QRCode_Buffer[QRCODE_BUFFER_SIZE] = 0;
 
 /******************************************************************************/
 void QRCode_Init(void)

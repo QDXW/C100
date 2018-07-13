@@ -14,12 +14,7 @@
 /******************************************************************************/
 
 
-/******************************************************************************/
-/* Touch screen position */
-extern uint8 Cup_Count,Pic_Count,Touch_Success,Record_Display,Stored_Record;
-extern uint8 doubleClick,Read_first,UI_state,key_state_confirm,Exti_lock;
-extern float temp;
-extern uint16 xPos, yPos,UI_WindowBlocks;
+
 
 /******************************************************************************/
 /* Rectangular attribute */

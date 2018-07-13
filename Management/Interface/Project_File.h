@@ -31,6 +31,7 @@
 #include "stm32f10x_i2c.h"
 #include "Interface_main.h"
 #include "ScanMotorDriver.h"
+#include "Global_variable.h"
 #include "SystemManage_RTC.h"
 #include "HumanInput_CapTS.h"
 #include "DisplayDriver_API.h"

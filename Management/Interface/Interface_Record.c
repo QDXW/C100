@@ -565,16 +565,7 @@ uint8 Interface_Record(uint16* xpos,uint16* ypos)
 			Record_Display = 0;
 		}
 
-		Display_Time = 0;
-		DisplayDriver_Fill(11,123,119,249,WHITE);
-		DisplayDriver_Fill(121,123,228,249,WHITE);
-		DisplayDriver_Fill(110,41,228,59,WHITE);
-		DisplayDriver_Fill(64,63,210,80,WHITE);
-		DisplayDriver_Fill(38,83,160,101,WHITE);
-		sprintf(kBuffer,"%02d/%02d",reagent_Strip[0],reagent_Strip[1]);
-		DisplayDriver_Text16_Back(186, 254, BLACK,WHITE,kBuffer);
-		Display_Time = 1;
-
+		Page_Display();
 		memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 		UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Record[Storage_Data.StripNum-1]) >> 2;
 		memcpy(UI_WindowBlocksAttrArray,UI_WindowBlocksAttrArray_Record[0],
@@ -672,6 +663,20 @@ void UI_Background_Plate_Record (void)
 	DisplayDriver_Text16_Touch(62, 104, BLACK,WHITE,"Result");
 	DisplayDriver_Text16_Touch(122, 104, BLACK,WHITE,"Item");
 	DisplayDriver_Text16_Touch(172, 104, BLACK,WHITE,"Result");
+	Display_Time = 1;
+}
+
+/******************************************************************************/
+void Page_Display(void)
+{
+	Display_Time = 0;
+	DisplayDriver_Fill(11,123,119,249,WHITE);
+	DisplayDriver_Fill(121,123,228,249,WHITE);
+	DisplayDriver_Fill(110,41,228,59,WHITE);
+	DisplayDriver_Fill(64,63,210,80,WHITE);
+	DisplayDriver_Fill(38,83,160,101,WHITE);
+	sprintf(kBuffer,"%02d/%02d",reagent_Strip[0],reagent_Strip[1]);
+	DisplayDriver_Text16_Back(186, 254, BLACK,WHITE,kBuffer);
 	Display_Time = 1;
 }
 

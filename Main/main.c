@@ -12,14 +12,8 @@
 
 /******************************************************************************/
 static u32 TimingDelay;					/* Timer Delay Count */
-uint8 Display_Time = 1,Open_time = 0,Power_Open = 0,InvCode_Down_time = 0;
-uint8 Touch_State_Update = 0,Bluetooth_Update = 1,InvCode_Second = 0;
-uint8 Enter_Sleep = 0,Bluetooth_Connect = 0,Quick_Down_time = 0;
-uint8 Power_Switch = 0,Bluetooth_switch = 0,Quick_Second = 0;
-uint8 MBuffer[20] = {0},asd = 1,Interface_Reord = 0;
 uint16 insk[4] = {0,0,0,65535};
-uint16 adcx = 0;
-float temp = 0.0;
+uint8 MBuffer[20] = {0};
 
 /******************************************************************************/
 void main(void)

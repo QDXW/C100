@@ -11,15 +11,6 @@
 #include "Project_File.h"
 
 /******************************************************************************/
-extern const unsigned char UI_Return[];
-extern uint8 Power_Open,Power_Switch,Bluetooth_switch,Quick_Second,InvCode_Second;
-extern uint8 Enter_Sleep,Interface_Reord,Quick_Down_time,InvCode_Down_time;
-extern uint8 Bluetooth_Connect,Touch_State_Update,Open_time;
-extern uint8 Display_Time,Bluetooth_Update;
-extern uint16 adcx;
-extern float temp;
-
-/******************************************************************************/
 extern void SysTick_Init(u32 ticks);
 extern void Delay_ms(__IO uint32 nTime);
 extern void TimingDelay_Decrement(void);

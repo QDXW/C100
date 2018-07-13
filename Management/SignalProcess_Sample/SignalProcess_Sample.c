@@ -16,7 +16,6 @@ uint8 SignalSample_endDetection = 0;
 
 /* Number of samples */
 uint16 SignalSample_count = 0;
-extern uint8 NowCup_Count;
 uint16 SignalSample_ProcessCount = 0;
 uint8 SignalSample_startSampling = 0;	 //always sample
 

@@ -9,8 +9,7 @@
 
 /******************************************************************************/
 unsigned int CCR2_Val = 45000;
-uint8 ScanMotorDriver_InBasePosition = 0;
-uint8 MotorDriver_Ctr = 0;
+
 
 /******************************************************************************/
 void Delay_SW(__IO uint32 nCount)
