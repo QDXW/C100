@@ -17,7 +17,7 @@ uint8 Touch_State_Update = 0,Bluetooth_Update = 1,InvCode_Second = 0;
 uint8 Enter_Sleep = 0,Bluetooth_Connect = 0,Quick_Down_time = 0;
 uint8 Power_Switch = 0,Bluetooth_switch = 0,Quick_Second = 0;
 uint8 MBuffer[20] = {0},asd = 1,Interface_Reord = 0;
-uint16 insk[4] = {5,5,0,65530};
+uint16 insk[4] = {0,0,0,65535};
 uint16 adcx = 0;
 float temp = 0.0;
 
@@ -72,10 +72,6 @@ void main(void)
 //		Display_Time = 0;
 //		DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
 //		Display_Time = 1;
-
-//		Read_Record();
-//
-//		Delay_ms_SW(1000);
 
 		HumanInput_TouchScreen_Process();
 		

@@ -225,7 +225,7 @@ void TIM4_IRQHandler(void)
 			Display_Time = 0;
 			Bluetooth_Connection();
 
-//			if(UI_state == UI_STATE_RESULT)
+			if(UI_state == UI_STATE_RESULT)
 			{
 				if (Bluetooth_Connect)
 				{

@@ -116,6 +116,8 @@ void SystemManage_Sleep_Process(void)
 
 	SystemManage_5V_Disabled();
 
+	HumanInput_CapTS_Int(DISABLE);
+
 	GPIO_ResetBits(GPIOD,GPIO_Pin_2);
 
 	SystemManage_EnterExitStop();
@@ -166,6 +168,7 @@ void SYSCLKConfig_STOP(void)
 
 	GPIO_SetBits(GPIOD,GPIO_Pin_2);
 	Delay_ms_SW(150);
+	HumanInput_CapTS_Int(ENABLE);
 	TPR_Structure.TouchSta = 0;
 	key_state_confirm = 0;
 }

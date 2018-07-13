@@ -536,7 +536,7 @@ void UI_Background_Plate_Result (void)
 {
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
-	DisplayDriver_Fill(10,70,229,290,WHITE);
+	DisplayDriver_Fill(10,70,229,270,WHITE);
 	DisplayDriver_DrawStraight_Line(119,70,119,290,Interface_Back);
 	DisplayDriver_DrawStraight_Line(10,100,229,100,Interface_Back);
 	Display_Time = 1;
@@ -560,7 +560,7 @@ uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 		{
 			Storage_Record();
 			Display_Time = 0;
-			DisplayDriver_Text16_Touch(56, 255, BLACK,WHITE,"Has been stored!");
+			DisplayDriver_Text16_Touch(56, 275, WHITE,WHITE,"Has been stored!");
 			Display_Time = 0;
 			Stored_Record = 0;
 		}

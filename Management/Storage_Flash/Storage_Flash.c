@@ -399,10 +399,17 @@ void Get_reagent_TestNum(void)
 	memset(Information,0,sizeof(Information));
 	Storage_Read(Information,0x00,8);
 	memcpy(reagent_Strip,Information,8);
+	if(reagent_Strip[0] == 65535)
+	{
+		reagent_Strip[0] = 0;
+		reagent_Strip[1] = 0;
+		reagent_Strip[2] = 0;
+	}
 	reagent_Strip[0] += 1;
+
 	if(reagent_Strip[0] > 500)
 	{
-		reagent_Strip[0] = 500;
+		reagent_Strip[0] = 1;
 		reagent_Strip[1] = 500;
 		reagent_Strip[2] = 1;
 	}

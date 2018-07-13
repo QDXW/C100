@@ -67,8 +67,8 @@ block_attr_Record block_Record_SN = {
 	ENABLE,							/* Interface Record rect */
 	{
 		left,
-		10,  269,
-		60,  51,
+		10,  272,
+		60,  48,
 		1
 	},
 
@@ -94,14 +94,14 @@ block_attr_Record block_Record_Time = {
 	ENABLE,							/* Interface Record rect */
 	{
 		Right,
-		170, 269,
-		60,  51,
+		170, 272,
+		60,  48,
 		2
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
-		"SN:",
+		"  SN:",
 		12,   84,
 		BLACK,WHITE
 	},
@@ -109,7 +109,7 @@ block_attr_Record block_Record_Time = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.Product_SN,
-		38 ,   84,
+		60 ,   84,
 		BLACK,WHITE
 	},
 };
@@ -121,15 +121,15 @@ block_attr_Record block_Record_CH1 = {
 	ENABLE,									/* Display Picture */
 	{
 		Print,
-		98, 272,
-		45, 51,
+		98, 275,
+		45, 45,
 		3
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[0].TName,
-		12,   123,
+		14,   123,
 		BLACK,WHITE
 	},
 
@@ -151,7 +151,7 @@ block_attr_Record block_Record_CH2 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[1].TName,
-		122,   123,
+		124,   123,
 		BLACK,WHITE
 	},
 
@@ -173,7 +173,7 @@ block_attr_Record block_Record_CH3 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[2].TName,
-		12,   139,
+		14,   139,
 		BLACK,WHITE
 	},
 
@@ -195,7 +195,7 @@ block_attr_Record block_Record_CH4 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[3].TName,
-		122,   139,
+		124,   139,
 		BLACK,WHITE
 	},
 
@@ -217,7 +217,7 @@ block_attr_Record block_Record_CH5 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[4].TName,
-		12,   155,
+		14,   155,
 		BLACK,WHITE
 	},
 
@@ -238,7 +238,7 @@ block_attr_Record block_Record_CH6 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[5].TName,
-		122,   155,
+		124,   155,
 		BLACK,WHITE
 	},
 
@@ -260,7 +260,7 @@ block_attr_Record block_Record_CH7 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[6].TName,
-		12,   171,
+		14,   171,
 		BLACK,WHITE
 	},
 
@@ -282,7 +282,7 @@ block_attr_Record block_Record_CH8 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[7].TName,
-		122,   171,
+		124,   171,
 		BLACK,WHITE
 	},
 
@@ -304,7 +304,7 @@ block_attr_Record block_Record_CH9 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[8].TName,
-		12,   187,
+		14,   187,
 		BLACK,WHITE
 	},
 
@@ -326,7 +326,7 @@ block_attr_Record block_Record_CH10 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[9].TName,
-		122,   187,
+		124,   187,
 		BLACK,WHITE
 	},
 
@@ -348,7 +348,7 @@ block_attr_Record block_Record_CH11 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[10].TName,
-		12,   203,
+		14,   203,
 		BLACK,WHITE
 	},
 
@@ -370,7 +370,7 @@ block_attr_Record block_Record_CH12 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[11].TName,
-		122,   203,
+		124,   203,
 		BLACK,WHITE
 	},
 
@@ -392,7 +392,7 @@ block_attr_Record block_Record_CH13 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[12].TName,
-		12,   219,
+		14,   219,
 		BLACK,WHITE
 	},
 
@@ -414,7 +414,7 @@ block_attr_Record block_Record_CH14 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[13].TName,
-		122,   219,
+		124,   219,
 		BLACK,WHITE
 	},
 
@@ -436,7 +436,7 @@ block_attr_Record block_Record_CH15 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[14].TName,
-		12,   235,
+		14,   235,
 		BLACK,WHITE
 	},
 
@@ -458,7 +458,7 @@ block_attr_Record block_Record_CH16 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[15].TName,
-		122,   235,
+		124,   235,
 		BLACK,WHITE
 	},
 
@@ -571,8 +571,8 @@ uint8 Interface_Record(uint16* xpos,uint16* ypos)
 		DisplayDriver_Fill(110,41,228,59,WHITE);
 		DisplayDriver_Fill(64,63,210,80,WHITE);
 		DisplayDriver_Fill(38,83,160,101,WHITE);
-		sprintf(kBuffer,"%02d",reagent_Strip[0]);
-		DisplayDriver_Text16_Back(113, 255, BLACK,Interface_Back,kBuffer);
+		sprintf(kBuffer,"%02d/%02d",reagent_Strip[0],reagent_Strip[1]);
+		DisplayDriver_Text16_Back(186, 254, BLACK,WHITE,kBuffer);
 		Display_Time = 1;
 
 		memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
@@ -653,8 +653,6 @@ void UI_Background_Plate_Record_NO (void)
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(11,82,230,265,WHITE);
-	sprintf(kBuffer,"%02d",reagent_Strip[0]);
-	DisplayDriver_Text16_Back(113, 255, BLACK,Interface_Back,kBuffer);
 	Display_Time = 1;
 }
 
@@ -663,13 +661,13 @@ void UI_Background_Plate_Record (void)
 {
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
-	DisplayDriver_Fill(10,62,229,250,WHITE);
+	DisplayDriver_Fill(10,62,229,269,WHITE);
 	DisplayDriver_DrawCircle_Solid(100,50,10,WHITE);
 	DisplayDriver_Fill(100,40,229,60,WHITE);
 	DisplayDriver_DrawStraight_Line(0,82,240,82,Interface_Back);
 	DisplayDriver_DrawStraight_Line(0,102,240,102,Interface_Back);
 	DisplayDriver_DrawStraight_Line(0,122,240,122,Interface_Back);
-	DisplayDriver_DrawStraight_Line(120,102,120,250,Interface_Back);
+	DisplayDriver_DrawStraight_Line(120,102,120,270,Interface_Back);
 	DisplayDriver_Text16_Touch(12, 104, BLACK,WHITE,"Item");
 	DisplayDriver_Text16_Touch(62, 104, BLACK,WHITE,"Result");
 	DisplayDriver_Text16_Touch(122, 104, BLACK,WHITE,"Item");

@@ -172,7 +172,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Main,
 			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
-//	Exti_lock = ENABLE;
+	Exti_lock = ENABLE;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
 }
@@ -284,12 +284,14 @@ void Status_Init(void)
 	DisplayDriver_Fill(0,0,240,21,0X0AF8);
 	DisplayDriver_DrawPic_Touch(Open_face,Interface_Bar,15,35);
 	DisplayDriver_DrawPic_Touch(statusbar_bat,Interface_Bar,200,2);
-	DisplayDriver_DrawPic_Touch(Blutooth_Ico,Interface_Bar,180,3);
 	DisplayDriver_Text16_Touch(11,290,WHITE,Interface_Bar,"A good assistant for doctor!");
+	Battery_Display();
+	Bluetooth_Connection();
+	UI_Draw_Status_Bar();
 	Display_Time = 1;
 	SystemManage_5V_Enabled();
-//	RotationMotor_SelfCheck_StepDrive();
-//	ScanMotorDriver_SelfCheck_StepDrive();
+	RotationMotor_SelfCheck_StepDrive();
+	ScanMotorDriver_SelfCheck_StepDrive();
 	SystemManage_5V_Disabled();
 	Power_Open = 1;
 	HumanInput_CapTS_Int(ENABLE);
