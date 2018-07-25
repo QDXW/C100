@@ -15,20 +15,14 @@
 #define QRCODE_TEST_NAME_MAX         (8)
 #define QRCODE_BUFFER_SIZE           (600)
 
-#define QRCODE_TRIG_PORT      		 (GPIOA)
-#define QRCODE_TRIG_PIN         	 (GPIO_Pin_3)
-
-#if	 LCD_OLD
-#define QRCODE_TX_PORT      		 (GPIOA)
-#define QRCODE_TX_PIN         		 (GPIO_Pin_9)
-
-#define QRCODE_RX_PORT     			 (GPIOA)
-#define QRCODE_RX_PIN        		 (GPIO_Pin_10)
-
-#define QRCODE_USART          		 (USART1)
-#define QRCODE_USART_IRQN          	 (USART1_IRQn)
-
+#if LCD_OLD
+/******************************************************************************/
+#define QRCODE_TRIG_PORT                (GPIOA)
+#define QRCODE_TRIG_PIN                 (GPIO_Pin_3)
 #else
+#define QRCODE_TRIG_PORT                (GPIOD)
+#define QRCODE_TRIG_PIN                 (GPIO_Pin_3)
+#endif
 
 #define QRCODE_TX_PORT      		 (GPIOC)
 #define QRCODE_TX_PIN         		 (GPIO_Pin_10)
@@ -38,7 +32,6 @@
 
 #define QRCODE_USART          		 (USART3)
 #define QRCODE_USART_IRQN          	 (USART3_IRQn)
-#endif
 
 /******************************************************************************/
 typedef struct {
@@ -78,7 +71,7 @@ typedef struct {
 /******************************************************************************/
 typedef struct {
     QRCODE_HEAD_STRUCT head;
-    QRCODE_SINGLE_LINE ch_data[16];
+    QRCODE_SINGLE_LINE ch_data[17];
 } QRCODE_STRUCT;
 
 /******************************************************************************/
@@ -89,7 +82,6 @@ extern QRCODE_STRUCT QR_Date_Analyze;
 extern void Clear_Data(void);
 extern void QRCode_Init(void);
 extern void QRCode_Restart(void);
-extern void QRCode_Received(void);
 extern void QRCode_GPIO_Init(void);
 extern void QRCode_Uart_Init(void);
 extern uint8 QRCode_Identify(void);

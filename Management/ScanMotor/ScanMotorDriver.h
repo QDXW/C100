@@ -36,7 +36,7 @@
 
 /******************************************************************************/
 #define MOTOR_TOTAL_STEPS        (235)
-#define MOTOR_HALF_STEPS         (125)
+#define MOTOR_HALF_STEPS         (105)
 #define MOTOR_GOTO_DET_POS_STEPS (50)
 
 #define MOTOR_SAMPLE_STEPS       (MOTOR_TOTAL_STEPS - MOTOR_GOTO_DET_POS_STEPS)

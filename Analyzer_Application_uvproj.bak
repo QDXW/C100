@@ -705,6 +705,11 @@
               <FileType>1</FileType>
               <FilePath>.\Management\Interface\Interface_Buetooth.c</FilePath>
             </File>
+            <File>
+              <FileName>Interface_Invalue_Code.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_Invalue_Code.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

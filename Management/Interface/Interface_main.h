@@ -114,7 +114,7 @@ void UI_Background_Plate_Main (void);
 void Touch_process(uint16* xpos,uint16* ypos);
 uint8 Touch_Check (uint16* xpos,uint16* ypos);
 uint8 Interface_Main(uint16* xpos,uint16* ypos);
-extern block_attr* UI_WindowBlocksAttrArray[20];
+extern block_attr* UI_WindowBlocksAttrArray[25];
 uint8 Interface_Key_Event(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Quick(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Start(uint16* xpos,uint16* ypos);

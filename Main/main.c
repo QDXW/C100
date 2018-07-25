@@ -18,7 +18,7 @@ uint8 MBuffer[20] = {0};
 /******************************************************************************/
 void main(void)
 {
-	uint8 asd = 1;
+	uint16 asd = 1;
 
 	RCC_Configuration();				/* RCC Initialize */
 
@@ -31,6 +31,8 @@ void main(void)
 	SysTick_Init(SYSTICK_FREQ_1MS);		/* Initialize system tick timer */
 
 	QRCode_Init();						/* QRCode Initialize */
+
+	Printer_BLE_Init();					/* Printer BLE Initialize */
 
 	PCF8563_Init();						/* PCF8563 Initialize */
 
@@ -67,9 +69,16 @@ void main(void)
 //		DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
 //		Display_Time = 1;
 
+//		SystemManage_5V_Enabled();
+//		RotationMotor_Input_StepDrive(Foreward_Rotation,Get_Start_Postion());
+//		Delay_ms_SW(2000);
+//		SignalSample_SampleStrip();
+
 		HumanInput_TouchScreen_Process();
-		
+
 		Interface_Process(&xPos,&yPos);			/* User Interface */
+
+
 	}
 }
 

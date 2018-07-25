@@ -240,7 +240,7 @@ void ScanMotorDriver_Goto_CentrePosition(void)
 	/* Disable position sensor interrupt to avoid falsely trigger */
 	ScanMotorDriver_PositionSensor_Int_Disable();
 	/* Move to detection position */
-	ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT, MOTOR_HALF_STEPS);
+	ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT, 105);
 	/* Enable sensor position interrupt */
 	ScanMotorDriver_PositionSensor_Int_Enable();
 }

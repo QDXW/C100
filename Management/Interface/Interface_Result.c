@@ -121,14 +121,14 @@ block_attr_Result block_Result_CH3 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[2].TName,
-		14,   123,
+		14,   121,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[2].Result,
-		74,  123,
+		74,  121,
 		BLACK,Interface_Back
 	},
 };
@@ -143,14 +143,14 @@ block_attr_Result block_Result_CH4 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[3].TName,
-		124,   123,
+		124,   121,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[3].Result,
-		184,  123,
+		184,  121,
 		BLACK,Interface_Back
 	},
 };
@@ -165,14 +165,14 @@ block_attr_Result block_Result_CH5 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[4].TName,
-		14,   143,
+		14,   139,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[4].Result,
-		74,  143,
+		74,  139,
 		BLACK,Interface_Back
 	},
 };
@@ -186,14 +186,14 @@ block_attr_Result block_Result_CH6 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[5].TName,
-		124,   143,
+		124,   139,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[5].Result,
-		184,  143,
+		184,  139,
 		BLACK,Interface_Back
 	},
 };
@@ -208,14 +208,14 @@ block_attr_Result block_Result_CH7 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[6].TName,
-		14,   163,
+		14,   157,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[6].Result,
-		74,  163,
+		74,  157,
 		BLACK,Interface_Back
 	},
 };
@@ -230,14 +230,14 @@ block_attr_Result block_Result_CH8 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[7].TName,
-		124,   163,
+		124,   157,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[7].Result,
-		184,  163,
+		184,  157,
 		BLACK,Interface_Back
 	},
 };
@@ -252,14 +252,14 @@ block_attr_Result block_Result_CH9 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[8].TName,
-		14,   183,
+		14,   174,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[8].Result,
-		74,  183,
+		74,  174,
 		BLACK,Interface_Back
 	},
 };
@@ -274,14 +274,14 @@ block_attr_Result block_Result_CH10 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[9].TName,
-		124,   183,
+		124,   174,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[9].Result,
-		184,  183,
+		184,  174,
 		BLACK,Interface_Back
 	},
 };
@@ -296,14 +296,14 @@ block_attr_Result block_Result_CH11 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[10].TName,
-		14,   203,
+		14,   193,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[10].Result,
-		74,  203,
+		74,  193,
 		BLACK,Interface_Back
 	},
 };
@@ -318,14 +318,14 @@ block_attr_Result block_Result_CH12 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[11].TName,
-		124,   203,
+		124,   193,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[11].Result,
-		184,  203,
+		184,  193,
 		BLACK,Interface_Back
 	},
 };
@@ -340,14 +340,14 @@ block_attr_Result block_Result_CH13 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[12].TName,
-		14,   223,
+		14,   211,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[12].Result,
-		74,  223,
+		74,  211,
 		BLACK,Interface_Back
 	},
 };
@@ -362,14 +362,14 @@ block_attr_Result block_Result_CH14 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[13].TName,
-		124,   223,
+		124,   211,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[13].Result,
-		184,  223,
+		184,  211,
 		BLACK,Interface_Back
 	},
 };
@@ -384,14 +384,14 @@ block_attr_Result block_Result_CH15 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[14].TName,
-		14,   243,
+		14,   229,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[14].Result,
-		74,  243,
+		74,  229,
 		BLACK,Interface_Back
 	},
 };
@@ -406,20 +406,42 @@ block_attr_Result block_Result_CH16 = {
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[15].TName,
-		124,   243,
+		124,   229,
 		BLACK,Interface_Back
 	},
 
 	ENABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.CH_data[15].Result,
-		184,  243,
+		184,  229,
 		BLACK,Interface_Back
 	},
 };
 
 /******************************************************************************/
-block_attr_Result* UI_WindowBlocksAttrArray_Result[][18] = {/* Window: Result entry */
+block_attr_Result block_Result_CH17 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Result rect */
+	{0},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		Storage_Data.CH_data[16].TName,
+		14,   247,
+		BLACK,Interface_Back
+	},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		Storage_Data.CH_data[16].Result,
+		74,  247,
+		BLACK,Interface_Back
+	},
+};
+
+/******************************************************************************/
+block_attr_Result* UI_WindowBlocksAttrArray_Result[][20] = {/* Window: Result entry */
 {&block_Result_Return,&block_Result_Result,&block_Result_CH1},
 {&block_Result_Return,&block_Result_Result,&block_Result_CH1,&block_Result_CH2},
 {&block_Result_Return,&block_Result_Result,&block_Result_CH1,&block_Result_CH2,
@@ -468,7 +490,11 @@ block_attr_Result* UI_WindowBlocksAttrArray_Result[][18] = {/* Window: Result en
 		&block_Result_CH7,&block_Result_CH8,&block_Result_CH9,&block_Result_CH10,
 		&block_Result_CH11,&block_Result_CH12,&block_Result_CH13,&block_Result_CH14
 		,&block_Result_CH15,&block_Result_CH16},
-
+{&block_Result_Return,&block_Result_Result,&block_Result_CH1,&block_Result_CH2,
+		&block_Result_CH3,&block_Result_CH4,&block_Result_CH5,&block_Result_CH6,
+		&block_Result_CH7,&block_Result_CH8,&block_Result_CH9,&block_Result_CH10,
+		&block_Result_CH11,&block_Result_CH12,&block_Result_CH13,&block_Result_CH14
+		,&block_Result_CH15,&block_Result_CH16,&block_Result_CH17},
 };
 
 /******************************************************************************/

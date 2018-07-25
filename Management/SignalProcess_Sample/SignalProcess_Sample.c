@@ -10,6 +10,9 @@
 /******************************************************************************/
 #include "SignalProcess_Sample.h"
 
+uint8 SignalBuffer_Process[500] = {0};
+uint16 SignalBuffer_samples[200] = {0};
+
 /******************************************************************************/
 uint8 SignalSample_moveThenSample = 0;
 uint8 SignalSample_endDetection = 0;
@@ -24,12 +27,10 @@ uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint16 SignalProcess_sampleBuffer_BK[SIGNALSAMPLE_MAX_COUNT] = {0};
 uint8 SignalProcess_outputBuffer[SIGNALSAMPLE_MAX_COUNT] = {0};
 
-uint8 SignalSample_resistorValue = 8;
+uint8 SignalSample_resistorValue = 7;
 uint8 SignalSample_resistorValueStored = 0;
 
 uint8 SignalProcess_output = 0;
-
-//uint8 SignalBuffer[500] = {0};
 
 /******************************************************************************/
 void SignalSample_Sample_Strip_Sensor_Init(void);
@@ -439,14 +440,6 @@ void SignalSample_OutputSamples(uint16 sampleCount,uint16 *Sample_Data)
 	/* Debugging: Output samples
 	 * Format: data length, data[0], data[1], ..., data[data length - 1] */
 
-	for(count = 0;count <= sampleCount;count++)
-	{
-		if(Sample_Data[count] < 500)
-		{
-			Sample_Data[count]=Sample_Data[count-1];
-		}
-	}
-
 	SignalProcess_sampleBuffer_BK[0] = sampleCount;
 	memcpy(&SignalProcess_sampleBuffer_BK[1], Sample_Data, sampleCount << 1);
 	memset(&SignalProcess_outputBuffer[0],0,2*sizeof(SignalProcess_outputBuffer));
@@ -521,62 +514,66 @@ void SignalSample_Sample_ExitCriticalArea(void)
 /******************************************************************************/
 void SignalSample_SampleStrip(void)
 {
-	uint16 moveSteps = MOTOR_SAMPLE_STEPS - 1;
-	/* 1st stage: prepare to sample */
-
+	uint8 i = 0;
 	/* 1.3 Enter critical area */
 	SignalSample_Sample_EnterCriticalArea();
-	memset(&SignalProcess_sampleBuffer[0],0,382);
+	memset(&SignalProcess_sampleBuffer[0],0,512);
 
 	/* 2nd stage: start timer, move motor per interval then sample */
 	/* 2.1 Initialize timer */
 	SignalSample_Sample_Timer_Init();
 
-	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
+	if (CAN_POSSEN_INT_STATE())
 	{
-		SignalSample_count = 191;
+		SignalSample_count = 180;
+
 		/* 2.2 Move motor per interval, then sample */
-		for (;;)
+		while(SignalSample_count)
 		{
-//			if (SignalSample_moveThenSample)
-			{
-				/* Timer notifies */
-				SignalSample_moveThenSample = 0;
-				/* Move one step */
-				ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT,1);
-				/* Sample one time */
-				SignalProcess_sampleBuffer[SignalSample_count--]
-										   = SignalProcess_Collecting_Data();
-				/* Determine exit condition */
-				if (!(moveSteps--))
-					break;
-			}
+			/* Move one step */
+			ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT,1);
+			/* Sample one time */
+			SignalProcess_sampleBuffer[SignalSample_count--]
+									   = SignalProcess_Collecting_Data();
 		}
-		SignalSample_count = 191;
+		SignalSample_count = 180;
 	}
 	else
 	{
 		SignalSample_count = 0;
-		/* Move until slider reaches base position */
-		while (!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
+		while (!CAN_POSSEN_INT_STATE())
 		{
-			/* Timer notifies */
+			/* Move one step */
 			ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_IN);
 			/* Sample one time */
 			SignalProcess_sampleBuffer[SignalSample_count++]
-											= SignalProcess_Collecting_Data();
+									= SignalProcess_Collecting_Data();
 		}
 	}
-
 	/* 3rd stage: Post process */
 	/* 3.1 Disable timer */
 	SignalSample_Sample_Timer_Disabled();
 
+	/* 信号值处理  */
+	SignalSample_count = 170;
+	for(i = 0;i < SignalSample_count;i++)
+	{
+		SignalBuffer_samples[i] = SignalProcess_sampleBuffer[i];
+	}
+
+	memset(&SignalProcess_sampleBuffer[0],0,512);
+	for(i = 0;i < SignalSample_count;i++)
+	{
+		SignalProcess_sampleBuffer[i] = SignalBuffer_samples[i] ;
+	}
+
 	/* 3.2 Exit critical area */
 	SignalSample_Sample_ExitCriticalArea();
-//	memset(SignalBuffer,0,500);
-//	memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count << 1);
-//	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
+
+	/* 发送采集结果  */
+	memset(SignalBuffer_Process,0,500);
+	memcpy(SignalBuffer_Process, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer_Process);
 }
 
 

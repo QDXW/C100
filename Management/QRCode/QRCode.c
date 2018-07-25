@@ -36,11 +36,7 @@ void QRCode_GPIO_Init(void)
 /******************************************************************************/
 void QRCode_Uart_Init(void)
 {
-#if LCD_OLD
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-#else
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-#endif
 	GPIO_PinRemapConfig(GPIO_PartialRemap_USART3, ENABLE);
 
 	QRCode_Uart_GPIO_Init();					/* Initialize GPIOs */
@@ -55,8 +51,8 @@ void QRCode_Uart_NVIC_Configuration(void)
 
 	/*Enable interrupt*/
 	NVIC_InitStructure.NVIC_IRQChannel = QRCODE_USART_IRQN;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -125,14 +121,9 @@ void QRCode_Restart(void)
 }
 
 /******************************************************************************/
-#if LCD_OLD
-void USART1_IRQHandler(void)
-#else
 void USART3_IRQHandler(void)
-#endif
 {
 	uint8 value;
-
 	if(USART_GetITStatus(QRCODE_USART, USART_IT_RXNE) != RESET)
 	{
 		value=USART_ReceiveData(QRCODE_USART);
@@ -144,43 +135,19 @@ void USART3_IRQHandler(void)
 		else
 		{
 			QRCode_received = 1;
-			QRCode_existed = 0;
 		}
-	}
-
-	QRCode_Received();
-	USART_ClearITPendingBit(QRCODE_USART, USART_IT_RXNE);	//清除USART1/USART3上的中断标志位
-}
-
-/******************************************************************************/
-void QRCode_Received(void)
-{
-/* Scan interface: receive data from QR code scanner */
-	if (QRCode_received == 1)
-	{
-		if (QRCode_Identify())						/* Decode */
-		{
-			QRCode_received = 1;
-			QRCode_existed = 1;
-		}
-		else
-		{
-			QRCode_received = 1;
-			QRCode_existed = 0;
-		}
-		QRCode_count = 0;							/* Clear size */
 	}
 }
 
 /******************************************************************************/
 uint8 QRCode_Identify(void)
 {
-	uint8 status = 0, headLineSize = 0, singleLineSize = 0,QR_Date_Analyze_Conut = 0,QR_Date_Conut = 0;
-	uint16 crcCalc = 0, crcRec = 0;
+	uint8 status = 0;
+	uint8 QR_Date_Analyze_Conut = 0,QR_Date_Conut = 0;
+	uint16 crcCalc = 0, crcRec = 0, headLineSize = 0, singleLineSize = 0;
 
 	/* Calculate CRC */
 	crcCalc = Common_CalculateCRC(&QRCode_Buffer[2], QRCode_count - 2, 0xFFFF, 0x0000);
-
 	/* Get CRC from command */
 	crcRec = (QRCode_Buffer[1] << 8) | QRCode_Buffer[0];
 
@@ -207,8 +174,10 @@ uint8 QRCode_Identify(void)
 		Action_time = QR_Date.head.time;
 		Storage_Data.StripNum = QR_Date.head.stripNum;
 
-		switch (16)
+		switch (17)
 		{
+			case 17:
+				memcpy(&QR_Date.ch_data[16], &QRCode_Buffer[headLineSize + 16 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
 			case 16:
 				memcpy(&QR_Date.ch_data[15], &QRCode_Buffer[headLineSize + 15 * singleLineSize], sizeof(QRCODE_SINGLE_LINE));
 			case 15:
@@ -246,7 +215,7 @@ uint8 QRCode_Identify(void)
 				break;
 		}
 
-		for(QR_Date_Conut = 0; QR_Date_Conut < 16; QR_Date_Conut++)
+		for(QR_Date_Conut = 0; QR_Date_Conut < 17; QR_Date_Conut++)
 		{
 			if(QR_Date.ch_data[QR_Date_Conut].Switch_Bool)
 			{
@@ -255,7 +224,7 @@ uint8 QRCode_Identify(void)
 			}
 		}
 
-		for(QR_Date_Conut = 0; QR_Date_Conut < 16; QR_Date_Conut++)
+		for(QR_Date_Conut = 0; QR_Date_Conut < 17; QR_Date_Conut++)
 		{
 			memcpy(&Storage_Data.CH_data[QR_Date_Conut], &QR_Date_Analyze.ch_data[QR_Date_Conut], sizeof(QRCODE_SINGLE_LINE));
 		}
@@ -267,7 +236,9 @@ uint8 QRCode_Identify(void)
 	{
 		status = 0;
 	}
+
 	QRCode_Trigger_Disabled();
+
 	return status;
 }
 

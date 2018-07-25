@@ -618,13 +618,14 @@ void DisplayDriver_Init_Touch(void)
 	if(lcddev.id==0X9341)
 	{
 		Driver_Init_9341();
-		Delay_ms_SW(800);
+		Delay_ms_SW(200);
 		GPIO_SetBits(GPIOB, GPIO_Pin_3);
 	}
 	else
 	{
 		Driver_Init_7789();
-
+		Delay_ms_SW(200);
+		GPIO_SetBits(GPIOB, GPIO_Pin_3);
 		lcddev.id = 0X7789;
 	}
 

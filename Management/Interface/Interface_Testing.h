@@ -35,6 +35,7 @@ void Get_sampleBuffer_Start_Position(void);
 void QR_Date_SignalProcess_Alg_data (void);
 uint16 Get_sampleBuffer_Boundary_Value(void);
 extern void UI_Draw_Window_Down_Time(uint16 blockNum);
+uint16 Calculate_Start_Postion(uint16* Signal,uint16 Postion);
 uint8 Down_Time_Touch_Check(Down_Time* block,uint16* xpos,uint16* ypos);
 void SignalSample_Moving_Average_Data(uint16 *Data,uint16 Length,uint16 Period);
 

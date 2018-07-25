@@ -97,16 +97,12 @@ void BLE_Timer_Init(uint16 period)
 /******************************************************************************/
 void Printer_BLE_Init(void)
 {
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
 	/*Initialize GPIOs*/
 	Printer_GPIO_Init();
 	/*Configure parameters*/
 	Printer_Config();
-	/*Initialize TIM7*/
-#if BLE_4_0_ENABLED
-	BLE_Timer_Init(3000);
-#endif
 }
 
 /******************************************************************************/

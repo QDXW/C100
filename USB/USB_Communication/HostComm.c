@@ -84,7 +84,7 @@ static void HostComm_Config()
 	/* Configure */
 	USART_Init(HOSTCOMM_USART, &USART_InitStructure);
 	/* Enable Receive and Transmit interrupts */
-	USART_ITConfig(HOSTCOMM_USART, USART_IT_RXNE, ENABLE);
+//	USART_ITConfig(HOSTCOMM_USART, USART_IT_RXNE, ENABLE);
 //	USART_ITConfig(HOSTCOMM_USART, USART_IT_TXE, ENABLE);
 	/* Enable */
 	USART_Cmd(HOSTCOMM_USART, ENABLE);

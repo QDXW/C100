@@ -54,7 +54,9 @@ void UI_Draw_Block_InvCode(block_attr_InvCode* block);
 uint8 Interface_Invalue_Code_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
+	Display_Battery = 1;
 	UI_Background_Plate_InvCode();
+	QRCode_Trigger_Disabled();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_InvCode) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_InvCode,sizeof(UI_WindowBlocksAttrArray_InvCode));

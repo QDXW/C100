@@ -67,8 +67,8 @@ block_attr_Record block_Record_SN = {
 	ENABLE,							/* Interface Record rect */
 	{
 		left,
-		10,  272,
-		60,  48,
+		10,  270,
+		70,  50,
 		1
 	},
 
@@ -94,8 +94,8 @@ block_attr_Record block_Record_Time = {
 	ENABLE,							/* Interface Record rect */
 	{
 		Right,
-		170, 272,
-		60,  48,
+		170, 270,
+		70,  50,
 		2
 	},
 
@@ -121,8 +121,8 @@ block_attr_Record block_Record_CH1 = {
 	ENABLE,									/* Display Picture */
 	{
 		Print,
-		98, 275,
-		45, 45,
+		98, 274,
+		45, 46,
 		3
 	},
 
@@ -471,12 +471,34 @@ block_attr_Record block_Record_CH16 = {
 };
 
 /******************************************************************************/
+block_attr_Record block_Record_CH17 = {
+	DISABLE,
+
+	DISABLE,							/* Interface Record rect */
+	{0},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		Storage_Data.CH_data[16].TName,
+		14,   251,
+		BLACK,WHITE
+	},
+
+	ENABLE,								/* Display HZ16X8 */
+	{
+		Storage_Data.CH_data[16].Result,
+		72,  251,
+		BLACK,WHITE
+	},
+};
+
+/******************************************************************************/
 block_attr_Record* UI_WindowBlocksAttrArray_Record_UI_Return[] = {/* Window: Standard entry */
 		&block_Record_UI_Return,
 };
 
 /******************************************************************************/
-block_attr_Record* UI_WindowBlocksAttrArray_Record[][19] = {/* Window: Standard entry */
+block_attr_Record* UI_WindowBlocksAttrArray_Record[][20] = {/* Window: Standard entry */
 {&block_Record_Name,&block_Record_SN,&block_Record_Time,&block_Record_CH1},
 {&block_Record_Name,&block_Record_SN,&block_Record_Time,&block_Record_CH1,
 		&block_Record_CH2},
@@ -529,6 +551,11 @@ block_attr_Record* UI_WindowBlocksAttrArray_Record[][19] = {/* Window: Standard 
 		&block_Record_CH6,&block_Record_CH7,&block_Record_CH8,&block_Record_CH9,
 		&block_Record_CH10,&block_Record_CH11,&block_Record_CH12,&block_Record_CH13,
 		&block_Record_CH14,&block_Record_CH15,&block_Record_CH16},
+{&block_Record_Name,&block_Record_SN,&block_Record_Time,&block_Record_CH1,
+		&block_Record_CH2,&block_Record_CH3,&block_Record_CH4,&block_Record_CH5,
+		&block_Record_CH6,&block_Record_CH7,&block_Record_CH8,&block_Record_CH9,
+		&block_Record_CH10,&block_Record_CH11,&block_Record_CH12,&block_Record_CH13,
+		&block_Record_CH14,&block_Record_CH15,&block_Record_CH16,&block_Record_CH17},
 };
 
 /******************************************************************************/
@@ -670,13 +697,13 @@ void UI_Background_Plate_Record (void)
 void Page_Display(void)
 {
 	Display_Time = 0;
-	DisplayDriver_Fill(11,123,119,249,WHITE);
-	DisplayDriver_Fill(121,123,228,249,WHITE);
+	DisplayDriver_Fill(11,123,119,269,WHITE);
+	DisplayDriver_Fill(121,123,228,269,WHITE);
 	DisplayDriver_Fill(110,41,228,59,WHITE);
 	DisplayDriver_Fill(64,63,210,80,WHITE);
 	DisplayDriver_Fill(38,83,160,101,WHITE);
-	sprintf(kBuffer,"%02d/%02d",reagent_Strip[0],reagent_Strip[1]);
-	DisplayDriver_Text16_Back(186, 254, BLACK,WHITE,kBuffer);
+	sprintf(kBuffer,"%03d/%03d",reagent_Strip[0],reagent_Strip[1]);
+	DisplayDriver_Text16_Back(153, 254, BLACK,WHITE,kBuffer);
 	Display_Time = 1;
 }
 
@@ -687,9 +714,11 @@ uint8 Interface_Record_Demand_Process(uint16* xpos,uint16* ypos)
 	if(Pic_Count == 1)
 	{
 		reagent_Strip[0]--;
-		if(reagent_Strip[0] <= 1)
+		if(reagent_Strip[0] < 1)
 		{
 			reagent_Strip[0] = 1;
+			UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+			return state;
 		}
 		UI_state = UI_STATE_RECORD;
 	}
@@ -702,14 +731,18 @@ uint8 Interface_Record_Demand_Process(uint16* xpos,uint16* ypos)
 			if(reagent_Strip[0] > 500)
 			{
 				reagent_Strip[0] = 500;
+				UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+				return state;
 			}
 		}
 		else
 		{
 			reagent_Strip[0]++;
-			if(reagent_Strip[0] >= reagent_Strip[1])
+			if(reagent_Strip[0] > reagent_Strip[1])
 			{
 				reagent_Strip[0] = reagent_Strip[1];
+				UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+				return state;
 			}
 		}
 		UI_state = UI_STATE_RECORD;

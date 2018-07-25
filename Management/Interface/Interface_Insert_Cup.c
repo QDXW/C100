@@ -55,7 +55,9 @@ block_attr_Insert_Cup* UI_WindowBlocksAttrArray_Insert_Cup[] = {/* Window: Inser
 uint8 Interface_Insert_Cup(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
+	Display_Battery = 1;
 	UI_Background_Plate_Cup();
+	QRCode_Trigger_Disabled();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Insert_Cup) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Insert_Cup,sizeof(UI_WindowBlocksAttrArray_Insert_Cup));

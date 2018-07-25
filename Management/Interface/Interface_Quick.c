@@ -39,6 +39,7 @@ uint8 Interface_Quick(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
 	Enter_Sleep = 0;
+	Display_Battery = 0;
 	if(Cup_Count != 0)
 	{
 		UI_state = UI_STATE_START;
@@ -50,8 +51,8 @@ uint8 Interface_Quick(uint16* xpos,uint16* ypos)
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Quick) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Quick,sizeof(UI_WindowBlocksAttrArray_Quick));
 	UI_Draw_Window_Quick(UI_WindowBlocks);
-	QRCode_Trigger_Enabled();
 	UI_WindowBlocks = 2;
+	QRCode_Trigger_Enabled();
 	UI_state = UI_STATE_QUICK_TOUCH_PROCESS;
 	return state;
 }
@@ -100,21 +101,25 @@ uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
 	Quick_Down_time = 1;
-	if(QRCode_received)
+
+	if(1 == QRCode_received)
 	{
-		if (QRCode_existed)
+		QRCode_received = 0;
+		if (QRCode_Identify())						/* Decode */
 		{
 			UI_state = UI_STATE_INSERT_CUP;
-			QRCode_received = 0;
-			QRCode_existed = 0;
 			Quick_Down_time = 0;
+			state = UI_STATE_RERUN;
 		}
 		else
 		{
 			UI_state = UI_STATE_INVALUE_CODE_PROCESS;
-			QRCode_received = 0;
 			Quick_Down_time = 0;
+			state = UI_STATE_RERUN;
 		}
+
+		/* Clear size */
+		QRCode_count = 0;
 	}
 	else
 	{
@@ -134,7 +139,7 @@ uint8 Quick_Touch_Check(block_attr_Quick* block,uint16* xpos,uint16* ypos)
 {
 	if((xpos != 0) || (ypos != 0))
 	{
-		if((0 < *xpos) && (*xpos < 45) && (22 < *ypos) && (*ypos < 65))
+		if((0 < *xpos) && (*xpos < 60) && (22 < *ypos) && (*ypos < 65))
 		{
 			UI_state = block->Interface_Status;
 			Pic_Count = block->pic_attr.count;

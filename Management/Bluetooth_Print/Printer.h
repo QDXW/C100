@@ -11,12 +11,12 @@
 #include "Project_File.h"
 
 /******************************************************************************/
-#define PRINTER_USART (UART4)
+#define PRINTER_USART (USART2)
 
-#define PRINTER_TX_PORT (GPIOC)
-#define PRINTER_TX_PIN (GPIO_Pin_10)
-#define PRINTER_RX_PORT (GPIOC)
-#define PRINTER_RX_PIN (GPIO_Pin_11)
+#define PRINTER_TX_PORT (GPIOA)
+#define PRINTER_TX_PIN (GPIO_Pin_2)
+#define PRINTER_RX_PORT (GPIOA)
+#define PRINTER_RX_PIN (GPIO_Pin_3)
 
 #define PRINTER_MATCH_STATUS_PORT (GPIOC)
 #define PRINTER_MATCH_STATUS_PIN (GPIO_Pin_9)

@@ -104,7 +104,7 @@ block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
 		&block_settings,
 };
 /******************************************************************************/
-block_attr* UI_WindowBlocksAttrArray[20] = {0};
+block_attr* UI_WindowBlocksAttrArray[25] = {0};
 
 /******************************************************************************/
 void UI_Draw_Block(block_attr* block);
@@ -157,8 +157,9 @@ uint8 Interface_Process(uint16* xpos,uint16* ypos)
 uint8 Interface_Main(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
-	Enter_Sleep = 1;
+	QRCode_existed = 0;
 	Read_first = 1,Record_Display = 1;
+	Enter_Sleep = 1,Display_Battery = 1;
 	Interface_Reord = 0,Stored_Record = 1;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Main();
@@ -295,20 +296,23 @@ void Status_Init(void)
 /******************************************************************************/
 void Battery_Display (void)
 {
-	int i = 0;
-
-	adcx = Get_Adc_Average(ADC_Channel_11,10);
-	temp = (float)adcx*(5.185/4096.0);
-
-	DisplayDriver_Fill(103,7,118,8,Interface_Bar);
-	if((!Power_Open) || (UI_state == UI_STATE_TESTING))
+	if(!Display_Battery)
 	{
-		temp += 0.36;
+		adcx = Get_Adc_Average(ADC_Channel_11,10);
+		temp = (float)adcx*(5.185/4096.0);
+		return;
 	}
+	else
+	{
+		adcx = Get_Adc_Average(ADC_Channel_11,10);
+		temp = (float)adcx*(5.185/4096.0);
+	}
+
+	DisplayDriver_Fill(202,5,218,14,Interface_Bar);
 
 	if((GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12)) && (temp < 3.6))
 	{
-		DisplayDriver_Fill(203,7,104,15,RED);
+		DisplayDriver_Fill(202,6,202,14,RED);
 	}
 	else
 	{
@@ -336,12 +340,11 @@ void Battery_Display (void)
 		{
 			DisplayDriver_Fill(202,5,202,14,RED);
 		}
-		else
+		else if(Power_Open)
 		{
-//			SystemManage_CheckPowerOff();
+			SystemManage_CheckPowerOff();
 		}
 	}
-
 
 	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
 	{

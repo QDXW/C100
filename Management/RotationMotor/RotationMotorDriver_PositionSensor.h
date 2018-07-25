@@ -9,11 +9,17 @@
 #define MANAGEMENT_SCANMOTOR_ROTATIONMOTORDRIVER_POSITIONSENSOR_H_
 
 /******************************************************************************/
-#include "comDef.h"
+#include "Project_File.h"
 
 /******************************************************************************/
+#if LCD_OLD
 #define ROTA_POSSEN_INT_PORT      (GPIOA)
 #define ROTA_POSSEN_INT_PIN       (GPIO_Pin_1)
+#else
+#define ROTA_POSSEN_INT_PORT      (GPIOA)
+#define ROTA_POSSEN_INT_PIN       (GPIO_Pin_0)
+#endif
+
 #define ROTA_POSSEN_INT_EXTI      (EXTI_Line1)
 #define ROTA_POSSEN_EXTI_PORT     (GPIO_PortSourceGPIOA)
 #define ROTA_POSSEN_EXTI_PIN      (GPIO_PinSource1)

@@ -17,7 +17,7 @@ void RotaMotorDriver_PositionSensor_Int_Enable(void)
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
 	/* Enable */
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_InitStructure.EXTI_LineCmd = DISABLE;
 	EXTI_Init(&EXTI_InitStructure);
 }
 
@@ -55,7 +55,7 @@ void RotaMotorDriver_PositionSensor_Init()
 	EXTI_InitStructure.EXTI_Line = ROTA_POSSEN_INT_EXTI;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_InitStructure.EXTI_LineCmd = DISABLE;
 	EXTI_Init(&EXTI_InitStructure);
 
 	/* Position sensor input */

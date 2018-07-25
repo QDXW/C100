@@ -12,9 +12,6 @@
 #include "Project_File.h"
 
 /******************************************************************************/
-
-
-/******************************************************************************/
 typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */

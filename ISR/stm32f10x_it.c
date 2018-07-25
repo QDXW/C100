@@ -7,11 +7,7 @@
 #include "stm32f10x_it.h"
 
 /******************************************************************************/
-extern uint8 SignalSample_moveThenSample;
-extern uint8 Power_Open;
-extern uint8 Display_Time;
 uint8 time_second = 59,Battery_Second = 0;
-extern uint8 Open_time;
 uint16 Power_Second = 0;
 uint16 Power_Minute = 0;
 
@@ -220,7 +216,7 @@ void TIM4_IRQHandler(void)
 			InvCode_Second = 0;
 		}
 
-		if(Display_Time)
+		if((!MotorDriver_Ctr) && Display_Time)
 		{
 			Display_Time = 0;
 			Bluetooth_Connection();
@@ -229,7 +225,7 @@ void TIM4_IRQHandler(void)
 			{
 				if (Bluetooth_Connect)
 				{
-//					DisplayDriver_Fill(28,290,220,310,Interface_Back);
+					DisplayDriver_Fill(28,290,220,310,Interface_Back);
 				}
 				else
 				{
@@ -241,7 +237,11 @@ void TIM4_IRQHandler(void)
 
 		if((!MotorDriver_Ctr) && Display_Time)
 		{
-			if((UI_state != UI_STATE_TESTING) && (UI_state != UI_STATE_RESULT))
+			if((UI_state == UI_STATE_TESTING) || (UI_state == UI_STATE_RESULT))
+			{
+
+			}
+			else
 			{
 				Display_Time = 0;
 				Battery_Display();

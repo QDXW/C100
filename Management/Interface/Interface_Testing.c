@@ -10,10 +10,9 @@
 /******************************************************************************/
 uint16 max = 0;
 uint8 Storage_Data_Conut = 0;
-uint8 Zero_Count = 0,Forever_Value = 2;
 uint16 BOUNDARY_VALUE = 2500;
-extern uint16 SignalSample_count;
-extern uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT];
+
+uint8 SignalBuffer[1024] = {0};
 
 /******************************************************************************/
 Down_Time block_Testing = {
@@ -63,11 +62,12 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 	}
 
 	Exti_lock = DISABLE;
+	Display_Battery = 0;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Testing();
 	SystemManage_5V_Enabled();
 	Start_Postion = Get_Start_Postion();
-	RotationMotor_Input_StepDrive(Foreward_Rotation,Start_Postion + 21);
+	RotationMotor_Input_StepDrive(Foreward_Rotation,Start_Postion);
 	if(Confirm_CUP)
 	{
 		Acquisition_Signal();
@@ -84,7 +84,7 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 /******************************************************************************/
 void Acquisition_Signal(void)
 {
-	uint8 j = 0,Step_Count = 44,Step_Start = 33,i = 0;
+	uint8 j = 0,Step_Count = 46,Step_Start = 36,i = 0;
 	NowCup_Count = 0;
 	Storage_Data_Conut = 0;
 	Storage_Time();
@@ -97,8 +97,9 @@ void Acquisition_Signal(void)
 	/* 二维码 */
 	QR_Date_SignalProcess_Alg_data();
 
+	ScanMotorDriver_Goto_BasePosition();
 	/* 采样与结果存储*/
-	for(NowCup_Count = 0;NowCup_Count< 16;NowCup_Count++)
+	for(NowCup_Count = 0;NowCup_Count< 17;NowCup_Count++)
 	{
 		if(QR_Date.ch_data[NowCup_Count].Switch_Bool)
 		{
@@ -115,22 +116,11 @@ void Acquisition_Signal(void)
 			Storage_Data_Conut += 1;
 
 			/* 调试输出 */
-			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
-	//		memset(SignalBuffer,0,500);
-	//		memcpy(SignalBuffer, &SignalProcess_Alg_data.processBuffer[0], SignalProcess_Alg_data.processNumder << 1);
-	//		HostComm_Cmd_Send_RawData(SignalProcess_Alg_data.processNumder << 1, SignalBuffer);
-
+//			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
 		}
 
 		/* 转动电机转动30° */
-		if(NowCup_Count%3 == 1)
-		{
-			RotationMotor_Input_StepDrive(Foreward_Rotation,43);
-		}
-		else
-		{
-			RotationMotor_Input_StepDrive(Foreward_Rotation,42);
-		}
+		RotationMotor_Input_StepDrive(Foreward_Rotation,18);
 
 		/* 进度条刷新 */
 		for(j = Step_Start;j < Step_Count;j++)		/* 每次进度条走十格 */
@@ -141,7 +131,7 @@ void Acquisition_Signal(void)
 			Display_Time = 1;
 		}
 		Step_Start = Step_Count;					/* 重置进度条开始位置 */
-		Step_Count += 11;
+		Step_Count += 10;
 	}
 }
 
@@ -149,10 +139,11 @@ void Acquisition_Signal(void)
 uint16 Get_Start_Postion(void)
 {
 	uint16 i = 0;
+	uint16 Pre_Count = 0,Next_Count = 0;
 	uint16 Start_Postion=0;
+	uint16 Forever_Value = 0;
 	SignalSample_count = 0;
-	Zero_Count = 0;
-	Forever_Value = 2;
+
 	/* 第一步:扫描电机转到中间位置 */
 	memset(&SignalProcess_sampleBuffer[0],0,2*512);
 	ScanMotorDriver_PositionSensor_Int_Enable();
@@ -165,6 +156,11 @@ uint16 Get_Start_Postion(void)
 		SignalProcess_sampleBuffer[SignalSample_count++]
 									= SignalProcess_Collecting_Data();
 	}
+
+	memset(SignalBuffer,0,1024);
+	memcpy(SignalBuffer, SignalProcess_sampleBuffer, 1024);
+	HostComm_Cmd_Send_RawData(1024, SignalBuffer);
+
 	SignalSample_Sample_ExitCriticalArea();
 	ScanMotorDriver_Goto_BasePosition();
 	ScanMotorDriver_Goto_DetectionPosition();
@@ -174,7 +170,7 @@ uint16 Get_Start_Postion(void)
 	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
 	/* 2.有无杯子判断 */
-	if((max < 1000) || (BOUNDARY_VALUE > 900))
+	if((max < 1200) || (BOUNDARY_VALUE > 900))
 	{
 		Confirm_CUP = NO_CUP;
 		return Confirm_CUP;
@@ -184,63 +180,39 @@ uint16 Get_Start_Postion(void)
 		Confirm_CUP = 1;
 	}
 
-	/* 3.减去临界值，获得易处理的数据 */
-	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
+	/* 3.找到上升沿的位置 */
+	for(i = 0;i < 511;i++)
 	{
-		if(SignalProcess_sampleBuffer[i]  == 0)
+		if((SignalProcess_sampleBuffer[i] < 600) && (SignalProcess_sampleBuffer[i+1] >= 600))
 		{
-			Zero_Count++;
-		}
-
-		if((SignalProcess_sampleBuffer[i] == SignalProcess_sampleBuffer[i-1]) && (SignalProcess_sampleBuffer[i-1] == SignalProcess_sampleBuffer[i-2]))
-		{
-			Forever_Value++;
+			Start_Postion = i;
 		}
 	}
 
-	/* 3.减去临界值，获得易处理的数据 */
-	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
-	{
-		if(SignalProcess_sampleBuffer[i] < BOUNDARY_VALUE)
+	/* 判断上升沿是否在最后  */
+		if((511-Start_Postion) < 9)
 		{
-			SignalProcess_sampleBuffer[i] = 0;
+			/* 求取上升沿在最后最大值  */
+			for(i = Start_Postion;i < 511;i++)
+			{
+				if(SignalProcess_sampleBuffer[i] < SignalProcess_sampleBuffer[i+1])
+				{
+					Pre_Count = SignalProcess_sampleBuffer[i+1];
+					Start_Postion = i+1;
+				}
+			}
+
+			/* 上升沿在最后不为峰值的情况  */
+			if(Pre_Count < SignalProcess_sampleBuffer[0])
+			{
+				Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],0);
+			}
 		}
 		else
 		{
-				SignalProcess_sampleBuffer[i] = SignalProcess_sampleBuffer[i] - BOUNDARY_VALUE;
+			Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],Start_Postion);
 		}
-	}
-
-	/* 4.得到杯子的起始位置 */
-	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
-	{
-		if((SignalProcess_sampleBuffer[i] == 0) && (SignalProcess_sampleBuffer[i+1] > 0) )
-		{
-			Start_Postion = i;
-			break;
-		}
-	}
-
-	if(Zero_Count)
-	{
-		Start_Postion += ((187 - Forever_Value)/2);
-	}
-	else
-	{
-		Start_Postion = (Start_Postion + 93) - (Forever_Value+3)/2;
-	}
-
-	if(Start_Postion >= 511 )
-	{
-		Start_Postion = 511;
-	}
-
-	if(Start_Postion <= 4 )
-	{
-		Start_Postion = 2;
-	}
-
-	return Start_Postion;
+		return (Start_Postion + 9);
 }
 
 /******************************************************************************/
@@ -266,7 +238,7 @@ uint16 Get_sampleBuffer_Boundary_Value(void)
 /******************************************************************************/
 uint16 Get_sampleBuffer_Max_Value(void)
 {
-	int j=0;
+	uint16 j=0;
 	max = 0;
 	for(j = 0;j < SIGNALSAMPLE_MAX_COUNT;j++)
 	{
@@ -293,6 +265,21 @@ void SignalSample_Moving_Average_Data(uint16 *Data,uint16 Length,uint16 Period)
 		Data[i] = Num/Period;
 		Num=0;
 	}
+}
+
+/******************************************************************************/
+uint16 Calculate_Start_Postion(uint16* Signal,uint16 Postion)
+{
+	uint16 Start_Postion = 0,i = 0;
+	Start_Postion = Postion;
+	for(i = Postion;i < (Postion+14);i++)
+	{
+		if(Signal[i] < Signal[i+1])
+		{
+			Start_Postion = i+1;
+		}
+	}
+	return Start_Postion;
 }
 
 /******************************************************************************/
@@ -360,7 +347,7 @@ void UI_Background_Plate_Testing (void)
 {
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
-	DisplayDriver_Fill(33,130,208,150,WHITE);
+	DisplayDriver_Fill(36,130,205,150,WHITE);
 	DisplayDriver_Text16_Touch(80,160,WHITE,WHITE,"testing...");
 	Display_Time = 1;
 }
