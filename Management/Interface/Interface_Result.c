@@ -502,6 +502,7 @@ uint8 Interface_Result(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
 	Exti_lock = ENABLE;
+	BLE_Remind = 1;
 	UI_Background_Plate_Result();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Result[Storage_Data.StripNum-1]) >> 2;
@@ -591,6 +592,7 @@ uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 			Stored_Record = 0;
 		}
 	}
+
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
 }

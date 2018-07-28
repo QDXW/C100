@@ -45,7 +45,7 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 	max = 0;
 	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
 	{
-		if(temp > 3.6)
+		if(temp > 3.0)
 		{
 
 		}
@@ -116,6 +116,9 @@ void Acquisition_Signal(void)
 			Storage_Data_Conut += 1;
 
 			/* µ÷ÊÔÊä³ö */
+//			memset(SignalBuffer,0,500);
+//			memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+//			HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
 //			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
 		}
 
@@ -212,7 +215,7 @@ uint16 Get_Start_Postion(void)
 		{
 			Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],Start_Postion);
 		}
-		return (Start_Postion + 9);
+		return (Start_Postion + 11);
 }
 
 /******************************************************************************/

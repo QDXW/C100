@@ -750,6 +750,7 @@ uint8 Interface_Record_Demand_Process(uint16* xpos,uint16* ypos)
 
 	if(Pic_Count == 3)
 	{
+		UI_Process_BLE_Print();
 		UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	}
 

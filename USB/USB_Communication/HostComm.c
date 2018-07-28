@@ -177,6 +177,7 @@ void HostComm_Cmd_Send_C_T(uint16 CValue, uint16 TValue)
 /******************************************************************************/
 void HostComm_SendResp(uint8 *Data, uint16 length)
 {
+	USART1->SR;
 	while(length-- != 0) {
 		USART_SendData(HOSTCOMM_USART, *Data++);
 		while(USART_GetFlagStatus(HOSTCOMM_USART, USART_FLAG_TC)==RESET);
@@ -313,11 +314,12 @@ char *itoa(int32 value, char *string, int radix)
 /******************************************************************************
 !!! ISR: Host communication interrupt service routine
 ******************************************************************************/
-//void USART1_IRQHandler(void)
-//{
-//	uint8 value;
-//	if(USART_GetITStatus(HOSTCOMM_USART, USART_IT_RXNE) != RESET)
-//	{
+void USART1_IRQHandler(void)
+{
+	uint8 value;
+	if(USART_GetITStatus(HOSTCOMM_USART, USART_IT_RXNE) != RESET)
+	{
+
 //		value=USART_ReceiveData(HOSTCOMM_USART);
 //
 //		if ((value == '$') && (contReceive == 0))
@@ -356,8 +358,8 @@ char *itoa(int32 value, char *string, int radix)
 //			respLength = 0;
 //			recCount = 0;
 //		}
-//	}
-//}
+	}
+}
 
 /******************************************************************************/
 void HostComm_Cmd_Send_RawData(uint16 length, uint8 dataBuf[])

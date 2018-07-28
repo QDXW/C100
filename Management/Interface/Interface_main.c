@@ -103,6 +103,7 @@ block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
 		&block_record,
 		&block_settings,
 };
+
 /******************************************************************************/
 block_attr* UI_WindowBlocksAttrArray[25] = {0};
 
@@ -160,7 +161,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 	QRCode_existed = 0;
 	Read_first = 1,Record_Display = 1;
 	Enter_Sleep = 1,Display_Battery = 1;
-	Interface_Reord = 0,Stored_Record = 1;
+	Interface_Reord = 0,Stored_Record = 1,BLE_Remind = 0;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Main();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
@@ -220,6 +221,7 @@ uint8 Interface_Main_Window_Process(uint16* xpos,uint16* ypos)
 {
 	Touch_Check (xpos,ypos);
 }
+
 /******************************************************************************/
 uint8 Touch_Check (uint16* xpos,uint16* ypos)
 {

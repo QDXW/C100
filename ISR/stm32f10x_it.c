@@ -190,6 +190,7 @@ void TIM4_IRQHandler(void)
 	{
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);  		//清除TIMx更新中断标志
 
+		/* Quick界面扫描倒计时  */
 		if(Quick_Down_time)
 		{
 			Quick_Second++;
@@ -216,25 +217,28 @@ void TIM4_IRQHandler(void)
 			InvCode_Second = 0;
 		}
 
+		/* 蓝牙连接显示  */
 		if((!MotorDriver_Ctr) && Display_Time)
 		{
 			Display_Time = 0;
 			Bluetooth_Connection();
-
-			if(UI_state == UI_STATE_RESULT)
-			{
-				if (Bluetooth_Connect)
-				{
-					DisplayDriver_Fill(28,290,220,310,Interface_Back);
-				}
-				else
-				{
-					DisplayDriver_Text16_Touch(28,290,WHITE,WHITE,"Bluetooth disconnected");
-				}
-			}
 			Display_Time = 1;
 		}
 
+		if(BLE_Remind)
+		{
+			/* 连接提醒  */
+			if(Printer_isConnected())
+			{
+				DisplayDriver_Fill(28,290,220,310,Interface_Back);
+			}
+			else
+			{
+				DisplayDriver_Text16_Touch(28,290,WHITE,WHITE,"Bluetooth disconnected!");
+			}
+		}
+
+		/* 电池电量图标显示  */
 		if((!MotorDriver_Ctr) && Display_Time)
 		{
 			if((UI_state == UI_STATE_TESTING) || (UI_state == UI_STATE_RESULT))
@@ -250,6 +254,7 @@ void TIM4_IRQHandler(void)
 			UI_Draw_Status_Bar();
 		}
 
+		/* 标准测试界面倒计时  */
 		if(Open_time)
 		{
 			time_second--;

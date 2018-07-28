@@ -20,13 +20,13 @@ static void Printer_GPIO_Init(void)
 	NVIC_InitTypeDef NVIC_InitStructure;
 	EXTI_InitTypeDef EXTI_InitStructure;
 
-	/*Configure USART4 Tx as alternate function push-pull*/
+	/*Configure USART2 Tx as alternate function push-pull*/
 	GPIO_InitStructure.GPIO_Pin = PRINTER_TX_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(PRINTER_TX_PORT, &GPIO_InitStructure);
 
-	/*Configure USART4 Rx as input floating*/
+	/*Configure USART2 Rx as input floating*/
 	GPIO_InitStructure.GPIO_Pin = PRINTER_RX_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(PRINTER_RX_PORT, &GPIO_InitStructure);
@@ -194,7 +194,7 @@ void Printer_BLE_Print(STORAGE_SINGLE_DATA_STRUCT *content)
 	Printer_BLE_PrintOneLine("------------Realy Tech----------\r\n");
 	Printer_BLE_PrintOneLine("--------------------------------\r\n");
 	/* Device type */
-	Printer_BLE_PrintOneLine("Device Type: RL-S100\r\n");
+	Printer_BLE_PrintOneLine("Device Type: RL-C100\r\n");
 
 	buffer[0] = '\0';
 	strcat(buffer, "Product Name: ");
@@ -242,4 +242,3 @@ void UI_Process_BLE_Print(void)
 {
 	Printer_BLE_Print(&Storage_Data);
 }
-

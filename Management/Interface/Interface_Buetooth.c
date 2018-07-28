@@ -27,6 +27,7 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 			DisplayDriver_Text16_Touch(48,288,WHITE,WHITE,"OFF");
 			GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 			GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+			Bluetooth_Connect = 0;
 			Bluetooth_switch = 0;
 		}
 	}
