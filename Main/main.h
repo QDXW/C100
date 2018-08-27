@@ -11,6 +11,7 @@
 #include "Project_File.h"
 
 /******************************************************************************/
+void Debug_Function(void);
 extern void SysTick_Init(u32 ticks);
 extern void Delay_ms(__IO uint32 nTime);
 extern void TimingDelay_Decrement(void);

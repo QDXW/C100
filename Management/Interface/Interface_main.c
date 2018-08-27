@@ -16,6 +16,7 @@
 #include "statusbar_bat.pic"
 #include "statusbar_charging.pic"
 #include "Blutooth_Ico.pic"
+#include "Charger.pic"
 
 /******************************************************************************/
 uint8 UI_state = UI_STATE_MAIN_WINDOW;
@@ -288,10 +289,17 @@ void Status_Init(void)
 	UI_Draw_Status_Bar();
 	Display_Time = 1;
 	SystemManage_5V_Enabled();
-	RotationMotor_SelfCheck_StepDrive();
 	ScanMotorDriver_SelfCheck_StepDrive();
+	RotationMotor_SelfCheck_StepDrive();
 	SystemManage_5V_Disabled();
+	ReadResistor_Valid();
 	Power_Open = 1;
+	Enter_Sleep = 1;
+	if(Check_Lock)
+	{
+		Exti_lock = ENABLE;
+		while(1);
+	}
 	HumanInput_CapTS_Int(ENABLE);
 }
 
@@ -318,6 +326,17 @@ void Battery_Display (void)
 	}
 	else
 	{
+		if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
+		{
+			DisplayDriver_DrawPic_Touch(statusbar_charging,Interface_Bar,225,1);
+			DisplayDriver_DrawPic_Touch(Charger,Interface_Bar,203,6);
+			return;
+		}
+		else
+		{
+			DisplayDriver_Fill(225,0,240,20,Interface_Bar);
+		}
+
 		if(temp > 4.1)
 		{
 			DisplayDriver_Fill(203,6,218,13,0x7EF);
@@ -346,15 +365,6 @@ void Battery_Display (void)
 		{
 			SystemManage_CheckPowerOff();
 		}
-	}
-
-	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
-	{
-		DisplayDriver_DrawPic_Touch(statusbar_charging,Interface_Bar,225,1);
-	}
-	else
-	{
-		DisplayDriver_Fill(225,0,240,20,Interface_Bar);
 	}
 }
 

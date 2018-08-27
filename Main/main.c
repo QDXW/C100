@@ -30,8 +30,6 @@ void main(void)
 
 	SysTick_Init(SYSTICK_FREQ_1MS);		/* Initialize system tick timer */
 
-	QRCode_Init();						/* QRCode Initialize */
-
 	Printer_BLE_Init();					/* Printer BLE Initialize */
 
 	PCF8563_Init();						/* PCF8563 Initialize */
@@ -52,32 +50,19 @@ void main(void)
 
 	TIM4_Int_Init(9999,7199);			/* 10Khz的计数频率，计数到10000为1s */
 
-	Status_Init();						/* Status Initialize */
-
 	Storage_Flash_Init();				/* Storage Flash Initialize */
+
+	Status_Init();						/* Status Initialize */
 
 	while(1)
 	{
-//		memcpy(MBuffer,insk,8);
-//
-//		Storage_Write(MBuffer, 0x00, 8);
-//
-//		Storage_Read(MBuffer,0x00,8);
-//		memcpy(insk,MBuffer,8);
-//		sprintf(MBuffer,"%02d %02d %02d %02d",insk[0],insk[1],insk[2],insk[3]);
-//		Display_Time = 0;
-//		DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
-//		Display_Time = 1;
-
-//		SystemManage_5V_Enabled();
-//		RotationMotor_Input_StepDrive(Foreward_Rotation,Get_Start_Postion());
-//		Delay_ms_SW(2000);
-//		SignalSample_SampleStrip();
+//		Debug_Function();
 
 		HumanInput_TouchScreen_Process();
 
-		Interface_Process(&xPos,&yPos);			/* User Interface */
+		HostComm_Process();
 
+		Interface_Process(&xPos,&yPos);			/* User Interface */
 
 	}
 }
@@ -108,4 +93,28 @@ void TimingDelay_Decrement(void)
 	{
 		TimingDelay--;
 	}
+}
+
+/******************************************************************************/
+void Debug_Function(void)
+{
+	memcpy(MBuffer,insk,8);
+
+	Storage_Write(MBuffer, 0x00, 8);
+
+	Storage_Read(MBuffer,0x00,8);
+	memcpy(insk,MBuffer,8);
+	sprintf(MBuffer,"%02d %02d %02d %02d",insk[0],insk[1],insk[2],insk[3]);
+	Display_Time = 0;
+	DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
+	Display_Time = 1;
+
+	SystemManage_5V_Enabled();
+	SignalSample_Sample_EnterCriticalArea();
+	RotationMotor_Input_StepDrive(Foreward_Rotation,Get_Start_Postion());
+	Delay_ms_SW(2000);
+	SignalSample_SampleStrip();
+	memset(SignalBuffer,0,500);
+	memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
 }

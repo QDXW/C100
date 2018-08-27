@@ -11,8 +11,10 @@
 /******************************************************************************/
 float temp = 0.0;
 volatile uint16 QRCode_count = 0;
-uint8 QRCode_Buffer[500] = {0};
+uint8 QRCode_Buffer[500] = {0},SignalBuffer[1024] = {0};
 uint16 UI_WindowBlocks = 0,adcx = 0,xPos = 0, yPos = 0;
+uint8 Check_Lock = 0,Stop_Mode = 0;
+uint8 USART1_TX = 0,Existed_Data = 0,Check_motor = 0;
 uint8 Touch_State_Update = 0,Bluetooth_Update = 1,InvCode_Second = 0;
 uint8 Display_Time = 1,Open_time = 0,Power_Open = 0,InvCode_Down_time = 0;
 uint8 Record_Display = 1,Stored_Record = 1,QRCode_received = 0,Exti_lock = 0;

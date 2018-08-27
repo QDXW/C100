@@ -127,7 +127,6 @@ extern uint16 SignalProcess_sampleBuffer[SIGNALSAMPLE_MAX_COUNT];
 /* Digital resistor */
 extern uint8 SignalSample_resistorValue;
 extern uint8 SignalSample_resistorValueStored;
-extern uint8 SignalProcess_output;
 
 /******************************************************************************/
 void  SignalSample_Sample_Init(void);

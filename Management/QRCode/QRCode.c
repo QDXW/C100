@@ -231,6 +231,7 @@ uint8 QRCode_Identify(void)
 		Cup_Count = QR_Date_Analyze_Conut;
 		Storage_Data.StripNum = Cup_Count;
 		status = 1;
+		Existed_Data = 1;
 	}
 	else
 	{
@@ -246,6 +247,7 @@ uint8 QRCode_Identify(void)
 void Clear_Data(void)
 {
 	Cup_Count = 0;
+	Existed_Data = 0;
 	memset(&QR_Date, 0, sizeof(QRCODE_STRUCT));
 	memset(&QR_Date_Analyze, 0, sizeof(QRCODE_STRUCT));
 	memset(&QRCode_Buffer, 0, sizeof(QRCode_Buffer));

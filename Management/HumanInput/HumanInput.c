@@ -105,20 +105,44 @@ void Key_Confirm(void)
 	{
 		SystemManage_CheckPowerOff();
 	}
+
+	if(short_key_flag)
+	{
+		if(Stop_Mode)
+		{
+			SYSCLKConfig_STOP();
+			Stop_Mode = 0;
+		}
+		else
+		{
+			key_state_confirm = ENABLE;
+
+		}
+		short_key_flag = 0;
+	}
 }
 
 /******************************************************************************/
 void SystemManage_Sleep_Process(void)
 {
-	HSEStartUpStatusPwr = 0;
+	Stop_Mode = 1;
 
+	/* 关闭5V电源  */
 	SystemManage_5V_Disabled();
 
-	HumanInput_CapTS_Int(DISABLE);
-
+	/* 关闭背光  */
 	GPIO_ResetBits(GPIOD,GPIO_Pin_2);
 
-	SystemManage_EnterExitStop();
+	/* 蓝牙关闭  */
+	GPIO_ResetBits(GPIOE, GPIO_Pin_4);
+
+	/* 蓝牙连接状态清除  */
+	GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+
+	/* 关闭触摸效果  */
+	HumanInput_CapTS_Int(DISABLE);
+
+	Exti_lock = ENABLE;
 }
 
 /******************************************************************************/
@@ -139,31 +163,6 @@ void SystemManage_EnterExitStop(void)
 /******************************************************************************/
 void SYSCLKConfig_STOP(void)
 {
-	/* Enable HSE */
-	RCC_HSEConfig(RCC_HSE_ON);
-
-	/* Wait till HSE is ready */
-	HSEStartUpStatusPwr = RCC_WaitForHSEStartUp();
-
-	if(HSEStartUpStatusPwr == SUCCESS)
-	{
-		/* Enable PLL */
-		RCC_PLLCmd(ENABLE);
-
-		/* Wait till PLL is ready */
-		while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
-		{
-		}
-
-		/* Select PLL as system clock source */
-		RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
-
-		/* Wait till PLL is used as system clock source */
-		while(RCC_GetSYSCLKSource() != 0x08)
-		{
-		}
-	}
-
 	GPIO_SetBits(GPIOD,GPIO_Pin_2);
 	Delay_ms_SW(150);
 	HumanInput_CapTS_Int(ENABLE);

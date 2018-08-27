@@ -7,8 +7,8 @@
 #include "stm32f10x_it.h"
 
 /******************************************************************************/
-uint8 time_second = 59,Battery_Second = 0;
-uint16 Power_Second = 0;
+uint8 time_second = 59,Battery_Second = 0,Check_flag = 0;
+uint16 Power_Second = 0,Stop_Mode_Second = 0;
 uint16 Power_Minute = 0;
 
 /******************************************************************************/
@@ -274,6 +274,50 @@ void TIM4_IRQHandler(void)
 		else
 		{
 			time_second = 59;
+		}
+
+		if(Check_motor)
+		{
+			Display_Time = 0;
+			if(1 == Check_Lock)
+			{
+				DisplayDriver_Fill(0,22,240,320,Interface_Back);
+				DisplayDriver_Text16_Touch (28,160,RED,RED,"Error: 001 Screw motor!");
+				Check_flag = 1;
+			}
+
+			if(2 == Check_Lock)
+			{
+				if(!Check_flag)
+				{
+					DisplayDriver_Fill(0,22,240,320,Interface_Back);
+				}
+				DisplayDriver_Text16_Touch (28,180,RED,RED,"Error: 002 Rotating motor!");
+			}
+
+			Display_Time = 1;
+			Check_motor = 0;
+		}
+		else
+		{
+			Check_motor = 0;
+			if(0 == Check_Lock)
+			{
+				Check_flag = 0;
+			}
+		}
+
+		if(Stop_Mode)
+		{
+			Stop_Mode_Second++;
+			if(Stop_Mode_Second > 299)
+			{
+				GPIO_ResetBits(GPIOB, GPIO_Pin_3);
+			}
+		}
+		else
+		{
+			Stop_Mode_Second = 0;
 		}
 	}
 }

@@ -71,11 +71,32 @@ void Delay_us(int nCount)
 /******************************************************************************/
 void RotationMotor_SelfCheck_StepDrive(void)
 {
+	uint16 MoveStep_Num = 0;
 	while(!ROTA_POSSEN_INT_STATE())
 	{
-		RotationMotor_StepDrive_Min(Foreward_Rotation);
+		RotationMotor_Input_StepDrive(Foreward_Rotation,1);
+		MoveStep_Num++;
+		if(MoveStep_Num > 518)
+		{
+			Check_motor = 1;
+			Check_Lock = 2;
+			return;
+		}
 	}
-	RotationMotor_Input_StepDrive(Foreward_Rotation,Whole_Circle);
+
+	MoveStep_Num = 80;
+	RotationMotor_Input_StepDrive(Foreward_Rotation,80);
+	while(!ROTA_POSSEN_INT_STATE())
+	{
+		RotationMotor_Input_StepDrive(Foreward_Rotation,1);
+		MoveStep_Num++;
+		if(MoveStep_Num > 518)
+		{
+			Check_motor = 1;
+			Check_Lock = 2;
+			return;
+		}
+	}
 }
 
 /******************************************************************************/

@@ -12,8 +12,6 @@ uint16 max = 0;
 uint8 Storage_Data_Conut = 0;
 uint16 BOUNDARY_VALUE = 2500;
 
-uint8 SignalBuffer[1024] = {0};
-
 /******************************************************************************/
 Down_Time block_Testing = {
 	UI_STATE_MAIN_WINDOW,
@@ -62,7 +60,6 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 	}
 
 	Exti_lock = DISABLE;
-	Display_Battery = 0;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Testing();
 	SystemManage_5V_Enabled();
@@ -116,14 +113,22 @@ void Acquisition_Signal(void)
 			Storage_Data_Conut += 1;
 
 			/* 调试输出 */
-//			memset(SignalBuffer,0,500);
-//			memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
-//			HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
-//			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
+			memset(SignalBuffer,0,500);
+			memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+			HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
+			Delay_ms_SW(50);
+			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
 		}
 
 		/* 转动电机转动30° */
-		RotationMotor_Input_StepDrive(Foreward_Rotation,18);
+		if((NowCup_Count/4) == 1)
+		{
+			RotationMotor_Input_StepDrive(Foreward_Rotation,19);
+		}
+		else
+		{
+			RotationMotor_Input_StepDrive(Foreward_Rotation,18);
+		}
 
 		/* 进度条刷新 */
 		for(j = Step_Start;j < Step_Count;j++)		/* 每次进度条走十格 */
@@ -215,7 +220,7 @@ uint16 Get_Start_Postion(void)
 		{
 			Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],Start_Postion);
 		}
-		return (Start_Postion + 11);
+		return Start_Postion;
 }
 
 /******************************************************************************/
