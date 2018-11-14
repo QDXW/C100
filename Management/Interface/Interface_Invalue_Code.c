@@ -17,12 +17,17 @@ block_attr_InvCode block_InvCode_UI_Return = {
 		0,   22,
 		50,  45
 	},
+};
 
-	ENABLE,
+/******************************************************************************/
+block_attr_InvCode block_InvCode_UI_Return_China = {
+	UI_STATE_MAIN_WINDOW,			/* Interface status */
+
+	ENABLE,							/* Display HZ16X8 */
 	{
-		"Invalid QR Code",
-		60,   159,
-		RED,WHITE
+		UI_Return,
+		0,   22,
+		50,  45
 	},
 };
 
@@ -36,9 +41,6 @@ block_attr_InvCode block_InvCode_Delete = {
 		84,   265,
 		72,   55
 	},
-
-	DISABLE,
-	{0},
 };
 
 /******************************************************************************/
@@ -61,6 +63,7 @@ uint8 Interface_Invalue_Code_Process(uint16* xpos,uint16* ypos)
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_InvCode) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_InvCode,sizeof(UI_WindowBlocksAttrArray_InvCode));
 	UI_Draw_Window_InvCode(UI_WindowBlocks);
+	UI_Language_Plate_InvCode();
 	UI_WindowBlocks = 1;
 	UI_state = UI_STATE_INVALID_TOUCH_PROCESS;
 	return state;
@@ -85,14 +88,6 @@ void UI_Draw_Block_InvCode(block_attr_InvCode* block)
 		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
 				block->pic_attr.offsetX,block->pic_attr.offsetY);
 	}
-
-	if (block->char_enabled)					/* 4. Draw character */
-	{
-		DisplayDriver_Text16_Touch(
-				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.backColor,
-				block->char_attr.str);
-	}
 	Display_Time = 1;
 }
 
@@ -102,6 +97,26 @@ void UI_Background_Plate_InvCode (void)
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(10,82,229,250,WHITE);
+	Display_Time = 1;
+}
+
+/******************************************************************************/
+void UI_Language_Plate_InvCode (void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		DisplayDriver_Text_Flex(16,60,159,RED,WHITE,"Invalid QR Code");
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		DisplayDriver_Text_Flex(24,60,159,RED,WHITE,"ÎÞÐ§¶þÎ¬Âë");
+		break;
+
+	default:
+		break;
+	}
 	Display_Time = 1;
 }
 

@@ -29,6 +29,7 @@ typedef struct {
 /******************************************************************************/
 void Data_Changer(void);
 void Page_Display(void);
+void UI_Language_Plate_Record (void);
 void UI_Background_Plate_Record (void);
 void UI_Background_Plate_Record_NO (void);
 void UI_Draw_Window_Record(uint16 blockNum);

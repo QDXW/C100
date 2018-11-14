@@ -10,6 +10,7 @@
 #include "system.pic"
 #include "time.pic"
 #include "Blutooth.pic"
+#include "Calibration.pic"
 
 /******************************************************************************/
 block_attr_Setting block_Setting_return = {
@@ -39,7 +40,7 @@ block_attr_Setting block_Setting_system = {
 		1
 	},
 
-	ENABLE,
+	DISABLE,
 	{
 		"About Machine",
 		8,   154,
@@ -59,7 +60,7 @@ block_attr_Setting block_Setting_Time = {
 		2
 	},
 
-	ENABLE,
+	DISABLE,
 	{
 		"System Time",
 		140,  154,
@@ -79,7 +80,7 @@ block_attr_Setting block_Setting_Blutooth_OFF = {
 		3
 	},
 
-	ENABLE,
+	DISABLE,
 	{
 		"OFF",
 		48,  288,
@@ -99,10 +100,30 @@ block_attr_Setting block_Setting_Blutooth_ON = {
 		3
 	},
 
-	ENABLE,
+	DISABLE,
 	{
 		"ON",
 		52,  288,
+		WHITE,WHITE
+	},
+};
+
+/******************************************************************************/
+block_attr_Setting block_Calibration = {
+	UI_STATE_CALIBRATION_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Calibration,
+		137,  196,
+		86, 86,
+		4
+	},
+
+	DISABLE,
+	{
+		"Calibration",
+		136,  288,
 		WHITE,WHITE
 	},
 };
@@ -113,14 +134,7 @@ block_attr_Setting* UI_WindowBlocksAttrArray_Setting[] = {/* Window: Standard en
 		&block_Setting_Time,
 		&block_Setting_system,
 		&block_Setting_Blutooth_OFF,
-};
-
-/******************************************************************************/
-block_attr_Setting* UI_WindowBlocksAttrArray_Setting_2[] = {/* Window: Standard entry */
-		&block_Setting_return,
-		&block_Setting_Time,
-		&block_Setting_system,
-		&block_Setting_Blutooth_ON,
+		&block_Calibration,
 };
 
 /******************************************************************************/
@@ -134,19 +148,11 @@ uint8 Interface_Setting(uint16* xpos,uint16* ypos)
 	Interface_Reord = 3;
 	UI_Background_Plate_Setting();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
-	if(Bluetooth_switch)
-	{
-		UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Setting_2) >> 2;
-		memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Setting_2,sizeof(UI_WindowBlocksAttrArray_Setting_2));
-		UI_Draw_Window_Setting(UI_WindowBlocks);
-	}
-	else
-	{
-		UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Setting) >> 2;
-		memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Setting,sizeof(UI_WindowBlocksAttrArray_Setting));
-		UI_Draw_Window_Setting(UI_WindowBlocks);
-	}
+	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Setting) >> 2;
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Setting,sizeof(UI_WindowBlocksAttrArray_Setting));
+	UI_Draw_Window_Setting(UI_WindowBlocks);
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
+	UI_Language_Plate_Setting();
 	return state;
 }
 
@@ -156,14 +162,7 @@ void UI_Draw_Window_Setting(uint16 blockNum)
 	uint8 blockIndex = 0;					/* Draw blocks one by one */
 	for (blockIndex = 0; blockIndex < blockNum; blockIndex++)
 	{
-		if(Bluetooth_switch)
-		{
-			UI_Draw_Block_Setting(UI_WindowBlocksAttrArray_Setting_2[blockIndex]);
-		}
-		else
-		{
-			UI_Draw_Block_Setting(UI_WindowBlocksAttrArray_Setting[blockIndex]);
-		}
+		UI_Draw_Block_Setting(UI_WindowBlocksAttrArray_Setting[blockIndex]);
 	}
 }
 
@@ -196,5 +195,51 @@ void UI_Background_Plate_Setting(void)
 	DisplayDriver_DrawStraight_Line(120,22,120,320,Thint_Line);
 	DisplayDriver_DrawStraight_Line(0,185,240,185,CYAN_Line);
 	DisplayDriver_DrawStraight_Line(0,186,240,186,Thint_Line);
+	Display_Time = 1;
+}
+
+/******************************************************************************/
+void UI_Language_Plate_Setting(void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		if(Bluetooth_switch)
+		{
+			DisplayDriver_Text_Flex(16,8,154,WHITE,WHITE,"About Machine");
+			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"System Time");
+//			DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"ON");
+			DisplayDriver_Text_Flex(16,136,288,WHITE,WHITE,"Calibration");
+		}
+		else
+		{
+			DisplayDriver_Text_Flex(16,8,154,WHITE,WHITE,"About Machine");
+			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"System Time");
+//			DisplayDriver_Text_Flex(16,48,  288,WHITE,WHITE,"OFF");
+			DisplayDriver_Text_Flex(16,136,288,WHITE,WHITE,"Calibration");
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if(Bluetooth_switch)
+		{
+			DisplayDriver_Text_Flex(16,28,154,WHITE,WHITE,"关于本机");
+			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"系统时间");
+			DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"打开");
+			DisplayDriver_Text_Flex(16,64,288,WHITE,WHITE,"校准");
+		}
+		else
+		{
+			DisplayDriver_Text_Flex(16,28,154,WHITE,WHITE,"关于本机");
+			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"系统时间");
+			DisplayDriver_Text_Flex(16,48,  288,WHITE,WHITE,"关闭");
+			DisplayDriver_Text_Flex(16,164,288,WHITE,WHITE,"校准");
+		}
+		break;
+
+	default:
+		break;
+	}
 	Display_Time = 1;
 }

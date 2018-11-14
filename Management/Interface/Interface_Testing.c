@@ -51,7 +51,20 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 		{
 			Display_Time = 0;
 			DisplayDriver_Fill(0,22,240,320,Interface_Back);
-			DisplayDriver_Text16_Touch(24, 80, RED,WHITE,"No Battery!");
+			switch(Font_Switch)
+			{
+			case DISPLAY_FONT_ENGLISH:
+				DisplayDriver_Text16_Touch(24, 80, RED,WHITE,"No Battery!");
+				break;
+
+			case DISPLAY_FONT_CHINESE:
+				DisplayDriver_Text_Flex(24,72, 155, RED,WHITE,"电量过低");
+				break;
+
+			default:
+				break;
+			}
+
 			Display_Time = 1;
 			UI_state = UI_STATE_MAIN_WINDOW;
 			Delay_ms_SW(1500);
@@ -109,15 +122,18 @@ void Acquisition_Signal(void)
 			SignalProcess_Run();
 
 			/* 判定结果 */
-			Result_Judge();
+			Result_Display();
 			Storage_Data_Conut += 1;
 
 			/* 调试输出 */
-			memset(SignalBuffer,0,500);
-			memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
-			HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
-			Delay_ms_SW(50);
-			HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
+			if(UI_runMode)
+			{
+				memset(SignalBuffer,0,500);
+				memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+				HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
+				Delay_ms_SW(50);
+				HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
+			}
 		}
 
 		/* 转动电机转动30° */
@@ -146,10 +162,244 @@ void Acquisition_Signal(void)
 /******************************************************************************/
 uint16 Get_Start_Postion(void)
 {
+	uint8 Judge_Flag = 2,Trend_FLag = 0,Judge_Trend = 0;
+	uint16 Start_Postion = 0,Postion_Down = 0,i = 0,Postion_Up = 0;
+	while(Judge_Flag--)
+	{
+		if(0 == Judge_Flag)
+		{
+			RotationMotor_Input_StepDrive(Foreward_Rotation,30);
+		}
+
+		Acquisition_StartSignal();
+
+		/* 3.找到上升沿的位置 */
+		for(i = 0;i < 511;i++)
+		{
+			if((SignalProcess_sampleBuffer[i] < Data_Boundary) && (SignalProcess_sampleBuffer[i+1] >= Data_Boundary))
+			{
+				Trend_FLag = 1;
+				if(Check_Trend(&SignalProcess_sampleBuffer[0],i,Trend_FLag))
+				{
+					Postion_Up = i;
+					Judge_Trend = 1;
+				}
+				else
+				{
+					Confirm_CUP = NO_CUP;
+					Judge_Trend = 0;
+				}
+			}
+		}
+
+
+		if (0 == Postion_Up)
+		{
+			Postion_Up = 1;
+		}
+
+		if(Judge_Trend)
+		{
+			Start_Postion = Calculate_Postion_Up(&SignalProcess_sampleBuffer[0],Postion_Up);
+			if(Calculate_StartPostion_Down(&SignalProcess_sampleBuffer[0],Start_Postion))
+			{
+				Judge_Flag = 0;
+			}
+			else
+			{
+				Confirm_CUP = NO_CUP;
+				Start_Postion = 0;
+			}
+		}
+	}
+
+	if(!Confirm_CUP)
+	{
+		Start_Postion = 0;
+	}
+
+	return Start_Postion;
+}
+
+/******************************************************************************/
+uint16 Calculate_Postion_Up(uint16* Signal,uint16 Postion)
+{
+	uint16 Start_Postion = 0,i = 0,Confirm_Postion = 1,Reconfirm_Postion = 0;
+
+	i = Postion;
+	do
+	{
+		if(Signal[i] <= Signal[i+1])
+		{
+			i += 1;
+			Start_Postion = i;
+			Confirm_Postion = 1;
+			if(i >511)
+			{
+				Confirm_Postion = 0;
+				Reconfirm_Postion = 1;
+			}
+		}
+		else
+		{
+			Confirm_Postion = 0;
+		}
+
+	}while(Confirm_Postion);
+
+	if(Reconfirm_Postion)
+	{
+		i = 1;
+		do
+		{
+			if(Signal[i] <= Signal[i+1])
+			{
+				i += 1;
+				Start_Postion = i;
+				Confirm_Postion = 1;
+			}
+			else
+			{
+				Confirm_Postion = 0;
+			}
+
+		}while(Confirm_Postion);
+	}
+
+	return Start_Postion;
+}
+
+/******************************************************************************/
+uint8 Calculate_StartPostion_Down(uint16* Signal,uint16 Postion)
+{
+	uint16 Start_Postion = 0,i = 0,Confirm_Postion = 1,Reconfirm_Postion = 0;
+	i = Postion;
+
+	if((i+6) < 511)
+	{
+		while(Confirm_Postion)
+		{
+			if(Signal[i] < Signal[i+1])
+			{
+				return 0;
+			}
+			else
+			{
+				Start_Postion= 1;
+			}
+
+			i += 1;
+			if(i >= (Postion+6))
+			{
+				Confirm_Postion = 0;
+			}
+			else
+			{
+				Confirm_Postion = 1;
+			}
+		}
+	}
+	else
+	{
+		while(Confirm_Postion)
+		{
+			if(Signal[i] < Signal[i+1])
+			{
+				return 0;
+			}
+			else
+			{
+				Start_Postion= 1;
+			}
+
+			i += 1;
+			if(i >= (Postion+6))
+			{
+				Confirm_Postion = 0;
+			}
+			else
+			{
+				Confirm_Postion = 1;
+			}
+		}
+	}
+	return Start_Postion;
+}
+
+/******************************************************************************/
+uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
+{
+	uint16 i = 0,state = 0,Start_Postion = 0;
+	Start_Postion  = Postion;
+	if (Flag)
+	{
+		if((Start_Postion + 6) < 511)
+		{
+			for(i = Start_Postion;i < (Start_Postion + 6);i++)
+			{
+				if(Signal[i] < Signal[i+1])
+				{
+					state = 1;
+				}
+				else
+				{
+					state = 0;
+				}
+			}
+		}
+		else
+		{
+			for(i = Start_Postion;i < 511;i++)
+			{
+				if(Signal[i] < Signal[i+1])
+				{
+					state = 1;
+				}
+				else
+				{
+					state = 0;
+				}
+			}
+		}
+	}
+	else
+	{
+		if((Start_Postion + 6) < 511)
+		{
+			for(i = Start_Postion;i < (Start_Postion + 6);i++)
+			{
+				if(Signal[i] > Signal[i+1])
+				{
+					state = 1;
+				}
+				else
+				{
+					state = 0;
+				}
+			}
+		}
+		else
+		{
+			for(i = Start_Postion;i < 511;i++)
+			{
+				if(Signal[i] > Signal[i+1])
+				{
+					state = 1;
+				}
+				else
+				{
+					state = 0;
+				}
+			}
+		}
+	}
+	return state;
+}
+
+/******************************************************************************/
+void Acquisition_StartSignal(void)
+{
 	uint16 i = 0;
-	uint16 Pre_Count = 0,Next_Count = 0;
-	uint16 Start_Postion=0;
-	uint16 Forever_Value = 0;
 	SignalSample_count = 0;
 
 	/* 第一步:扫描电机转到中间位置 */
@@ -165,62 +415,31 @@ uint16 Get_Start_Postion(void)
 									= SignalProcess_Collecting_Data();
 	}
 
-	memset(SignalBuffer,0,1024);
-	memcpy(SignalBuffer, SignalProcess_sampleBuffer, 1024);
-	HostComm_Cmd_Send_RawData(1024, SignalBuffer);
+	if(UI_runMode)
+	{
+		memset(SignalBuffer,0,1024);
+		memcpy(SignalBuffer, SignalProcess_sampleBuffer, 1024);
+		HostComm_Cmd_Send_RawData(1024, SignalBuffer);
+	}
 
 	SignalSample_Sample_ExitCriticalArea();
 	ScanMotorDriver_Goto_BasePosition();
 	ScanMotorDriver_Goto_DetectionPosition();
 	/* 第三步:数据处理得到杯子检测的起始位置*/
 	/* 1.对数据进行移动平均 */
-	SignalSample_Moving_Average_Data(SignalProcess_sampleBuffer,SIGNALSAMPLE_MAX_COUNT,15);
 	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
 	/* 2.有无杯子判断 */
 	if((max < 1200) || (BOUNDARY_VALUE > 900))
 	{
 		Confirm_CUP = NO_CUP;
-		return Confirm_CUP;
+		return ;
 	}
 	else
 	{
 		Confirm_CUP = 1;
 	}
 
-	/* 3.找到上升沿的位置 */
-	for(i = 0;i < 511;i++)
-	{
-		if((SignalProcess_sampleBuffer[i] < 600) && (SignalProcess_sampleBuffer[i+1] >= 600))
-		{
-			Start_Postion = i;
-		}
-	}
-
-	/* 判断上升沿是否在最后  */
-		if((511-Start_Postion) < 9)
-		{
-			/* 求取上升沿在最后最大值  */
-			for(i = Start_Postion;i < 511;i++)
-			{
-				if(SignalProcess_sampleBuffer[i] < SignalProcess_sampleBuffer[i+1])
-				{
-					Pre_Count = SignalProcess_sampleBuffer[i+1];
-					Start_Postion = i+1;
-				}
-			}
-
-			/* 上升沿在最后不为峰值的情况  */
-			if(Pre_Count < SignalProcess_sampleBuffer[0])
-			{
-				Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],0);
-			}
-		}
-		else
-		{
-			Start_Postion = Calculate_Start_Postion(&SignalProcess_sampleBuffer[0],Start_Postion);
-		}
-		return Start_Postion;
 }
 
 /******************************************************************************/
@@ -312,7 +531,7 @@ void QR_Date_SignalProcess_Alg_data (void)
 }
 
 /******************************************************************************/
-void Result_Judge(void)
+void Result_Display(void)
 {
 	if (SignalProcess_Alg_data.calcInfo.validity == ALG_RESULT_ABNORMAL_C)
 	{
@@ -356,7 +575,7 @@ void UI_Background_Plate_Testing (void)
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(36,130,205,150,WHITE);
-	DisplayDriver_Text16_Touch(80,160,WHITE,WHITE,"testing...");
+	DisplayDriver_Text_Flex(16,76,160,WHITE,WHITE,"正在测试...");
 	Display_Time = 1;
 }
 
@@ -366,6 +585,7 @@ uint8 Interface_Down_Time_Process(uint16* xpos,uint16* ypos)
 	uint8 state = 0;
 	Interface_Reord = 0;
 	Display_Down_Time_Plate();
+	Action_time = QR_Date.head.time;
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Down_Time) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Down_Time,sizeof(UI_WindowBlocksAttrArray_Down_Time));
@@ -422,6 +642,7 @@ uint8 Interface_Down_Time_Touch_Process(uint16* xpos,uint16* ypos)
 	{
 			UI_state = UI_STATE_TESTING;
 			Open_time = 0;
+			Action_time = QR_Date.head.time;
 			return UI_STATE_RERUN;
 	}
 	return state;

@@ -42,4 +42,16 @@ extern void DisplayDriver_Text16_Any(unsigned short x, unsigned short y,
 extern void DisplayDriver_DrawPoint_Big(u16 x,u16 y, u16 color);
 extern void DisplayDriver_DrawCircle_Solid(u16 x_postion,u16 y_postion,u8 radius, u16 color);
 
+void DisplayDriver_Text16_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s);
+
+void DisplayDriver_Text24_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s);
+
+void DisplayDriver_Text32_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s);
+
+extern void DisplayDriver_Text_Flex(uint8 Size,unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s);
+
 #endif /* __MANAGEMENT_DISPLAYDRIVER_DISPLAYDRIVER_API_H_ */

@@ -23,14 +23,22 @@ block_attr_Start block_Start_Name = {
 		0
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	ENABLE,							/* Display HZ16X8 */
+	{
+		UI_Return,
+		0,   22,
+		50,  45,
+		0
+	},
+
+	DISABLE,								/* Display HZ16X8 */
 	{
 		"Name:",
 		14,   64,
 		BLACK,Interface_Back
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	DISABLE,								/* Display HZ16X8 */
 	{
 		QR_Date.head.name,
 		60,   64,
@@ -49,7 +57,14 @@ block_attr_Start block_Start_SN = {
 		72,   54
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	ENABLE,							/* Interface Start rect */
+	{
+		Confirm_China,
+		144,  270,
+		72,   54
+	},
+
+	DISABLE,								/* Display HZ16X8 */
 	{
 		"  SN:",
 		14,   84,
@@ -75,6 +90,13 @@ block_attr_Start block_Start_CH1 = {
 		72,   54
 	},
 
+	ENABLE,							/* Interface Start rect */
+	{
+		Delete_China,
+		24,   270,
+		72,   54
+	},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		" 1:",
@@ -93,6 +115,9 @@ block_attr_Start block_Start_CH1 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH2 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -119,6 +144,9 @@ block_attr_Start block_Start_CH3 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		" 3:",
@@ -137,6 +165,9 @@ block_attr_Start block_Start_CH3 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH4 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -163,6 +194,9 @@ block_attr_Start block_Start_CH5 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		" 5:",
@@ -180,6 +214,9 @@ block_attr_Start block_Start_CH5 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH6 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -206,6 +243,9 @@ block_attr_Start block_Start_CH7 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		" 7:",
@@ -224,6 +264,9 @@ block_attr_Start block_Start_CH7 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH8 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -250,6 +293,9 @@ block_attr_Start block_Start_CH9 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		" 9:",
@@ -268,6 +314,9 @@ block_attr_Start block_Start_CH9 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH10 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -294,6 +343,9 @@ block_attr_Start block_Start_CH11 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		"11:",
@@ -312,6 +364,9 @@ block_attr_Start block_Start_CH11 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH12 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -338,6 +393,9 @@ block_attr_Start block_Start_CH13 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		"13:",
@@ -356,6 +414,9 @@ block_attr_Start block_Start_CH13 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH14 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -382,6 +443,9 @@ block_attr_Start block_Start_CH15 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		"15:",
@@ -404,6 +468,9 @@ block_attr_Start block_Start_CH16 = {
 	DISABLE,							/* Interface Start rect */
 	{0},
 
+	DISABLE,							/* Interface Start rect */
+	{0},
+
 	ENABLE,								/* Display HZ16X8 */
 	{
 		"16:",
@@ -422,6 +489,9 @@ block_attr_Start block_Start_CH16 = {
 /******************************************************************************/
 block_attr_Start block_Start_CH17 = {
 	DISABLE,
+
+	DISABLE,							/* Interface Start rect */
+	{0},
 
 	DISABLE,							/* Interface Start rect */
 	{0},
@@ -503,6 +573,7 @@ uint8 Interface_Start(uint16* xpos,uint16* ypos)
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Start[Cup_Count-1]) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Start[Cup_Count-1],12);
 	UI_Draw_Window_Start(UI_WindowBlocks);
+	UI_Language_Plate_Start();
 	UI_WindowBlocks = 3;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
@@ -528,15 +599,33 @@ void UI_Draw_Window_Start(uint16 blockNum)
 void UI_Draw_block_Start(block_attr_Start* block)
 {
 	Display_Time = 0;
-	if (block->pic_enabled)						/* 2. Draw picture */
+
+	switch(Font_Switch)
 	{
-		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
-				block->pic_attr.offsetX,block->pic_attr.offsetY);
+	case DISPLAY_FONT_ENGLISH:
+		if (block->pic_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+					block->pic_attr.offsetX,block->pic_attr.offsetY);
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
+	default:
+		break;
 	}
 
 	if (block->char_enabled)					/* 4. Draw character */
 	{
-		DisplayDriver_Text16_Touch(
+		DisplayDriver_Text_Flex(
+				16,
 				block->char_attr.offsetX,block->char_attr.offsetY,
 				block->char_attr.color,block->char_attr.backColor,
 				block->char_attr.str);
@@ -544,7 +633,8 @@ void UI_Draw_block_Start(block_attr_Start* block)
 
 	if (block->char1_enabled)					/* 4. Draw character */
 	{
-		DisplayDriver_Text16_Touch(
+		DisplayDriver_Text_Flex(
+				16,
 				block->char1_attr.offsetX,block->char1_attr.offsetY,
 				block->char1_attr.color,block->char1_attr.backColor,
 				block->char1_attr.str);
@@ -569,5 +659,29 @@ void UI_Background_Plate_Start (void)
 	DisplayDriver_DrawStraight_Line(0,82,229,82,Interface_Back);
 	DisplayDriver_DrawStraight_Line(0,102,229,102,Interface_Back);
 	DisplayDriver_DrawStraight_Line(120,102,120,256,Interface_Back);
+	Display_Time = 1;
+}
+
+/******************************************************************************/
+void UI_Language_Plate_Start (void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		DisplayDriver_Text_Flex(16,14,64,BLACK,Interface_Back,"Name:");
+		DisplayDriver_Text_Flex(16,60,64,BLACK,Interface_Back,QR_Date.head.name);
+		DisplayDriver_Text_Flex(16,14,84,BLACK,Interface_Back,"  SN:");
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		DisplayDriver_Text_Flex(16,14,64,BLACK,Interface_Back,"Ãû³Æ:");
+		DisplayDriver_Text_Flex(16,60,64,BLACK,Interface_Back,"¶¾Æ·²âÊÔ");
+		DisplayDriver_Text_Flex(16,14,84,BLACK,Interface_Back,"ÅúºÅ:");
+		break;
+
+	default:
+		break;
+	}
 	Display_Time = 1;
 }

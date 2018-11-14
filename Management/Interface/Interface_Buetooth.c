@@ -16,15 +16,42 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 	{
 		if(!Bluetooth_switch)
 		{
-			DisplayDriver_Fill(48,288,72,310,Interface_Back);
-			DisplayDriver_Text16_Touch(52, 288,WHITE,WHITE,"ON");
+			DisplayDriver_Fill(44,288,100,310,Interface_Back);
+
+			switch(Font_Switch)
+			{
+			case DISPLAY_FONT_ENGLISH:
+					DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"ON");
+				break;
+
+			case DISPLAY_FONT_CHINESE:
+					DisplayDriver_Text_Flex(16,44,288,WHITE,WHITE,"´ò¿ª");
+				break;
+
+			default:
+				break;
+			}
 			GPIO_SetBits(GPIOE, GPIO_Pin_4);
 			Bluetooth_switch = 1;
 		}
 		else
 		{
-			DisplayDriver_Fill(48,288,72,310,Interface_Back);
-			DisplayDriver_Text16_Touch(48,288,WHITE,WHITE,"OFF");
+			DisplayDriver_Fill(44,288,100,310,Interface_Back);
+
+			switch(Font_Switch)
+			{
+			case DISPLAY_FONT_ENGLISH:
+					DisplayDriver_Text_Flex(16,48,288,WHITE,WHITE,"OFF");
+				break;
+
+			case DISPLAY_FONT_CHINESE:
+					DisplayDriver_Text_Flex(16,44,288,WHITE,WHITE,"¹Ø±Õ");
+				break;
+
+			default:
+				break;
+			}
+
 			GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 			GPIO_ResetBits(GPIOC, GPIO_Pin_9);
 			Bluetooth_Connect = 0;

@@ -52,7 +52,7 @@ typedef struct {
     uint16 areaT_HalfRadius;
     uint16 winSize;
     uint8 limitEnabled;
-    uint8 value;
+    uint8 Model;
     uint16 C_stepSize;
     uint16 C_magnitude;
     uint16 C_MIN;

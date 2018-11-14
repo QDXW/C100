@@ -23,5 +23,6 @@ typedef struct {
 /******************************************************************************/
 void UI_Draw_Window_Setting(uint16 blockNum);
 void UI_Background_Plate_Setting(void);
+void UI_Language_Plate_Setting(void);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_SETTING_H_ */

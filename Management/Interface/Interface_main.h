@@ -11,10 +11,7 @@
 /******************************************************************************/
 #include "Project_File.h"
 
-/******************************************************************************/
-
-
-
+extern uint8 BUF1[4],BUF2[4];
 
 /******************************************************************************/
 /* Rectangular attribute */
@@ -63,8 +60,6 @@ typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;     				/* Picture attribute */
-	uint8 char_enabled;					/* Support char or not */
-	char_attr char_attr;				/* char attribute */
 } block_attr;
 
 /******************************************************************************/
@@ -91,13 +86,25 @@ typedef enum {
 	UI_STATE_INVALUE_CODE_PROCESS,	/* Interface INVALUE CODE TOUCH Display */
 	UI_STATE_INVALID_TOUCH_PROCESS,	/* Interface INVALID TOUCH Display */
 	UI_STATE_RECORD_DEMAND_PROCESS,	/* Interface RECORD DEMAND Display */
+	UI_STATE_CALIBRATION_PROCESS,	/* Interface RECORD DEMAND Display */
+	UI_STATE_IN_CALIBRATION_PROCESS,	/* Interface RECORD DEMAND Display */
 
 	UI_STATE_MAX_STATE_NUM,
 } UI_STATE;
 
+
+/******************************************************************************/
+typedef enum {
+	DISPLAY_FONT_CHINESE,
+	DISPLAY_FONT_ENGLISH,
+
+	DISPLAY_FONT,
+} FONT_DIASPLAY;
+
 /******************************************************************************/
 void Battery_Display (void);
 extern void Status_Init(void);
+void Set_Fixed_Parameter(void);
 extern void Battery_Empty_ICO(void);
 extern void UI_Draw_Status_Bar (void);
 extern void Bluetooth_Connection (void);
@@ -109,8 +116,8 @@ extern uint8 Interface_Standard_font(uint16 KeyCode);
 extern void UI_Draw_Window_Quick_font(uint16 blockNum);
 extern void SignalSample_Moving_Average_Data(uint16 *Data,uint16 Length,uint16 Period);
 
-
 void UI_Background_Plate_Main (void);
+void UI_Language_Plate_Main (void);
 void Touch_process(uint16* xpos,uint16* ypos);
 uint8 Touch_Check (uint16* xpos,uint16* ypos);
 uint8 Interface_Main(uint16* xpos,uint16* ypos);
@@ -133,10 +140,13 @@ extern uint8 Interface_Down_Time_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos);
 extern uint8 Interface_Set_Time_Process (uint16* xpos,uint16* ypos);
 extern uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos);
+extern uint8 Interface_Calibration_Process (uint16* xpos,uint16* ypos);
 extern uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Invalue_Code_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Record_Demand_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Invalid_Touch_Process(uint16* xpos,uint16* ypos);
+extern uint8 Interface_In_Calibration_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Down_Time_Touch_Process(uint16* xpos,uint16* ypos);
+
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_MAIN_H_ */

@@ -534,3 +534,359 @@ void DisplayDriver_DrawCircle_Solid(u16 x_postion,u16 y_postion,u8 radius, u16 c
 		DisplayDriver_DrawCircle(x_postion,y_postion,radius_lenght,color);
 	}
 }
+
+/******************************************************************************/
+void DisplayDriver_Text_Flex(uint8 Size,unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s)
+{
+	switch(Size)
+	{
+	case 16:
+		DisplayDriver_Text16_China(x, y,fc,bc,s);
+		break;
+	case 24:
+		DisplayDriver_Text24_China(x, y,fc,bc,s);
+		break;
+	case 32:
+		DisplayDriver_Text32_China(x, y,fc,bc,s);
+		break;
+	default:
+		break;
+	}
+}
+
+/******************************************************************************/
+void DisplayDriver_Text16_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, uint8 *s)
+{
+	unsigned char i,j;
+	unsigned short k;
+
+	while(*s)
+	{
+		if( *s < 0x80 )
+		{
+			k=*s;
+			if (k>32)
+				k-=32;
+			else
+				k=0;
+
+			for(i=0;i<16;i++)
+				for(j=0;j<8;j++)
+				{
+					if(asc16[k*16+i]&(0x80>>j))
+						DisplayDriver_DrawPoint(x+j,y+i,fc);
+//					else
+//					{
+//						if (fc!=bc)
+//							DisplayDriver_DrawPoint(x+j,y+i,bc);
+//					}
+				}
+			s++;x+=8;
+		}
+		else
+		{
+			for (k=0;k<HZ16_NUM;k++)
+			{
+				if ((hz16[k].Index[0]==*(s))&&(hz16[k].Index[1]==*(s+1)))
+				{
+					for(i=0;i<16;i++)
+					{
+						for(j=0;j<8;j++)
+						{
+							if(hz16[k].Msk[i*2]&(0x80>>j))
+								DisplayDriver_DrawPoint(x+j,y+i,fc);
+//							else
+//							{
+//								if (fc!=bc)
+//									DisplayDriver_DrawPoint(x+j,y+i,bc);
+//							}
+						}
+						for(j=0;j<8;j++)
+						{
+							if(hz16[k].Msk[i*2+1]&(0x80>>j))
+								DisplayDriver_DrawPoint(x+j+8,y+i,fc);
+//							else
+//							{
+//								if (fc!=bc)
+//									DisplayDriver_DrawPoint(x+j+8,y+i,bc);
+//							}
+						}
+					}
+					break;
+				}
+			}
+			s+=2;x+=16;
+		}
+	}
+}
+
+/******************************************************************************/
+void DisplayDriver_Text24_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, unsigned char *s)
+{
+  unsigned char i,j;
+  unsigned short k;
+
+  while(*s)
+  {
+		if( *s < 0x80 )
+		{
+			k=*s;
+			if(k>32)
+			  k-=32;
+			else
+			  k=0;
+
+			for(i=0;i<16;i++)
+				for(j=0;j<8;j++)
+				{
+					if(asc16[k*16+i]&(0x80>>j))
+						DisplayDriver_DrawPoint(x+j,y+i,fc);
+//					else
+//					{
+//						if (fc!=bc)
+//							DisplayDriver_DrawPoint(x+j,y+i,bc);
+//					}
+				}
+			s++;
+			x+=8;
+		}
+		else
+		{
+			k=0;
+			for (k=0;k<HZ24_NUM;k++)
+			{
+				if ((hz24[k].Index[0]==*(s))&&(hz24[k].Index[1]==*(s+1)))
+				{
+					for(i=0;i<24;i++)
+					{
+						for(j=0;j<8;j++)
+						{
+							if(hz24[k].Msk[i*3]&(0x80>>j))
+								DisplayDriver_DrawPoint(x+j,y+i,fc);
+//							else
+//							{
+//								if (fc!=bc)
+//									DisplayDriver_DrawPoint(x+j,y+i,bc);
+//							}
+						}
+						for(j=0;j<8;j++)
+						{
+							if(hz24[k].Msk[i*3+1]&(0x80>>j))
+								DisplayDriver_DrawPoint(x+j+8,y+i,fc);
+//							else
+//							{
+//								if (fc!=bc)
+//									DisplayDriver_DrawPoint(x+j+8,y+i,bc);
+//							}
+						}
+						for(j=0;j<8;j++)
+						{
+							if(hz24[k].Msk[i*3+2]&(0x80>>j))
+								DisplayDriver_DrawPoint(x+j+16,y+i,fc);
+//							else
+//							{
+//								if (fc!=bc)
+//									DisplayDriver_DrawPoint(x+j+16,y+i,bc);
+//							}
+						}
+					}
+				break;
+				}
+			}
+            s+=2;x+=24;
+		}
+  	  }
+}
+
+/******************************************************************************/
+void DisplayDriver_Text32_China(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, unsigned char *s)
+{
+  unsigned char i,j;
+  unsigned short k;
+
+  while(*s)
+  {
+    if( *s < 0x80 )
+    {
+		k=*s;
+		if(k>32)
+		  k-=32;
+		else
+		  k=0;
+
+        for(i=0;i<16;i++)
+            for(j=0;j<8;j++)
+			{
+				if(asc16[k*16+i]&(0x80>>j))
+						DisplayDriver_DrawPoint(x+j,y+i,fc);
+//				else
+//				{
+//					if (fc!=bc)
+//						DisplayDriver_DrawPoint(x+j,y+i,bc);
+//				}
+			}
+            s++;
+            x+=8;
+    }
+    else
+    {
+		for (k=0;k<HZ32_NUM;k++) {
+			if ((hz32[k].Index[0]==*(s))&&(hz32[k].Index[1]==*(s+1)))
+			{
+				for(i=0;i<32;i++)
+				{
+					for(j=0;j<8;j++)
+					{
+						if(hz32[k].Msk[i*4]&(0x80>>j))
+							DisplayDriver_DrawPoint(x+j,y+i,fc);
+//						else
+//						{
+//							if (fc!=bc)
+//								DisplayDriver_DrawPoint(x+j,y+i,bc);
+//						}
+					}
+
+					for(j=0;j<8;j++)
+					{
+						if(hz32[k].Msk[i*4+1]&(0x80>>j))
+							DisplayDriver_DrawPoint(x+j+8,y+i,fc);
+//						else
+//						{
+//							if (fc!=bc)
+//								DisplayDriver_DrawPoint(x+j+8,y+i,bc);
+//						}
+					}
+
+					for(j=0;j<8;j++)
+					{
+						if(hz32[k].Msk[i*4+2]&(0x80>>j))
+							DisplayDriver_DrawPoint(x+j+16,y+i,fc);
+//						else
+//						{
+//							if (fc!=bc)
+//								DisplayDriver_DrawPoint(x+j+16,y+i,bc);
+//						}
+					}
+					for(j=0;j<8;j++)
+					{
+						if(hz32[k].Msk[i*4+3]&(0x80>>j))
+							DisplayDriver_DrawPoint(x+j+24,y+i,fc);
+//						else
+//						{
+//							if (fc!=bc)
+//								DisplayDriver_DrawPoint(x+j+24,y+i,bc);
+//						}
+					}
+				}
+					break;
+		   }
+		}
+            s+=2;x+=32;
+      }
+   }
+}
+
+/******************************************************************************
+void DisplayDriver_Text48(unsigned short x, unsigned short y, unsigned short fc,
+		unsigned short bc, unsigned char *s)
+{
+  unsigned char i,j;
+  unsigned short k;
+
+  while(*s)
+  {
+    if( *s < 0x80 )
+    {
+            k=*s;
+            if(k>32)
+              k-=32;
+            else
+              k=0;
+
+        for(i=0;i<16;i++)
+            for(j=0;j<8;j++)
+                    {
+                    if(asc16[k*16+i]&(0x80>>j))
+                            DisplayDriver_DrawPoint(x+j,y+i,fc);
+                            else {
+                                    if (fc!=bc)
+                                    DisplayDriver_DrawPoint(x+j,y+i,bc);
+                            }
+                    }
+            s++;
+            x+=8;
+    }
+    else {
+
+            for (k=0;k<HZ48_NUM;k++)
+			{
+              if ((hz48[k].Index[0]==*(s))&&(hz48[k].Index[1]==*(s+1)))
+			  {
+                        for(i=0;i<48;i++)
+                        {
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j,y+i,bc);
+                                                    }
+                                            }
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6+1]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j+8,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j+8,y+i,bc);
+                                                    }
+                                            }
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6+2]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j+16,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j+16,y+i,bc);
+                                                    }
+                                            }
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6+3]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j+24,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j+24,y+i,bc);
+                                                    }
+                                            }
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6+4]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j+32,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j+32,y+i,bc);
+                                                    }
+                                            }
+                                    for(j=0;j<8;j++)
+                                            {
+                                            if(hz48[k].Msk[i*6+5]&(0x80>>j))
+                                                    DisplayDriver_DrawPoint(x+j+40,y+i,fc);
+                                                    else {
+                                                            if (fc!=bc)
+                                                            DisplayDriver_DrawPoint(x+j+40,y+i,bc);
+                                                    }
+                                            }
+		                   }
+                        break;
+                    }
+            }
+            s+=2;x+=48;
+      }
+   }
+}*/

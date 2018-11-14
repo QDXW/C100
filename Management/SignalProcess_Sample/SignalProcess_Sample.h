@@ -139,7 +139,7 @@ void SignalSample_Sample_Start(uint8 ch);
 void SignalSample_Sample_Stop(uint8 ch);
 ADC_DATA_ARRAY SignalSample_Test(void);
 uint8 SignalSample_Sample_IsStripInserted(void);
-vu16 SignalProcess_Collecting_Data(void);
+extern vu16 SignalProcess_Collecting_Data(void);
 vu16 SignalSample_Sample_Vbat(void);
 void SignalSample_OutputSamples(uint16 sampleCount,uint16 *Sample_Data);
 void SignalSample_Sample_Timer_Int(FunctionalState state);
@@ -152,9 +152,9 @@ void SignalSample_SampleStrip(void);
 uint8 SignalSample_GetVbat(void);
 void SignalSample_Sample_LED_Init(void);
 void SignalSample_Sample_Strip_Sensor_Int(FunctionalState state);
-void SignalSample_Sample_SetResistor(void);
 void SignalSample_Sample_Select_Channel(CH_ENUM ch);
 void SignalSample_SampleStrip_MultiCh(uint8 runCycle);
 void SignalProcess_sampleBuffer_Changer(void);
+extern void SignalSample_Sample_SetResistor(void);
 
 #endif /* __MANAGEMENT_SIGNALPROCESS_SIGNALPROCESS_SAMPLE_H_ */

@@ -101,7 +101,12 @@ void EXTI_Key_Confirm_Enable(void)
 *******************************************************************************/
 void Key_Confirm(void)
 {
-	if(Power_Open && long_key_flag)
+	if(Power_Open && long_key_flag )
+	{
+		SystemManage_CheckPowerOff();
+	}
+
+	if(!Power_Open && Exti_lock && long_key_flag)
 	{
 		SystemManage_CheckPowerOff();
 	}
@@ -119,6 +124,7 @@ void Key_Confirm(void)
 
 		}
 		short_key_flag = 0;
+		Stop_Mode_Second = 0;
 	}
 }
 
@@ -132,12 +138,6 @@ void SystemManage_Sleep_Process(void)
 
 	/* 关闭背光  */
 	GPIO_ResetBits(GPIOD,GPIO_Pin_2);
-
-	/* 蓝牙关闭  */
-	GPIO_ResetBits(GPIOE, GPIO_Pin_4);
-
-	/* 蓝牙连接状态清除  */
-	GPIO_ResetBits(GPIOC, GPIO_Pin_9);
 
 	/* 关闭触摸效果  */
 	HumanInput_CapTS_Int(DISABLE);
@@ -163,6 +163,7 @@ void SystemManage_EnterExitStop(void)
 /******************************************************************************/
 void SYSCLKConfig_STOP(void)
 {
+	Power_Second = 0,Power_Minute = 0;
 	GPIO_SetBits(GPIOD,GPIO_Pin_2);
 	Delay_ms_SW(150);
 	HumanInput_CapTS_Int(ENABLE);

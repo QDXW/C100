@@ -7,9 +7,7 @@
 #include "stm32f10x_it.h"
 
 /******************************************************************************/
-uint8 time_second = 59,Battery_Second = 0,Check_flag = 0;
-uint16 Power_Second = 0,Stop_Mode_Second = 0;
-uint16 Power_Minute = 0;
+uint8 time_second = 60,Battery_Second = 0,Check_flag = 0;
 
 /******************************************************************************/
 void Delay_ms_SW(__IO uint32 nCount)
@@ -93,7 +91,7 @@ void SysTick_Handler(void)
 			{
 				Power_Second = 0;
 				Power_Minute++;
-				if(Power_Minute > 30)
+				if(Power_Minute > 59)
 				{
 					Power_Minute = 0;
 					SystemManage_Sleep_Process();
@@ -218,15 +216,16 @@ void TIM4_IRQHandler(void)
 		}
 
 		/* 蓝牙连接显示  */
-		if((!MotorDriver_Ctr) && Display_Time)
+		if((!MotorDriver_Ctr) && Display_Time && Power_Open)
 		{
 			Display_Time = 0;
 			Bluetooth_Connection();
 			Display_Time = 1;
 		}
 
-		if(BLE_Remind)
+		if((BLE_Remind) && Display_Time && Power_Open)
 		{
+			Display_Time = 0;
 			/* 连接提醒  */
 			if(Printer_isConnected())
 			{
@@ -234,14 +233,15 @@ void TIM4_IRQHandler(void)
 			}
 			else
 			{
-				DisplayDriver_Text16_Touch(28,290,WHITE,WHITE,"Bluetooth disconnected!");
+				DisplayDriver_Text_Flex(16,80,290,WHITE,WHITE,"蓝牙未连接!");
 			}
+			Display_Time = 1;
 		}
 
 		/* 电池电量图标显示  */
-		if((!MotorDriver_Ctr) && Display_Time)
+		if((!MotorDriver_Ctr) && Display_Time && Power_Open)
 		{
-			if((UI_state == UI_STATE_TESTING) || (UI_state == UI_STATE_RESULT))
+			if((UI_state == UI_STATE_TESTING) || (UI_state == UI_STATE_RESULT) || (UI_state == UI_STATE_IN_CALIBRATION_PROCESS))
 			{
 
 			}
@@ -255,7 +255,7 @@ void TIM4_IRQHandler(void)
 		}
 
 		/* 标准测试界面倒计时  */
-		if(Open_time)
+		if((Open_time) && Display_Time)
 		{
 			time_second--;
 			Display_Down_Time_second();
@@ -266,14 +266,15 @@ void TIM4_IRQHandler(void)
 				Display_Down_Time_Msec();
 				if(Action_time < 1)
 				{
+					Action_time = 0;
 					Open_time = 0;
-					time_second = 59;
+					time_second = 60;
 				}
 			}
 		}
 		else
 		{
-			time_second = 59;
+			time_second = 60;
 		}
 
 		if(Check_motor)
@@ -281,8 +282,21 @@ void TIM4_IRQHandler(void)
 			Display_Time = 0;
 			if(1 == Check_Lock)
 			{
-				DisplayDriver_Fill(0,22,240,320,Interface_Back);
-				DisplayDriver_Text16_Touch (28,160,RED,RED,"Error: 001 Screw motor!");
+				DisplayDriver_Fill(0,0,240,320,Interface_Back);
+				switch(Font_Switch)
+				{
+				case DISPLAY_FONT_ENGLISH:
+					DisplayDriver_Text_Flex (16,28,160,RED,RED,"Error: 001 Screw motor!");
+					break;
+
+				case DISPLAY_FONT_CHINESE:
+					DisplayDriver_Text_Flex(16,28,160,BLACK,Interface_Bar,"错误:001   丝杆电机故障");
+					break;
+
+				default:
+					break;
+				}
+
 				Check_flag = 1;
 			}
 
@@ -290,9 +304,22 @@ void TIM4_IRQHandler(void)
 			{
 				if(!Check_flag)
 				{
-					DisplayDriver_Fill(0,22,240,320,Interface_Back);
+					DisplayDriver_Fill(0,0,240,320,Interface_Back);
 				}
-				DisplayDriver_Text16_Touch (28,180,RED,RED,"Error: 002 Rotating motor!");
+				switch(Font_Switch)
+				{
+				case DISPLAY_FONT_ENGLISH:
+					DisplayDriver_Text_Flex (16,28,180,RED,RED,"Error: 002 Rotating motor!");
+					break;
+
+				case DISPLAY_FONT_CHINESE:
+					DisplayDriver_Text_Flex(16,28,180,BLACK,Interface_Bar,"错误:002  转动电机故障");
+					break;
+
+				default:
+					break;
+				}
+
 			}
 
 			Display_Time = 1;
@@ -310,7 +337,7 @@ void TIM4_IRQHandler(void)
 		if(Stop_Mode)
 		{
 			Stop_Mode_Second++;
-			if(Stop_Mode_Second > 299)
+			if(Stop_Mode_Second > 599)
 			{
 				GPIO_ResetBits(GPIOB, GPIO_Pin_3);
 			}

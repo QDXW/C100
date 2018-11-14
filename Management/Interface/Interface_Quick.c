@@ -17,18 +17,29 @@ block_attr_Quick block_Quick_Scan = {
 		50,  45,
 		5
 	},
+};
 
-	ENABLE,
+/******************************************************************************/
+block_attr_Quick block_Quick_Scan_China = {
+	UI_STATE_MAIN_WINDOW,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
 	{
-		"Scan the QR code",
-		56,   169,
-		BLACK,WHITE
+		UI_Return,
+		0,   22,
+		50,  45,
+		5
 	},
 };
 
 /******************************************************************************/
 block_attr_Quick* UI_WindowBlocksAttrArray_Quick[] = {/* Window: Standard entry */
 		&block_Quick_Scan,
+};
+
+/******************************************************************************/
+block_attr_Quick* UI_WindowBlocksAttrArray_Quick_China[] = {/* Window: Standard entry */
+		&block_Quick_Scan_China,
 };
 
 /******************************************************************************/
@@ -49,8 +60,10 @@ uint8 Interface_Quick(uint16* xpos,uint16* ypos)
 	QRCode_Trigger_Disabled();
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Quick) >> 2;
-	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Quick,sizeof(UI_WindowBlocksAttrArray_Quick));
+	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Quick,
+			sizeof(UI_WindowBlocksAttrArray_Quick));
 	UI_Draw_Window_Quick(UI_WindowBlocks);
+	UI_Language_Plate_Quick();
 	UI_WindowBlocks = 2;
 	QRCode_Trigger_Enabled();
 	UI_state = UI_STATE_QUICK_TOUCH_PROCESS;
@@ -76,14 +89,6 @@ void UI_Draw_Block_Quick(block_attr_Quick* block)
 		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
 				block->pic_attr.offsetX,block->pic_attr.offsetY);
 	}
-
-	if (block->char_enabled)					/* 4. Draw character */
-	{
-		DisplayDriver_Text16_Touch(
-				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.backColor,
-				block->char_attr.str);
-	}
 	Display_Time = 1;
 }
 
@@ -97,6 +102,26 @@ void UI_Background_Plate_Quick (void)
 }
 
 /******************************************************************************/
+void UI_Language_Plate_Quick (void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		DisplayDriver_Text_Flex(16,56,169,BLACK,WHITE,"Scan the QR code");
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		DisplayDriver_Text_Flex(24,60,160,Interface_Back,WHITE,"扫描二维码");
+		break;
+
+	default:
+		break;
+	}
+	Display_Time = 1;
+}
+
+/******************************************************************************/
 uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
@@ -105,8 +130,9 @@ uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
 	if(1 == QRCode_received)
 	{
 		QRCode_received = 0;
-		if (QRCode_Identify())						/* Decode */
+		if ((QRCode_Identify()) && (2 == QR_Date.head.Model))						/* Decode */
 		{
+			Send_QRCode();
 			UI_state = UI_STATE_INSERT_CUP;
 			Quick_Down_time = 0;
 			state = UI_STATE_RERUN;
@@ -116,6 +142,12 @@ uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
 			UI_state = UI_STATE_INVALUE_CODE_PROCESS;
 			Quick_Down_time = 0;
 			state = UI_STATE_RERUN;
+
+			/* 清空结构体    1、QR接收结构体   2、处理后QR结构体    3、存储结构体 */
+			Cup_Count = 0;
+			memset(&QR_Date, 0, sizeof(QRCODE_STRUCT));
+			memset(&QR_Date_Analyze, 0, sizeof(QRCODE_STRUCT));
+			memset(&Storage_Data, 0, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 		}
 
 		/* Clear size */

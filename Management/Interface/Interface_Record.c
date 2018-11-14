@@ -23,7 +23,7 @@ block_attr_Record block_Record_UI_Return = {
 		50,  45
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	DISABLE,								/* Display HZ16X8 */
 	{
 		"No Record!",
 		80, 173,
@@ -53,7 +53,7 @@ block_attr_Record block_Record_Name = {
 		BLACK,WHITE
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	DISABLE,								/* Display HZ16X8 */
 	{
 		Storage_Data.Product_name,
 		110,   42,
@@ -72,7 +72,7 @@ block_attr_Record block_Record_SN = {
 		1
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	DISABLE,								/* Display HZ16X8 */
 	{
 		"Time:",
 		12,   64,
@@ -99,7 +99,7 @@ block_attr_Record block_Record_Time = {
 		2
 	},
 
-	ENABLE,								/* Display HZ16X8 */
+	DISABLE,								/* Display HZ16X8 */
 	{
 		"  SN:",
 		12,   84,
@@ -582,6 +582,7 @@ uint8 Interface_Record(uint16* xpos,uint16* ypos)
 		memcpy(UI_WindowBlocksAttrArray,UI_WindowBlocksAttrArray_Record_UI_Return,
 				sizeof(UI_WindowBlocksAttrArray_Record_UI_Return));
 		UI_Draw_Window_Record(UI_WindowBlocks);
+		UI_Language_Plate_Record();
 	}
 	else
 	{
@@ -598,6 +599,7 @@ uint8 Interface_Record(uint16* xpos,uint16* ypos)
 		memcpy(UI_WindowBlocksAttrArray,UI_WindowBlocksAttrArray_Record[0],
 				sizeof(UI_WindowBlocksAttrArray_Record[0]));
 		UI_Draw_Window_Record(UI_WindowBlocks);
+		UI_Language_Plate_Record();
 	}
 
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
@@ -686,10 +688,56 @@ void UI_Background_Plate_Record (void)
 	DisplayDriver_DrawStraight_Line(0,102,240,102,Interface_Back);
 	DisplayDriver_DrawStraight_Line(0,122,240,122,Interface_Back);
 	DisplayDriver_DrawStraight_Line(120,102,120,270,Interface_Back);
-	DisplayDriver_Text16_Touch(12, 104, BLACK,WHITE,"Item");
-	DisplayDriver_Text16_Touch(62, 104, BLACK,WHITE,"Result");
-	DisplayDriver_Text16_Touch(122, 104, BLACK,WHITE,"Item");
-	DisplayDriver_Text16_Touch(172, 104, BLACK,WHITE,"Result");
+	Display_Time = 1;
+}
+
+/******************************************************************************/
+void UI_Language_Plate_Record (void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		if((reagent_Strip[0]) == 0)
+		{
+			DisplayDriver_Text_Flex(16,80, 173,RED,WHITE,"No Record!");
+		}
+		else
+		{
+			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,Storage_Data.Product_name);
+			DisplayDriver_Text_Flex(16,12,64,BLACK,WHITE,"Time:");
+			DisplayDriver_Text_Flex(16,12,84,BLACK,WHITE,"  SN:");
+
+			DisplayDriver_Text_Flex(16,12, 104, BLACK,WHITE,"Item");
+			DisplayDriver_Text_Flex(16,62, 104, BLACK,WHITE,"Result");
+			DisplayDriver_Text_Flex(16,122, 104, BLACK,WHITE,"Item");
+			DisplayDriver_Text_Flex(16,172, 104, BLACK,WHITE,"Result");
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if((reagent_Strip[0]) == 0)
+		{
+			DisplayDriver_Text_Flex(24,80, 173,RED,WHITE,"无记录");
+		}
+		else
+		{
+//			DisplayDriver_Text_Flex(16,108,44,BLACK,WHITE,"名称:");
+			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,"毒品检测");
+			DisplayDriver_Text_Flex(16,12,64,BLACK,WHITE,"时间:");
+			DisplayDriver_Text_Flex(16,12,84,BLACK,WHITE,"批号:");
+
+			DisplayDriver_Text_Flex(16,12, 104, BLACK,WHITE,"名称");
+			DisplayDriver_Text_Flex(16,74, 104, BLACK,WHITE,"结果");
+			DisplayDriver_Text_Flex(16,122, 104, BLACK,WHITE,"名称");
+			DisplayDriver_Text_Flex(16,184, 104, BLACK,WHITE,"结果");
+		}
+		break;
+
+	default:
+		break;
+	}
+
 	Display_Time = 1;
 }
 

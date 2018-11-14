@@ -31,7 +31,7 @@ uint8 SignalSample_resistorValueStored = 0;
 /******************************************************************************/
 void SignalSample_Sample_Strip_Sensor_Init(void);
 void SignalSample_Sample_ADC_Init(void);
-void SignalSample_Sample_SetResistor(void);
+
 
 /******************************************************************************/
 void SignalSample_Sample_Init(void)
@@ -511,7 +511,6 @@ void SignalSample_Sample_ExitCriticalArea(void)
 void SignalSample_SampleStrip(void)
 {
 	uint8 i = 0;
-	ScanMotorDriver_Control(MOTOR_ENABLED);
 	/* 1.3 Enter critical area */
 	SignalSample_Sample_EnterCriticalArea();
 	memset(&SignalProcess_sampleBuffer[0],0,512);
@@ -572,5 +571,4 @@ void SignalSample_SampleStrip(void)
 
 	/* 3.2 Exit critical area */
 	SignalSample_Sample_ExitCriticalArea();
-	ScanMotorDriver_Control(MOTOR_DISABLED);
 }

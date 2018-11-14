@@ -12,13 +12,12 @@
 #include "Project_File.h"
 
 /******************************************************************************/
-
-
-/******************************************************************************/
 typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;					/* picture attribute */
+	uint8 pic1_enabled;     				/* Support picture or not */
+	pic_attr pic1_attr;					/* picture attribute */
 	uint8 char_enabled;					/* Support char or not */
 	char_attr char_attr;				/* char attribute */
 	uint8 char2_enabled;					/* Support char or not */
@@ -28,5 +27,6 @@ typedef struct {
 /******************************************************************************/
 void UI_Draw_Window_Result(uint16 blockNum);
 void UI_Background_Plate_Result (void);
+void UI_Language_Plate_Result (void);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_RESULT_H_ */

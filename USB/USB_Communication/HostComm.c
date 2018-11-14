@@ -1,3 +1,9 @@
+
+
+
+
+
+
 /*******************************************************************************
  * File name: HostComm.c
  * Author: Hanson Liu
@@ -24,19 +30,25 @@ uint8 respBuffer[SIZE_RESP_BUFFER];
 uint16 recCount = 0,respLength = 0,UI_Language = 0,UI_MFG_SN = 0;
 uint16 UI_MFG_FW1 = 0,UI_MFG_FW2 = 0,UI_MFG_FW3 = 0;
 uint8 contReceive = 0,keyMatched = 0;
+uint32 HZK_count_bit = 0;
+
+#define FONTINFOADDR 	20971520
 
 /******************************************************************************/
 uint8 HostComm_Cmd_Process(void);
-static uint16 HostComm_Cmd_Respond_APP_SetTime(void);
 static uint16 HostComm_Cmd_Respond_Status(void);
+static uint16 HostComm_Cmd_Respond_APP_SetMFG(void);
 uint16 HostComm_Cmd_Respond_APP_Error(uint8 cmdCode);
-static uint16 HostComm_Cmd_Respond_APP_WriteResistor(void);
-static uint16 HostComm_Cmd_Respond_APP_ReadResistor(void);
 static uint16 HostComm_Cmd_Respond_APP_SysInfo(void);
 static uint16 HostComm_Cmd_Respond_APP_SetMode(void);
-static uint16 HostComm_Cmd_Respond_APP_SetMFG(void);
+static uint16 HostComm_Cmd_Respond_APP_SetTime(void);
+static uint16 HostComm_Cmd_Respond_APP_Calibration(void);
 static uint16 HostComm_Cmd_Respond_APP_QRCode_Data(void);
 static uint16 HostComm_Cmd_Respond_APP_SetLanguage(void);
+static uint16 HostComm_Cmd_Respond_APP_ReadResistor(void);
+static uint16 HostComm_Cmd_Respond_APP_ReadBoundary(void);
+static uint16 HostComm_Cmd_Respond_APP_WriteBoundary(void);
+static uint16 HostComm_Cmd_Respond_APP_WriteResistor(void);
 
 /******************************************************************************/
 void HostComm_SendResp(uint8 *Data, uint16 length);
@@ -250,9 +262,9 @@ uint8 HostComm_Cmd_Process(void)
 		case CMD_CODE_APP_SET_LANGUAGE:
 			responseLength = HostComm_Cmd_Respond_APP_SetLanguage();
 			break;
-		case CMD_CODE_APP_SET_OUT_FAB:
+//		case CMD_CODE_APP_SET_OUT_FAB:
 //			responseLength = HostComm_Cmd_Respond_APP_SetOutFab();
-			break;
+//			break;
 		case CMD_CODE_APP_READ_RESISTOR:
 			responseLength = HostComm_Cmd_Respond_APP_ReadResistor();
 			break;
@@ -262,6 +274,16 @@ uint8 HostComm_Cmd_Process(void)
 		case CMD_CODE_APP_SEND_QRCODE_DATA:
 			responseLength = HostComm_Cmd_Respond_APP_QRCode_Data();
 			break;
+		case CMD_CODE_APP_READ_BOUNDARY:
+			responseLength = HostComm_Cmd_Respond_APP_ReadBoundary();
+			break;
+		case CMD_CODE_APP_WRITE_BOUNDARY:
+			responseLength = HostComm_Cmd_Respond_APP_WriteBoundary();
+			break;
+		case CMD_CODE_APP_CALIBRATION:
+		responseLength = HostComm_Cmd_Respond_APP_Calibration();
+		break;
+
 		default:
 			responseLength = HostComm_Cmd_Respond_APP_Error(cmdCode);
 			break;
@@ -326,7 +348,7 @@ static uint16 HostComm_Cmd_Respond_APP_SetOutFab(void)
 
 	/* Set out fab calibration value, then user can recover it */
 	value = SignalSample_resistorValueStored;
-	STMFlash_Write(FLASH_SET_OUT_FAB, &value, 1);
+//	STMFlash_Write(FLASH_SET_OUT_FAB, &value, 1);
 
 	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
 			CMD_TYPE_APP, CMD_CODE_APP_SET_OUT_FAB);
@@ -339,7 +361,6 @@ static uint16 HostComm_Cmd_Respond_APP_SetMode(void)
 {
 	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
 	uint16 cmdDataLength = 0;
-	uint16 UI_runMode = 0;
 
 	/*  */
 	if (cmdBuffer[OFFSET_CMD_DATA_RX] == 1)
@@ -350,7 +371,6 @@ static uint16 HostComm_Cmd_Respond_APP_SetMode(void)
 	{
 		UI_runMode = UI_MODE_NORMAL;
 	}
-	STMFlash_Write(FLASH_SET_MODE_ADDR, &UI_runMode, 1);
 
 	/*  */
 	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
@@ -364,16 +384,13 @@ static uint16 HostComm_Cmd_Respond_APP_SetMFG(void)
 {
 	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
 	uint16 cmdDataLength = 0;
+	uint8 MBuffer[12] = {0};
 
 	/* SN: 20161031001 */
-	memcpy(UI_MFG, &cmdBuffer[OFFSET_CMD_DATA_RX], 8);
+	memcpy(&Data_SN, &cmdBuffer[OFFSET_CMD_DATA_RX], 12);
+	sprintf(MBuffer,"20%d",Data_SN);
 
-	STMFlash_Write(FLASH_SET_MFG_ADDR, UI_MFG, 4);
-
-	UI_MFG_SN = (UI_MFG[1] << 16) + UI_MFG[0];
-	UI_MFG_FW1 = 0x00FF & UI_MFG[2];
-	UI_MFG_FW2 = (0xFF00 & UI_MFG[2]) >> 8;
-	UI_MFG_FW3 = UI_MFG[3];
+	Storage_Write(MBuffer, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*2),12);
 
 	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
 			CMD_TYPE_APP, CMD_CODE_APP_SET_MFG);
@@ -385,12 +402,11 @@ static uint16 HostComm_Cmd_Respond_APP_SetMFG(void)
 static uint16 HostComm_Cmd_Respond_APP_SetLanguage(void)
 {
 	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
-	uint16 cmdDataLength = 0;
+	uint16 cmdDataLength = 0,Value = 0;
 
 	/*  */
-	memcpy(&UI_Language, &cmdBuffer[OFFSET_CMD_DATA_RX], 2);
-
-	STMFlash_Write(FLASH_SET_LANGUAGE_ADDR, &UI_Language, 1);
+	memcpy(&Font_Switch, &cmdBuffer[OFFSET_CMD_DATA_RX], 1);
+	Storage_Write(&Font_Switch, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),1);
 
 	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
 			CMD_TYPE_APP, CMD_CODE_APP_SET_LANGUAGE);
@@ -464,6 +480,9 @@ static uint16 HostComm_Cmd_Respond_APP_ReadResistor(void)
 	SignalSample_resistorValue = value;
 	SignalSample_resistorValueStored = value;
 
+	/* Use it immediately */
+	SignalSample_Sample_SetResistor();
+
 	respBuffer[OFFSET_CMD_DATA] = value;
 	cmdDataLength = 1;
 
@@ -475,13 +494,77 @@ static uint16 HostComm_Cmd_Respond_APP_ReadResistor(void)
 }
 
 /******************************************************************************/
+static uint16 HostComm_Cmd_Respond_APP_ReadBoundary(void)
+{
+	uint16 totalPackageLength = SIZE_HEAD_TAIL; 	/* Include head and tail */
+	uint16 cmdDataLength = 0;
+	uint16 Boundary = 0;
+	uint8 value[3] = {0};
+//	uint8 MBuffer[3] = {0};
+
+	/* Read from flash */
+	Storage_Read(value,(FLASH_CALI_ADDR+FLASH_OFFSET_ADDR),2);
+	memcpy(&Boundary,value,2);
+	Data_Boundary = Boundary;
+//
+//	sprintf(MBuffer,"%d",Boundary);
+//
+//	Display_Time = 0;
+//	DisplayDriver_Text16_Touch(4, 90, BLACK,BLACK,MBuffer);
+//	Display_Time = 1;
+
+	respBuffer[OFFSET_CMD_DATA] = LoByte(Boundary);
+	respBuffer[OFFSET_CMD_DATA + 1] = HiByte(Boundary);
+	cmdDataLength = 2;
+
+	/* CRC校验 */
+	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, CMD_CODE_APP_READ_BOUNDARY);
+
+	return totalPackageLength;
+}
+
+/******************************************************************************/
+static uint16 HostComm_Cmd_Respond_APP_WriteBoundary(void)
+{
+
+	uint16 totalPackageLength = SIZE_HEAD_TAIL; 	/* Include head and tail */
+	uint16 cmdDataLength = 0;
+	uint16 Boundary = 0;
+	uint8 value[2] = {0};
+//	uint8 MBuffer[2] = {0};
+
+	/* 数据打包 */
+	if (cmdBuffer[OFFSET_CMD_DATA_RX] <= 0xFF)
+	{
+		value[0] = cmdBuffer[OFFSET_CMD_DATA_RX];
+		value[1] = cmdBuffer[OFFSET_CMD_DATA_RX + 1];
+		Storage_Write(value, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR),2);
+		memcpy(&Boundary,value,2);
+		Data_Boundary = Boundary;
+//
+//		sprintf(MBuffer,"%d %d",value[0],value[1]);
+//
+//		Display_Time = 0;
+//		DisplayDriver_Text16_Touch(4, 70, BLACK,BLACK,value);
+//		Display_Time = 1;
+	}
+
+	cmdDataLength = 2;
+
+	/* CRC校验 */
+	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, CMD_CODE_APP_WRITE_BOUNDARY);
+
+	return totalPackageLength;
+}
+
+/******************************************************************************/
 static uint16 HostComm_Cmd_Respond_APP_WriteResistor(void)
 {
 	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
 	uint16 cmdDataLength = 0;
 	uint8 value = 0;
-	uint8 MBuffer[10] = {0};
-
 	/* 数据打包 */
 	if (cmdBuffer[OFFSET_CMD_DATA_RX] <= 0xFF)
 	{
@@ -523,6 +606,41 @@ static uint16 HostComm_Cmd_Respond_APP_QRCode_Data(void)
 	/* CRC校验 */
 	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
 			CMD_TYPE_APP, CMD_CODE_APP_SEND_QRCODE_DATA);
+
+	return totalPackageLength;
+}
+
+/******************************************************************************/
+uint16 HostComm_Cmd_Respond_APP_Calibration(void)
+{
+	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
+	uint16 cmdDataLength = 0;
+	uint16 value = 0;
+	uint8 Record_Sleep_State = 0;
+
+	/* 防止进入低功耗模式，并记录低功耗状态，关掉触摸 */
+	Record_Sleep_State = Enter_Sleep;
+	MotorDriver_Ctr = 1,Calibration_channel = 0;
+	Display_Battery = 0;
+	SYSCLKConfig_STOP();
+
+	HumanInput_CapTS_Int(DISABLE);
+
+	cmdDataLength = 1;
+
+	Dichotomy_Calculate();
+
+	respBuffer[OFFSET_CMD_DATA_RX] = Result_Judge?1:0;
+
+	/* CRC校验 */
+	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, CMD_CODE_APP_CALIBRATION);
+
+	/* 还原低功耗状态，启动触摸  */
+	MotorDriver_Ctr = 0;
+	Delay_ms_SW(1010);
+	SYSCLKConfig_STOP();
+	Display_Battery = 1,Enter_Sleep = Record_Sleep_State;
 
 	return totalPackageLength;
 }
@@ -689,10 +807,16 @@ void HostComm_Cmd_Send_RawData(uint16 length, uint8 dataBuf[])
 
 	memcpy(&respBuffer[OFFSET_CMD_DATA], dataBuf, length);
 	cmdDataLength = length;
-
-	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
-			CMD_TYPE_APP, CMD_CODE_APP_SEND_C_T);
-
+	if(length >10)
+	{
+		totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+							CMD_TYPE_APP, CMD_CODE_APP_SEND_RAWDATA);
+	}
+	else
+	{
+		totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+					CMD_TYPE_APP, CMD_CODE_APP_SEND_C_T);
+	}
 	HostComm_SendResp(&respBuffer[0], totalPackageLength);
 }
 
@@ -700,18 +824,45 @@ void HostComm_Cmd_Send_RawData(uint16 length, uint8 dataBuf[])
 void ReadResistor_Valid (void)
 {
 	uint8 value = 0;
-	uint8 MBuffer[4] = {0};
-
 	/* Read from flash */
 	Storage_Read(&value,FLASH_CALI_ADDR,1);
 	SignalSample_resistorValue = value;
 	SignalSample_resistorValueStored = value;
 
-//	sprintf(MBuffer,"%d",value);
-//
-//	Display_Time = 0;
-//	DisplayDriver_Text16_Touch(4, 90, BLACK,BLACK,MBuffer);
-//	Display_Time = 1;
-
 	SignalSample_Sample_SetResistor();
+}
+
+/******************************************************************************/
+void Language_Valid (void)
+{
+	uint8 value[3] = {0};
+	/* Read from flash */
+	Storage_Read(value, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),2);
+	Font_Switch = value[0];
+}
+
+/******************************************************************************/
+void ReadBoundary_Value(void)
+{
+	uint16 Boundary = 0;
+	uint8 value[2] = {0};
+//	uint8 MBuffer[2] = {0};
+
+	/* Read from flash */
+	Storage_Read(value,(FLASH_CALI_ADDR+FLASH_OFFSET_ADDR),2);
+	memcpy(&Boundary,value,2);
+	Data_Boundary = Boundary;
+}
+
+void Read_SN (void)
+{
+	Storage_Read(data_SN, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*2),12);
+}
+
+/******************************************************************************/
+void Send_QRCode (void)
+{
+	uint16 responseLength = 0;
+	responseLength = HostComm_Cmd_Respond_APP_QRCode_Data();
+	HostComm_SendResp(&respBuffer[0], responseLength);
 }

@@ -25,6 +25,14 @@ block_attr_SetTime block_SetTime_return = {
 		0
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		UI_Return,
+		0,   22,
+		50,  45,
+		0
+	},
+
 	DISABLE,
 	{0},
 };
@@ -32,6 +40,14 @@ block_attr_SetTime block_SetTime_return = {
 /******************************************************************************/
 block_attr_SetTime block_SetTime_Y1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		45,   62,
+		40,  40,
+		1
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -57,6 +73,14 @@ block_attr_SetTime block_SetTime_Y2 = {
 		2
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		45,   123,
+		40,  40,
+		2
+	},
+
 	DISABLE,
 	{0},
 };
@@ -64,6 +88,14 @@ block_attr_SetTime block_SetTime_Y2 = {
 /******************************************************************************/
 block_attr_SetTime block_SetTime_M1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		107,   62,
+		40,  40,
+		3
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -89,6 +121,14 @@ block_attr_SetTime block_SetTime_M2 = {
 		4
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		107,   123,
+		40,  40,
+		4
+	},
+
 	DISABLE,
 	{0},
 };
@@ -96,6 +136,14 @@ block_attr_SetTime block_SetTime_M2 = {
 /******************************************************************************/
 block_attr_SetTime block_SetTime_D1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		163,   62,
+		40,  40,
+		5
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -121,12 +169,28 @@ block_attr_SetTime block_SetTime_D2 = {
 		6
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		163,   123,
+		40,  40,
+		6
+	},
+
 	DISABLE,
 	{0},
 };
 /******************************************************************************/
 block_attr_SetTime block_SetTime_H1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		45,   164,
+		40,  40,
+		7
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -152,6 +216,14 @@ block_attr_SetTime block_SetTime_H2 = {
 		8
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		45,   225,
+		40,  40,
+		8
+	},
+
 	DISABLE,
 	{0},
 };
@@ -159,6 +231,14 @@ block_attr_SetTime block_SetTime_H2 = {
 /******************************************************************************/
 block_attr_SetTime block_SetTime_F1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		107,   164,
+		40,  40,
+		9
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -184,6 +264,14 @@ block_attr_SetTime block_SetTime_F2 = {
 		10
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		107,   225,
+		40,  40,
+		10
+	},
+
 	DISABLE,
 	{0},
 };
@@ -191,6 +279,14 @@ block_attr_SetTime block_SetTime_F2 = {
 /******************************************************************************/
 block_attr_SetTime block_SetTime_S1 = {
 	UI_STATE_SET_TIME_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Add,
+		163,   164,
+		40,  40,
+		11
+	},
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -216,6 +312,14 @@ block_attr_SetTime block_SetTime_S2 = {
 		12
 	},
 
+	ENABLE,							/* Display HZ16X8 */
+	{
+		minus,
+		163,   225,
+		40,  40,
+		12
+	},
+
 	DISABLE,
 	{0},
 };
@@ -227,6 +331,14 @@ block_attr_SetTime block_SetTime_Confirm = {
 	ENABLE,									/* Display Picture */
 	{
 		Confirmation,
+		84,   272,
+		72,   30,
+		13
+	},
+
+	ENABLE,									/* Display Picture */
+	{
+		Confirm_China,
 		84,   272,
 		72,   30,
 		13
@@ -285,10 +397,26 @@ void UI_Draw_Window_System_Time(uint16 blockNum)
 void UI_Draw_Block_SetTime(block_attr_SetTime* block)
 {
 	Display_Time = 0;
-	if (block->pic_enabled)						/* 2. Draw picture */
+	switch(Font_Switch)
 	{
-		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
-				block->pic_attr.offsetX,block->pic_attr.offsetY);
+	case DISPLAY_FONT_ENGLISH:
+		if (block->pic_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+					block->pic_attr.offsetX,block->pic_attr.offsetY);
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
+	default:
+		break;
 	}
 
 	if (block->char_enabled)					/* 4. Draw character */
@@ -341,19 +469,19 @@ uint8 Interface_Set_Time_Process (uint16* xpos,uint16* ypos)
 	{
 	case 1:
 		start_data.year += 1;
-//		if(start_data.year > 2118)
-//		{
-//			start_data.year = 2118;
-//		}
+		if(start_data.year > 2118)
+		{
+			start_data.year = 2118;
+		}
 		sprintf(Year,"%d",start_data.year);
 		DisplayDriver_Text16_Back(49,104,BLACK,WHITE,Year);
 		break;
 	case 2:
 		start_data.year -= 1;
-//		if(start_data.year < 1918)
-//		{
-//			start_data.year = 1918;
-//		}
+		if(start_data.year < 1918)
+		{
+			start_data.year = 1918;
+		}
 		sprintf(Year,"%02d",start_data.year);
 		DisplayDriver_Text16_Back(49,104,BLACK,WHITE,Year);
 		break;

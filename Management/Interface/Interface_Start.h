@@ -16,6 +16,8 @@ typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;     				/* Picture attribute */
+	uint8 pic1_enabled;     				/* Support picture or not */
+	pic_attr pic1_attr;     				/* Picture attribute */
 	uint8 char_enabled;					/* Support char or not */
 	char_attr char_attr;				/* char attribute */
 	uint8 char1_enabled;					/* Support char or not */
@@ -26,6 +28,7 @@ typedef struct {
 void UI_Draw_Window_Start(uint16 blockNum);
 void UI_Draw_Window_Delete(uint16 blockNum);
 void UI_Background_Plate_Start (void);
+void UI_Language_Plate_Start (void);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_START_H_ */
 

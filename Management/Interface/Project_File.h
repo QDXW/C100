@@ -25,6 +25,7 @@
 #include "stmflash.h"
 #include "hw_config.h"
 #include "Comm_FIFO.h"
+#include "DisplayDriver_touch.h"
 #include "RotationMotor.h"
 #include "Storage_Flash.h"
 #include "Signalprocess.h"
@@ -35,15 +36,16 @@
 #include "SystemManage_RTC.h"
 #include "HumanInput_CapTS.h"
 #include "DisplayDriver_API.h"
-#include "DisplayDriver_touch.h"
 #include "SignalProcess_Sample.h"
 #include "ScanMotorDriver_PositionSensor.h"
 #include "RotationMotorDriver_PositionSensor.h"
+#include "DisplayDriver_FontLib.h"
 
 /******************************************************************************/
 extern const unsigned char UI_Return[];
 extern const unsigned char Confirmation[];
+extern const unsigned char Confirm_China[];
 extern const unsigned char Print[];
 extern const unsigned char Delete[];
-
+extern const unsigned char Delete_China[];
 #endif /* MANAGEMENT_INTERFACE_PROJECT_FILE_H_ */

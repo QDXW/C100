@@ -61,6 +61,8 @@ struct typFNT_GB482
   char Msk[288]; /* 6*48 */
 };
 
+extern uint8 BUF7[4],BUF8[4];
+
 /******************************************************************************/
 extern const struct typFNT_GB162 hz16[];
 extern const struct typFNT_GB242 hz24[];

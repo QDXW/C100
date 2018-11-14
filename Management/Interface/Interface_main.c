@@ -12,7 +12,6 @@
 #include "Record.pic"
 #include "Setting.pic"
 #include "Open_face.pic"
-#include "Open_HZ.pic"
 #include "statusbar_bat.pic"
 #include "statusbar_charging.pic"
 #include "Blutooth_Ico.pic"
@@ -30,13 +29,16 @@ block_attr block_standard = {
 			7,  28,
 			106, 106
 		},
+};
 
-		ENABLE,									/* Display HZ16X8 */
+/******************************************************************************/
+block_attr block_standard_China = {
+		UI_STATE_STANDARD,
+		ENABLE,									/* Display Picture */
 		{
-			"Standard",
-			28,  138,
-			WHITE,WHITE,
-			Interface_Back
+			Standard,
+			7,  28,
+			106, 106
 		},
 };
 
@@ -49,13 +51,16 @@ block_attr block_quick = {
 			127,  28,
 			106, 106
 		},
+};
 
-		ENABLE,									/* Display HZ16X8 */
+/******************************************************************************/
+block_attr block_quick_China = {
+		UI_STATE_QUICK,
+		ENABLE,									/* Display Picture */
 		{
-			"Quick",
-			160,  138,
-			WHITE,WHITE,
-			Interface_Back
+			Quick,
+			127,  28,
+			106, 106
 		},
 };
 
@@ -68,13 +73,16 @@ block_attr block_record = {
 			7,  187,
 			106, 106
 		},
+};
 
-		ENABLE,									/* Display HZ16X8 */
+/******************************************************************************/
+block_attr block_record_China = {
+		UI_STATE_RECORD,
+		ENABLE,									/* Display Picture */
 		{
-			"Record",
-			36,  297,
-			WHITE,WHITE,
-			Interface_Back
+			Record,
+			7,  187,
+			106, 106
 		},
 };
 
@@ -87,13 +95,16 @@ block_attr block_settings = {
 			127, 187,
 			106, 106
 		},
+};
 
-		ENABLE,									/* Display HZ16X8 */
+/******************************************************************************/
+block_attr block_settings_China = {
+		UI_STATE_SETTING,
+		ENABLE,									/* Display Picture */
 		{
-			"Settings",
-			148,  297,
-			WHITE,WHITE,
-			Interface_Back
+			Setting,
+			127, 187,
+			106, 106
 		},
 };
 
@@ -139,6 +150,8 @@ uint8 Interface_Process(uint16* xpos,uint16* ypos)
 			Interface_Invalue_Code_Process,		/* Interface Result Touch Display */
 			Interface_Invalid_Touch_Process,	/* Interface Result Touch Display */
 			Interface_Record_Demand_Process,	/* Interface Result Touch Display */
+			Interface_Calibration_Process,	    /* Interface Result Touch Display */
+			Interface_In_Calibration_Process,	/* Interface Result Touch Display */
 
 	};
 	uint8 state;
@@ -170,6 +183,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Main,
 			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
+	UI_Language_Plate_Main();
 	Exti_lock = ENABLE;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
@@ -181,7 +195,7 @@ void UI_Draw_Window(uint16 blockNum)
 	uint8 blockIndex = 0;						/* Draw blocks one by one */
 	for (blockIndex = 0; blockIndex < blockNum; blockIndex++)
 	{
-		UI_Draw_Block(UI_WindowBlocksAttrArray_Main[blockIndex]);
+			UI_Draw_Block(UI_WindowBlocksAttrArray_Main[blockIndex]);
 	}
 }
 
@@ -193,14 +207,6 @@ void UI_Draw_Block(block_attr* block)
 	{
 		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
 				block->pic_attr.offsetX,block->pic_attr.offsetY);
-	}
-
-	if (block->char_enabled)					/* 4. Draw character */
-	{
-		DisplayDriver_Text16_Touch(
-					block->char_attr.offsetX,block->char_attr.offsetY,
-					block->char_attr.color,block->char_attr.backColor,
-					block->char_attr.str);
 	}
 	Display_Time = 1;
 }
@@ -275,32 +281,65 @@ void UI_Background_Plate_Main (void)
 }
 
 /******************************************************************************/
+void UI_Language_Plate_Main (void)
+{
+	Display_Time = 0;
+	switch(Font_Switch)
+	{
+	case DISPLAY_FONT_ENGLISH:
+		DisplayDriver_Text_Flex(16,28,138,WHITE,Interface_Back,"Standard");
+		DisplayDriver_Text_Flex(16,160,138,WHITE,Interface_Back,"Quick");
+		DisplayDriver_Text_Flex(16,36,297,WHITE,Interface_Back,"Record");
+		DisplayDriver_Text_Flex(16,148,297,WHITE,Interface_Back,"Settings");
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		DisplayDriver_Text_Flex(16,28,138,WHITE,Interface_Back,"标准检测");
+		DisplayDriver_Text_Flex(16,148,138,WHITE,Interface_Back,"快速检测");
+		DisplayDriver_Text_Flex(16,44,297,WHITE,Interface_Back,"记录");
+		DisplayDriver_Text_Flex(16,164,297,WHITE,Interface_Back,"设置");
+		break;
+
+	default:
+		break;
+	}
+	Display_Time = 1;
+}
+
+/******************************************************************************/
 void Status_Init(void)
 {
 	GPIO_SetBits(GPIOD, GPIO_Pin_2);
 	Display_Time = 0;
-	DisplayDriver_Fill(0,20,240,320,Interface_Back);
-	DisplayDriver_Fill(0,0,240,21,0X0AF8);
-	DisplayDriver_DrawPic_Touch(Open_face,Interface_Bar,15,35);
-	DisplayDriver_DrawPic_Touch(statusbar_bat,Interface_Bar,200,2);
-	DisplayDriver_Text16_Touch(11,290,WHITE,Interface_Bar,"A good assistant for doctor!");
-	Battery_Display();
-	Bluetooth_Connection();
-	UI_Draw_Status_Bar();
-	Display_Time = 1;
+	DisplayDriver_Fill(0,0,240,320,WHITE);
+	DisplayDriver_DrawPic_Touch(Open_face,Interface_Bar,20,78);
 	SystemManage_5V_Enabled();
 	ScanMotorDriver_SelfCheck_StepDrive();
 	RotationMotor_SelfCheck_StepDrive();
 	SystemManage_5V_Disabled();
-	ReadResistor_Valid();
-	Power_Open = 1;
+	Set_Fixed_Parameter();
 	Enter_Sleep = 1;
 	if(Check_Lock)
 	{
 		Exti_lock = ENABLE;
 		while(1);
 	}
+	DisplayDriver_Fill(0,0,240,22,Interface_Bar);
+	DisplayDriver_DrawPic_Touch(statusbar_bat,Interface_Bar,200,2);
+	Battery_Display();
+	Bluetooth_Connection();
+	UI_Draw_Status_Bar();
+	Display_Time = 1;
 	HumanInput_CapTS_Int(ENABLE);
+	Power_Open = 1;
+}
+
+/******************************************************************************/
+void Set_Fixed_Parameter(void)
+{
+	ReadResistor_Valid();
+	ReadBoundary_Value();
+	Language_Valid();
 }
 
 /******************************************************************************/
@@ -320,12 +359,12 @@ void Battery_Display (void)
 
 	DisplayDriver_Fill(202,5,218,14,Interface_Bar);
 
-	if((GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12)) && (temp < 3.6))
-	{
-		DisplayDriver_Fill(202,6,202,14,RED);
-	}
-	else
-	{
+//	if((GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12)) && (temp < 3.6))
+//	{
+//		DisplayDriver_Fill(202,6,202,14,RED);
+//	}
+//	else
+//	{
 		if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
 		{
 			DisplayDriver_DrawPic_Touch(statusbar_charging,Interface_Bar,225,1);
@@ -365,7 +404,7 @@ void Battery_Display (void)
 		{
 			SystemManage_CheckPowerOff();
 		}
-	}
+//	}
 }
 
 /******************************************************************************/
