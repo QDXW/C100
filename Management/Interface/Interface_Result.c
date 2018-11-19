@@ -678,7 +678,7 @@ void UI_Language_Plate_Result (void)
 		break;
 
 	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(16,124,82,BLACK,WHITE,"名称");
+		DisplayDriver_Text_Flex(16,14,82,BLACK,WHITE,"名称");
 		DisplayDriver_Text_Flex(16,65,82,BLACK,WHITE,"结果");
 		DisplayDriver_Text_Flex(16,124,82,BLACK,WHITE,"名称");
 		DisplayDriver_Text_Flex(16,178,82,BLACK,WHITE,"结果");
@@ -708,7 +708,19 @@ uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 		{
 			Storage_Record();
 			Display_Time = 0;
-			DisplayDriver_Text16_Touch(56, 275, WHITE,WHITE,"Has been stored!");
+			switch(Font_Switch)
+			{
+			case DISPLAY_FONT_ENGLISH:
+				DisplayDriver_Text_Flex(16,56, 275, WHITE,WHITE,"Has been stored!");
+				break;
+
+			case DISPLAY_FONT_CHINESE:
+				DisplayDriver_Text_Flex(16,92, 275, WHITE,WHITE,"已保存!");
+				break;
+
+			default:
+				break;
+			}
 			Display_Time = 1;
 			Stored_Record = 0;
 		}

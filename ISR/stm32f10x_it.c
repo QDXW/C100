@@ -233,7 +233,19 @@ void TIM4_IRQHandler(void)
 			}
 			else
 			{
-				DisplayDriver_Text_Flex(16,80,290,WHITE,WHITE,"蓝牙未连接!");
+				switch(Font_Switch)
+				{
+				case DISPLAY_FONT_ENGLISH:
+					DisplayDriver_Text_Flex(16,24,294,WHITE,WHITE,"Bluetooth not connected!");
+					break;
+
+				case DISPLAY_FONT_CHINESE:
+					DisplayDriver_Text_Flex(16,80,294,WHITE,WHITE,"蓝牙未连接!");
+					break;
+
+				default:
+					break;
+				}
 			}
 			Display_Time = 1;
 		}

@@ -17,11 +17,6 @@ block_attr_InvCode block_InvCode_UI_Return = {
 		0,   22,
 		50,  45
 	},
-};
-
-/******************************************************************************/
-block_attr_InvCode block_InvCode_UI_Return_China = {
-	UI_STATE_MAIN_WINDOW,			/* Interface status */
 
 	ENABLE,							/* Display HZ16X8 */
 	{
@@ -31,6 +26,7 @@ block_attr_InvCode block_InvCode_UI_Return_China = {
 	},
 };
 
+
 /******************************************************************************/
 block_attr_InvCode block_InvCode_Delete = {
 	UI_STATE_QUICK,			/* Interface status */
@@ -38,6 +34,13 @@ block_attr_InvCode block_InvCode_Delete = {
 	ENABLE,							/* Interface Start rect */
 	{
 		Delete,
+		84,   265,
+		72,   55
+	},
+
+	ENABLE,							/* Interface Start rect */
+	{
+		Delete_China,
 		84,   265,
 		72,   55
 	},
@@ -83,10 +86,27 @@ void UI_Draw_Window_InvCode(uint16 blockNum)
 void UI_Draw_Block_InvCode(block_attr_InvCode* block)
 {
 	Display_Time = 0;
-	if (block->pic_enabled)						/* 2. Draw picture */
+
+	switch(Font_Switch)
 	{
-		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
-				block->pic_attr.offsetX,block->pic_attr.offsetY);
+	case DISPLAY_FONT_ENGLISH:
+		if (block->pic_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+					block->pic_attr.offsetX,block->pic_attr.offsetY);
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
+	default:
+		break;
 	}
 	Display_Time = 1;
 }

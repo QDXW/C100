@@ -16,6 +16,8 @@ typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;					/* picture attribute */
+	uint8 pic1_enabled;     				/* Support picture or not */
+	pic_attr pic1_attr;					/* picture attribute */
 } block_attr_InvCode;
 
 /******************************************************************************/

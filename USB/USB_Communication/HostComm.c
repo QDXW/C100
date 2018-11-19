@@ -1,9 +1,3 @@
-
-
-
-
-
-
 /*******************************************************************************
  * File name: HostComm.c
  * Author: Hanson Liu
@@ -49,6 +43,7 @@ static uint16 HostComm_Cmd_Respond_APP_ReadResistor(void);
 static uint16 HostComm_Cmd_Respond_APP_ReadBoundary(void);
 static uint16 HostComm_Cmd_Respond_APP_WriteBoundary(void);
 static uint16 HostComm_Cmd_Respond_APP_WriteResistor(void);
+static uint16 HostComm_Cmd_Respond_APP_SET_5V(void);
 
 /******************************************************************************/
 void HostComm_SendResp(uint8 *Data, uint16 length);
@@ -281,8 +276,12 @@ uint8 HostComm_Cmd_Process(void)
 			responseLength = HostComm_Cmd_Respond_APP_WriteBoundary();
 			break;
 		case CMD_CODE_APP_CALIBRATION:
-		responseLength = HostComm_Cmd_Respond_APP_Calibration();
-		break;
+			responseLength = HostComm_Cmd_Respond_APP_Calibration();
+			break;
+		case APP_SET_5V:
+			responseLength = HostComm_Cmd_Respond_APP_SET_5V();
+			break;
+
 
 		default:
 			responseLength = HostComm_Cmd_Respond_APP_Error(cmdCode);
@@ -641,6 +640,32 @@ uint16 HostComm_Cmd_Respond_APP_Calibration(void)
 	Delay_ms_SW(1010);
 	SYSCLKConfig_STOP();
 	Display_Battery = 1,Enter_Sleep = Record_Sleep_State;
+
+	return totalPackageLength;
+}
+
+/******************************************************************************/
+uint16 HostComm_Cmd_Respond_APP_SET_5V(void)
+{
+	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
+	uint16 cmdDataLength = 0;
+
+	cmdDataLength = 1;
+
+	respBuffer[OFFSET_CMD_DATA_RX] = cmdBuffer[OFFSET_CMD_DATA]? 1:0;
+
+	if(cmdBuffer[OFFSET_CMD_DATA])
+	{
+		SystemManage_5V_Enabled();
+	}
+	else
+	{
+		SystemManage_5V_Disabled();
+	}
+
+	/* CRCÐ£Ñé */
+	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, APP_SET_5V);
 
 	return totalPackageLength;
 }

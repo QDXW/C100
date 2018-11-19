@@ -126,6 +126,7 @@ enum cmdCode {
 	CMD_CODE_APP_READ_BOUNDARY,
 	CMD_CODE_APP_SEND_RAWDATA,
 	CMD_CODE_APP_CALIBRATION = 0x76,
+	APP_SET_5V,
 };
 
 /* Bin file attribute */

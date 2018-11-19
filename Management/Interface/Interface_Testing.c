@@ -575,7 +575,20 @@ void UI_Background_Plate_Testing (void)
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(36,130,205,150,WHITE);
-	DisplayDriver_Text_Flex(16,76,160,WHITE,WHITE,"正在测试...");
+
+	switch(Font_Switch)
+		{
+		case DISPLAY_FONT_ENGLISH:
+			DisplayDriver_Text_Flex(16,80,160,WHITE,WHITE,"testing...");
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+			DisplayDriver_Text_Flex(16,76,160,WHITE,WHITE,"正在测试...");
+			break;
+
+		default:
+			break;
+		}
 	Display_Time = 1;
 }
 

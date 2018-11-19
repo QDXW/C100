@@ -32,29 +32,7 @@ block_attr block_standard = {
 };
 
 /******************************************************************************/
-block_attr block_standard_China = {
-		UI_STATE_STANDARD,
-		ENABLE,									/* Display Picture */
-		{
-			Standard,
-			7,  28,
-			106, 106
-		},
-};
-
-/******************************************************************************/
 block_attr block_quick = {
-		UI_STATE_QUICK,
-		ENABLE,									/* Display Picture */
-		{
-			Quick,
-			127,  28,
-			106, 106
-		},
-};
-
-/******************************************************************************/
-block_attr block_quick_China = {
 		UI_STATE_QUICK,
 		ENABLE,									/* Display Picture */
 		{
@@ -76,17 +54,6 @@ block_attr block_record = {
 };
 
 /******************************************************************************/
-block_attr block_record_China = {
-		UI_STATE_RECORD,
-		ENABLE,									/* Display Picture */
-		{
-			Record,
-			7,  187,
-			106, 106
-		},
-};
-
-/******************************************************************************/
 block_attr block_settings = {
 		UI_STATE_SETTING,
 		ENABLE,									/* Display Picture */
@@ -97,16 +64,7 @@ block_attr block_settings = {
 		},
 };
 
-/******************************************************************************/
-block_attr block_settings_China = {
-		UI_STATE_SETTING,
-		ENABLE,									/* Display Picture */
-		{
-			Setting,
-			127, 187,
-			106, 106
-		},
-};
+
 
 /******************************************************************************/
 block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */

@@ -139,7 +139,6 @@ block_attr_Setting* UI_WindowBlocksAttrArray_Setting[] = {/* Window: Standard en
 
 /******************************************************************************/
 void UI_Draw_Block_Setting(block_attr_Setting* block);
-void UI_Draw_Block_Setting_2(block_attr_Setting* block);
 
 /******************************************************************************/
 uint8 Interface_Setting(uint16* xpos,uint16* ypos)
@@ -209,14 +208,14 @@ void UI_Language_Plate_Setting(void)
 		{
 			DisplayDriver_Text_Flex(16,8,154,WHITE,WHITE,"About Machine");
 			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"System Time");
-//			DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"ON");
+			DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"ON");
 			DisplayDriver_Text_Flex(16,136,288,WHITE,WHITE,"Calibration");
 		}
 		else
 		{
 			DisplayDriver_Text_Flex(16,8,154,WHITE,WHITE,"About Machine");
 			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"System Time");
-//			DisplayDriver_Text_Flex(16,48,  288,WHITE,WHITE,"OFF");
+			DisplayDriver_Text_Flex(16,48,  288,WHITE,WHITE,"OFF");
 			DisplayDriver_Text_Flex(16,136,288,WHITE,WHITE,"Calibration");
 		}
 		break;
@@ -226,14 +225,14 @@ void UI_Language_Plate_Setting(void)
 		{
 			DisplayDriver_Text_Flex(16,28,154,WHITE,WHITE,"关于本机");
 			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"系统时间");
-			DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"打开");
-			DisplayDriver_Text_Flex(16,64,288,WHITE,WHITE,"校准");
+			DisplayDriver_Text_Flex(16,44,288,WHITE,WHITE,"打开");
+			DisplayDriver_Text_Flex(16,164,288,WHITE,WHITE,"校准");
 		}
 		else
 		{
 			DisplayDriver_Text_Flex(16,28,154,WHITE,WHITE,"关于本机");
 			DisplayDriver_Text_Flex(16,140,154,WHITE,WHITE,"系统时间");
-			DisplayDriver_Text_Flex(16,48,  288,WHITE,WHITE,"关闭");
+			DisplayDriver_Text_Flex(16,44,  288,WHITE,WHITE,"关闭");
 			DisplayDriver_Text_Flex(16,164,288,WHITE,WHITE,"校准");
 		}
 		break;

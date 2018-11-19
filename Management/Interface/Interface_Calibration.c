@@ -9,6 +9,7 @@
 #include "Start_Buton.pic"
 #include "Start_Key.pic"
 #include "Start_remind.pic"
+#include "Start_Calibration_China.pic"
 
 /******************************************************************************/
 block_attr_Calibration block_attr_Calibration_return = {
@@ -22,8 +23,13 @@ block_attr_Calibration block_attr_Calibration_return = {
 		0
 	},
 
-	DISABLE,
-	{0},
+	ENABLE,							/* Display HZ16X8 */
+	{
+		UI_Return,
+		0,   22,
+		45,  40,
+		0
+	},
 };
 
 /******************************************************************************/
@@ -38,8 +44,13 @@ block_attr_Calibration block_attr_Start_Key = {
 		0
 	},
 
-	DISABLE,
-	{0},
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Start_Key,
+		50,   63,
+		140,  140,
+		0
+	},
 };
 
 /******************************************************************************/
@@ -54,8 +65,13 @@ block_attr_Calibration block_attr_Start_remind = {
 		0
 	},
 
-	DISABLE,
-	{0},
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Start_Calibration_China,
+		10,  250,
+		220,  40,
+		0
+	},
 };
 
 /******************************************************************************/
@@ -96,18 +112,27 @@ void UI_Draw_Window_Calibration(uint16 blockNum)
 void UI_Draw_Block_Calibration(block_attr_Calibration* block)
 {
 	Display_Time = 0;
-	if (block->pic_enabled)						/* 2. Draw picture */
-	{
-		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
-				block->pic_attr.offsetX,block->pic_attr.offsetY);
-	}
 
-	if (block->char_enabled)					/* 4. Draw character */
+	switch(Font_Switch)
 	{
-		DisplayDriver_Text16_Touch(
-				block->char_attr.offsetX,block->char_attr.offsetY,
-				block->char_attr.color,block->char_attr.backColor,
-				block->char_attr.str);
+	case DISPLAY_FONT_ENGLISH:
+		if (block->pic_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
+					block->pic_attr.offsetX,block->pic_attr.offsetY);
+		}
+		break;
+
+	case DISPLAY_FONT_CHINESE:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
+	default:
+		break;
 	}
 	Display_Time = 1;
 }

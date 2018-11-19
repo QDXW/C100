@@ -722,7 +722,6 @@ void UI_Language_Plate_Record (void)
 		}
 		else
 		{
-//			DisplayDriver_Text_Flex(16,108,44,BLACK,WHITE,"名称:");
 			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,"毒品检测");
 			DisplayDriver_Text_Flex(16,12,64,BLACK,WHITE,"时间:");
 			DisplayDriver_Text_Flex(16,12,84,BLACK,WHITE,"批号:");
