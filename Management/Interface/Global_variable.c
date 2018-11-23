@@ -13,7 +13,7 @@
 /******************************************************************************/
 float temp = 0.0;
 volatile uint16 QRCode_count = 0;
-uint8 QRCode_Buffer[500] = {0},SignalBuffer[1024] = {0},data_SN[12] = {0};
+uint8 QRCode_Buffer[600] = {0},SignalBuffer[1024] = {0},data_SN[12] = {0};
 uint8 Check_Lock = 0,Stop_Mode = 0,UI_runMode = 0,Result_Judge = 0;
 uint8 USART1_TX = 0,Existed_Data = 0,Check_motor = 0,Calibration_channel = 0;
 uint8 Touch_State_Update = 0,Bluetooth_Update = 1,InvCode_Second = 0;

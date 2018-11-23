@@ -11,7 +11,6 @@
 #include "Quick.pic"
 #include "Record.pic"
 #include "Setting.pic"
-#include "Open_face.pic"
 #include "statusbar_bat.pic"
 #include "statusbar_charging.pic"
 #include "Blutooth_Ico.pic"
@@ -64,8 +63,6 @@ block_attr block_settings = {
 		},
 };
 
-
-
 /******************************************************************************/
 block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
 		&block_standard,
@@ -110,6 +107,7 @@ uint8 Interface_Process(uint16* xpos,uint16* ypos)
 			Interface_Record_Demand_Process,	/* Interface Result Touch Display */
 			Interface_Calibration_Process,	    /* Interface Result Touch Display */
 			Interface_In_Calibration_Process,	/* Interface Result Touch Display */
+			Interface_Language_Process,		/* Interface Result Touch Display */
 
 	};
 	uint8 state;
@@ -132,7 +130,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 	uint8 state = 0;
 	QRCode_existed = 0;
 	Read_first = 1,Record_Display = 1;
-	Enter_Sleep = 1,Display_Battery = 1;
+	Display_Battery = 1;
 	Interface_Reord = 0,Stored_Record = 1,BLE_Remind = 0;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Main();
@@ -142,6 +140,7 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
 	UI_Language_Plate_Main();
+	Enter_Sleep = 1;
 	Exti_lock = ENABLE;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
@@ -269,8 +268,20 @@ void Status_Init(void)
 {
 	GPIO_SetBits(GPIOD, GPIO_Pin_2);
 	Display_Time = 0;
+#if REALY_ICO_C100
+	DisplayDriver_Fill(0,0,240,320,Interface_Back);
+	DisplayDriver_DrawPic_Touch(REALY_ICO,Interface_Bar,15,35);
+	DisplayDriver_Text16_Touch(20,290,WHITE,WHITE,"Good Assistant For Doctor!");
+#endif
+#if PROTZEK_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,WHITE);
-	DisplayDriver_DrawPic_Touch(Open_face,Interface_Bar,20,78);
+	DisplayDriver_DrawPic_Touch(PROTZEK_ICO,Interface_Bar,20,78);
+#endif
+#if HENGRUI_ICO_C100
+	DisplayDriver_Fill(0,0,240,320,WHITE);
+	DisplayDriver_DrawPic_Touch(HENGRUI_ICO,Interface_Bar,10,105);
+#endif
+
 	SystemManage_5V_Enabled();
 	ScanMotorDriver_SelfCheck_StepDrive();
 	RotationMotor_SelfCheck_StepDrive();
@@ -284,6 +295,7 @@ void Status_Init(void)
 	}
 	DisplayDriver_Fill(0,0,240,22,Interface_Bar);
 	DisplayDriver_DrawPic_Touch(statusbar_bat,Interface_Bar,200,2);
+	Display_Battery = 0;
 	Battery_Display();
 	Bluetooth_Connection();
 	UI_Draw_Status_Bar();

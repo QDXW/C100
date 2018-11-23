@@ -101,15 +101,15 @@ void EXTI_Key_Confirm_Enable(void)
 *******************************************************************************/
 void Key_Confirm(void)
 {
-	if(Power_Open && long_key_flag )
-	{
-		SystemManage_CheckPowerOff();
-	}
-
-	if(!Power_Open && Exti_lock && long_key_flag)
-	{
-		SystemManage_CheckPowerOff();
-	}
+//	if(Power_Open && long_key_flag )
+//	{
+//		SystemManage_CheckPowerOff();
+//	}
+//
+//	if(!Power_Open && Exti_lock && long_key_flag)
+//	{
+//		SystemManage_CheckPowerOff();
+//	}
 
 	if(short_key_flag)
 	{

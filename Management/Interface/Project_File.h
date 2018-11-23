@@ -9,8 +9,10 @@
 #define MANAGEMENT_INTERFACE_PROJECT_FILE_H_
 
 /******************************************************************************/
-#define LCD_OLD   0
-#define UI_STATE_RERUN (1u)
+#define UI_STATE_RERUN 			(1u)
+#define REALY_ICO_C100			1
+#define PROTZEK_ICO_C100 		0
+#define HENGRUI_ICO_C100		0
 
 /******************************************************************************/
 #include "stm32f10x.h"
@@ -48,4 +50,17 @@ extern const unsigned char Confirm_China[];
 extern const unsigned char Print[];
 extern const unsigned char Delete[];
 extern const unsigned char Delete_China[];
+
+#if REALY_ICO_C100
+extern const unsigned char REALY_ICO[];
+#endif
+
+#if PROTZEK_ICO_C100
+extern const unsigned char PROTZEK_ICO[];
+#endif
+
+#if HENGRUI_ICO_C100
+extern const unsigned char HENGRUI_ICO[];
+#endif
+
 #endif /* MANAGEMENT_INTERFACE_PROJECT_FILE_H_ */

@@ -64,7 +64,7 @@ uint8 Interface_In_Calibration_Process(uint16* xpos,uint16* ypos)
 		switch(Font_Switch)
 		{
 		case DISPLAY_FONT_ENGLISH:
-			DisplayDriver_Text_Flex(16,28,162,BLACK,Interface_Bar,"Successful calibration!");
+			DisplayDriver_Text_Flex(16,28,162,BLACK,Interface_Bar,"calibration Successful!");
 			break;
 
 		case DISPLAY_FONT_CHINESE:

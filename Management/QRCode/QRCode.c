@@ -159,7 +159,7 @@ uint8 QRCode_Identify(void)
 		memset(&Storage_Data, 0, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 
 		/* 产品头信息复制  */
-		memcpy(&QR_Date.head.name[0], &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 2);
+		memcpy(&QR_Date.head.Model, &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 2);
 		memcpy(&QR_Date_Analyze.head.name[0], &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 2);
 
 		/* 结构体长度计算  */

@@ -130,7 +130,7 @@ uint8 Interface_Quick_Touch_Process(uint16* xpos,uint16* ypos)
 	if(1 == QRCode_received)
 	{
 		QRCode_received = 0;
-		if ((QRCode_Identify()) && (2 == QR_Date.head.Model))						/* Decode */
+		if ((QRCode_Identify()) && (4 == QR_Date.head.Model))						/* Decode */
 		{
 			Send_QRCode();
 			UI_state = UI_STATE_INSERT_CUP;

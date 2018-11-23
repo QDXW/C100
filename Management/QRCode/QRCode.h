@@ -15,14 +15,8 @@
 #define QRCODE_TEST_NAME_MAX         (8)
 #define QRCODE_BUFFER_SIZE           (600)
 
-#if LCD_OLD
-/******************************************************************************/
-#define QRCODE_TRIG_PORT                (GPIOA)
-#define QRCODE_TRIG_PIN                 (GPIO_Pin_3)
-#else
 #define QRCODE_TRIG_PORT                (GPIOD)
 #define QRCODE_TRIG_PIN                 (GPIO_Pin_3)
-#endif
 
 #define QRCODE_TX_PORT      		 (GPIOC)
 #define QRCODE_TX_PIN         		 (GPIO_Pin_10)
@@ -36,6 +30,7 @@
 /******************************************************************************/
 typedef struct {
     uint16 crc;
+    uint8 Model;
     uint8 name[20];
     uint8 SN[10];
     uint8 time;
@@ -52,11 +47,10 @@ typedef struct {
     uint16 areaT_HalfRadius;
     uint16 winSize;
     uint8 limitEnabled;
-    uint8 Model;
+    uint8 Invalied;
     uint16 C_stepSize;
     uint16 C_magnitude;
     uint16 C_MIN;
-    uint16 reserved;
 } QRCODE_HEAD_STRUCT;
 
 /******************************************************************************/

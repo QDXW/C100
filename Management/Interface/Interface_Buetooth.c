@@ -16,16 +16,16 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 	{
 		if(!Bluetooth_switch)
 		{
-			DisplayDriver_Fill(44,288,100,310,Interface_Back);
+			DisplayDriver_Fill(28,204,70,224,Interface_Back);
 
 			switch(Font_Switch)
 			{
 			case DISPLAY_FONT_ENGLISH:
-					DisplayDriver_Text_Flex(16,52,288,WHITE,WHITE,"ON");
+				DisplayDriver_Text_Flex(16,32,204,WHITE,WHITE,"ON");
 				break;
 
 			case DISPLAY_FONT_CHINESE:
-					DisplayDriver_Text_Flex(16,44,288,WHITE,WHITE,"打开");
+				DisplayDriver_Text_Flex(16,24,204,WHITE,WHITE,"打开");
 				break;
 
 			default:
@@ -36,16 +36,16 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 		}
 		else
 		{
-			DisplayDriver_Fill(44,288,100,310,Interface_Back);
+			DisplayDriver_Fill(28,204,70,224,Interface_Back);
 
 			switch(Font_Switch)
 			{
 			case DISPLAY_FONT_ENGLISH:
-					DisplayDriver_Text_Flex(16,48,288,WHITE,WHITE,"OFF");
+				DisplayDriver_Text_Flex(16,28,204,WHITE,WHITE,"OFF");
 				break;
 
 			case DISPLAY_FONT_CHINESE:
-					DisplayDriver_Text_Flex(16,44,288,WHITE,WHITE,"关闭");
+				DisplayDriver_Text_Flex(16,24,204,WHITE,WHITE,"关闭");
 				break;
 
 			default:

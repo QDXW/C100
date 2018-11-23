@@ -13,7 +13,7 @@
 
 /******************************************************************************/
 extern float temp;
-extern uint8 QRCode_Buffer[500],SignalBuffer[1024],data_SN[12];
+extern uint8 QRCode_Buffer[600],SignalBuffer[1024],data_SN[12];
 extern volatile uint16 QRCode_count;
 extern uint8 Stop_Mode,UI_runMode,Result_Judge,Calibration_channel;
 extern uint8 USART1_TX,Existed_Data,Check_motor,Check_Lock,Font_Switch;

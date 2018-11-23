@@ -11,8 +11,6 @@
 /******************************************************************************/
 #include "Project_File.h"
 
-extern uint8 BUF1[4],BUF2[4];
-
 /******************************************************************************/
 /* Rectangular attribute */
 typedef struct {
@@ -64,34 +62,35 @@ typedef struct {
 
 /******************************************************************************/
 typedef enum {
-	UI_STATE_MAIN_WINDOW_PROCESS,	/* Interface touch process */
-	UI_STATE_MAIN_WINDOW, 			/* Interface main display */
-	UI_STATE_STANDARD,				/* Interface STANDARD display */
-	UI_STATE_START,					/* Interface Start Display */
-	UI_STATE_QUICK, 				/* Interface Quick Display */
-	UI_STATE_RECORD, 				/* Interface Record Display */
-	UI_STATE_SETTING, 				/* Interface Setting Display */
-	UI_STATE_TESTING,				/* Interface Testing Display */
-	UI_STATE_RESULT,				/* Interface Result Display */
-	UI_STATE_INSERT_CUP,			/* Interface insert cup Display */
-	UI_STATE_DELETE, 				/* Interface Record2 Display */
-	UI_STATE_DOWN_TIME_PROCESS,		/* Interface DOWN TIME Display */
-	UI_STATE_BLUETOOTH_PROCESS,		/* Interface BLUETOOTH Display */
-	UI_STATE_ABOUT_MACHINE,			/* Interface ABOUT MACHINE Display */
-	UI_STATE_SYSTEM_TIME,			/* Interface SYSTEM TIME Display */
-	UI_STATE_SET_TIME_PROCESS,		/* Interface SET TIME Display */
-	UI_STATE_QUICK_TOUCH_PROCESS,	/* Interface QUICK TOUCH Display */
+	UI_STATE_MAIN_WINDOW_PROCESS,		/* Interface touch process */
+	UI_STATE_MAIN_WINDOW, 				/* Interface main display */
+	UI_STATE_STANDARD,					/* Interface STANDARD display */
+	UI_STATE_START,						/* Interface Start Display */
+	UI_STATE_QUICK, 					/* Interface Quick Display */
+	UI_STATE_RECORD, 					/* Interface Record Display */
+	UI_STATE_SETTING, 					/* Interface Setting Display */
+	UI_STATE_TESTING,					/* Interface Testing Display */
+	UI_STATE_RESULT,					/* Interface Result Display */
+	UI_STATE_INSERT_CUP,				/* Interface insert cup Display */
+	UI_STATE_DELETE, 					/* Interface Record2 Display */
+	UI_STATE_DOWN_TIME_PROCESS,			/* Interface DOWN TIME Display */
+	UI_STATE_BLUETOOTH_PROCESS,			/* Interface BLUETOOTH Display */
+	UI_STATE_ABOUT_MACHINE,				/* Interface ABOUT MACHINE Display */
+	UI_STATE_SYSTEM_TIME,				/* Interface SYSTEM TIME Display */
+	UI_STATE_SET_TIME_PROCESS,			/* Interface SET TIME Display */
+	UI_STATE_QUICK_TOUCH_PROCESS,		/* Interface QUICK TOUCH Display */
 	UI_STATE_DOWN_TIME_TOUCH_PROCESS,	/* Interface DOWN TIME TOUCH Display */
-	UI_STATE_RESULT_TOUCH_PROCESS,	/* Interface Result TOUCH Display */
-	UI_STATE_INVALUE_CODE_PROCESS,	/* Interface INVALUE CODE TOUCH Display */
-	UI_STATE_INVALID_TOUCH_PROCESS,	/* Interface INVALID TOUCH Display */
-	UI_STATE_RECORD_DEMAND_PROCESS,	/* Interface RECORD DEMAND Display */
-	UI_STATE_CALIBRATION_PROCESS,	/* Interface RECORD DEMAND Display */
+	UI_STATE_RESULT_TOUCH_PROCESS,		/* Interface Result TOUCH Display */
+	UI_STATE_INVALUE_CODE_PROCESS,		/* Interface INVALUE CODE TOUCH Display */
+	UI_STATE_INVALID_TOUCH_PROCESS,		/* Interface INVALID TOUCH Display */
+	UI_STATE_RECORD_DEMAND_PROCESS,		/* Interface RECORD DEMAND Display */
+	UI_STATE_CALIBRATION_PROCESS,		/* Interface RECORD DEMAND Display */
 	UI_STATE_IN_CALIBRATION_PROCESS,	/* Interface RECORD DEMAND Display */
+	UI_STATE_LANGUSGE_PROCESS,			/* Interface RECORD DEMAND Display */
+	UI_STATE_LANGUSGE_CONFIRM_PROCESS,	/* Interface RECORD DEMAND Display */
 
 	UI_STATE_MAX_STATE_NUM,
 } UI_STATE;
-
 
 /******************************************************************************/
 typedef enum {
@@ -136,6 +135,7 @@ extern uint8 Interface_System_Time(uint16* xpos,uint16* ypos);
 uint8 Interface_Main_Window_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_About_Machine(uint16* xpos,uint16* ypos);
 void UI_Touch_Check(block_attr* block,uint16* xpos,uint16* ypos);
+extern uint8 Interface_Language_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Down_Time_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos);
 extern uint8 Interface_Set_Time_Process (uint16* xpos,uint16* ypos);
@@ -147,6 +147,7 @@ extern uint8 Interface_Record_Demand_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Invalid_Touch_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_In_Calibration_Process(uint16* xpos,uint16* ypos);
 extern uint8 Interface_Down_Time_Touch_Process(uint16* xpos,uint16* ypos);
+extern uint8 Interface_Language_Window_Process(uint16* xpos,uint16* ypos);
 
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_MAIN_H_ */
