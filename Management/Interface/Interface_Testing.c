@@ -11,6 +11,7 @@
 uint16 max = 0;
 uint8 Storage_Data_Conut = 0;
 uint16 BOUNDARY_VALUE = 2500;
+uint8 SignalProcess[1024] = {0};
 
 /******************************************************************************/
 Down_Time block_Testing = {
@@ -43,11 +44,7 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 	max = 0;
 	if(GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_12))
 	{
-		if(temp > 3.0)
-		{
-
-		}
-		else
+		if(temp <= 3.0)
 		{
 			Display_Time = 0;
 			DisplayDriver_Fill(0,22,240,320,Interface_Back);
@@ -121,6 +118,7 @@ void Acquisition_Signal(void)
 			SignalProcess_Alg_data.sampleNumber = SignalSample_count;
 			SignalProcess_Run();
 
+
 			/* 判定结果 */
 			Result_Display();
 			Storage_Data_Conut += 1;
@@ -129,8 +127,8 @@ void Acquisition_Signal(void)
 			if(UI_runMode)
 			{
 				memset(SignalBuffer,0,500);
-				memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
-				HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
+				memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], 300);
+				HostComm_Cmd_Send_RawData(300, SignalBuffer);
 				Delay_ms_SW(50);
 				HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
 			}
@@ -192,7 +190,6 @@ uint16 Get_Start_Postion(void)
 			}
 		}
 
-
 		if (0 == Postion_Up)
 		{
 			Postion_Up = 1;
@@ -216,6 +213,10 @@ uint16 Get_Start_Postion(void)
 	if(!Confirm_CUP)
 	{
 		Start_Postion = 0;
+	}
+	else
+	{
+		Calculate_Max_Postion(Start_Postion);
 	}
 
 	return Start_Postion;
@@ -427,6 +428,7 @@ void Acquisition_StartSignal(void)
 	ScanMotorDriver_Goto_DetectionPosition();
 	/* 第三步:数据处理得到杯子检测的起始位置*/
 	/* 1.对数据进行移动平均 */
+
 	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
 	/* 2.有无杯子判断 */
@@ -439,13 +441,55 @@ void Acquisition_StartSignal(void)
 	{
 		Confirm_CUP = 1;
 	}
+}
 
+/******************************************************************************/
+void Calculate_Max_Postion(uint16 First_Postion)
+{
+	uint8 i = 0,reagent_Strip_Count = 17;
+	uint16 Before_Postion = First_Postion,Last_Postion = First_Postion + 18;
+	memset(Record_Max_Postion,0,sizeof(Record_Max_Postion));
+	memcpy(&SignalProcess_sampleBuffer[512],SignalProcess_sampleBuffer,512);
+
+	for(i= 0;i < reagent_Strip_Count;i++)
+	{
+		if(SignalProcess_sampleBuffer[Last_Postion] > Data_Boundary)
+		{
+			Last_Postion = Judge_Max(&SignalProcess_sampleBuffer[0],Last_Postion);
+			Record_Max_Postion[i] = Last_Postion - Before_Postion;
+			Before_Postion = Last_Postion;
+			Last_Postion += 18;
+		}
+		else
+		{
+			reagent_Strip_Count = i;
+			for(;i < 17;i++)
+				Record_Max_Postion[i] = 1;
+		}
+	}
+}
+
+/******************************************************************************/
+uint16 Judge_Max (uint16* Signal,uint16 New_Postion)
+{
+	uint16 Postion_Plus = New_Postion - 7,Postion_Add = New_Postion + 7;
+	uint16 max = Signal[New_Postion],i = New_Postion;
+	for(i = Postion_Plus;i <= Postion_Add;i++)
+	{
+		if(Signal[i] > max)
+		{
+			New_Postion = i;
+		}
+	}
+
+	return New_Postion;
 }
 
 /******************************************************************************/
 uint16 Get_sampleBuffer_Boundary_Value(void)
 {
-	uint16 i = 0;
+	uint16 Old_Record = 0,New_Record = 0;
+	uint16 i = 0,Old_Boundary = 0,New_Boundary = 0,Boundary_Count = 0;
 	BOUNDARY_VALUE = 2500;
 	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
 	{
@@ -458,7 +502,50 @@ uint16 Get_sampleBuffer_Boundary_Value(void)
 	if(BOUNDARY_VALUE > 1500)
 	{
 		BOUNDARY_VALUE = 2500;
+		return BOUNDARY_VALUE;
 	}
+
+//	Old_Boundary = BOUNDARY_VALUE;
+//	New_Boundary = BOUNDARY_VALUE;
+//
+//	for(Data_Boundary = BOUNDARY_VALUE;Data_Boundary < 1200;Data_Boundary += 10)
+//	{
+//		for(i = 0;i < 511;i++)
+//		{
+//			if(SignalProcess_sampleBuffer[i] >= SignalProcess_sampleBuffer[i+1])
+//			{
+//				Boundary_Count++;
+//			}
+//
+//			if(SignalProcess_sampleBuffer[i] <= SignalProcess_sampleBuffer[i+1])
+//			{
+//				Boundary_Count++;
+//			}
+//		}
+//
+//		New_Record = ((Boundary_Count < 3) && (Boundary_Count > 0))?1:0;
+//
+//		if(Old_Record && (!New_Record))
+//		{
+//			New_Boundary = Data_Boundary;
+//		}
+//
+//		if((!Old_Record) && New_Record)
+//		{
+//			Old_Boundary = Data_Boundary;
+//		}
+//
+//		Old_Record = New_Record;
+//	}
+//
+//	if(New_Boundary == Old_Boundary)
+//	{
+//		BOUNDARY_VALUE = 2500;
+//		return BOUNDARY_VALUE;
+//	}
+//
+//	Data_Boundary = (New_Boundary + Old_Boundary)/2;
+
 	return BOUNDARY_VALUE;
 }
 

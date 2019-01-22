@@ -4,15 +4,15 @@
  *  Created on: 2018年5月19日
  *      Author: Administrator
  */
-
+/******************************************************************************/
 #ifndef MANAGEMENT_INTERFACE_PROJECT_FILE_H_
 #define MANAGEMENT_INTERFACE_PROJECT_FILE_H_
 
 /******************************************************************************/
 #define UI_STATE_RERUN 			(1u)
-#define REALY_ICO_C100			1
-#define PROTZEK_ICO_C100 		0
-#define HENGRUI_ICO_C100		0
+#define REALY_ICO_C100			1			/* 睿丽科技标识  */
+#define PROTZEK_ICO_C100 		0			/* 德国标识  */
+#define HENGRUI_ICO_C100		0			/* 中泰科技标识   */
 
 /******************************************************************************/
 #include "stm32f10x.h"

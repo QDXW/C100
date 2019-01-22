@@ -371,7 +371,7 @@ uint8 Storage_Record(void)
 /******************************************************************************/
 uint8 Read_Record(void)
 {
-	uint8 Information[10] = 0;
+	uint8 Information[12] = 0;
 	memset(Information,0,sizeof(Information));
 	memset(&Storage_Data, 0, sizeof(STORAGE_SINGLE_DATA_STRUCT));
 	if(Read_first)
@@ -394,7 +394,7 @@ uint8 Read_Record(void)
 /******************************************************************************/
 void Get_reagent_TestNum(void)
 {
-	uint8 Information[10] = 0;
+	uint8 Information[12] = 0;
 	reagent_Strip[3] = 65535;
 	memset(Information,0,sizeof(Information));
 	Storage_Read(Information,0x00,8);

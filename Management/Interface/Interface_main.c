@@ -107,8 +107,8 @@ uint8 Interface_Process(uint16* xpos,uint16* ypos)
 			Interface_Record_Demand_Process,	/* Interface Result Touch Display */
 			Interface_Calibration_Process,	    /* Interface Result Touch Display */
 			Interface_In_Calibration_Process,	/* Interface Result Touch Display */
-			Interface_Language_Process,		/* Interface Result Touch Display */
-
+			Interface_Language_Process,			/* Interface Result Touch Display */
+			Interface_Language_Window_Process,
 	};
 	uint8 state;
 	do										/* Polling each state */
@@ -128,7 +128,7 @@ uint8 Interface_Process(uint16* xpos,uint16* ypos)
 uint8 Interface_Main(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
-	QRCode_existed = 0;
+	Enter_Sleep = 1,QRCode_existed = 0;
 	Read_first = 1,Record_Display = 1;
 	Display_Battery = 1;
 	Interface_Reord = 0,Stored_Record = 1,BLE_Remind = 0;
@@ -140,7 +140,6 @@ uint8 Interface_Main(uint16* xpos,uint16* ypos)
 			sizeof(UI_WindowBlocksAttrArray_Main));
 	UI_Draw_Window(UI_WindowBlocks);
 	UI_Language_Plate_Main();
-	Enter_Sleep = 1;
 	Exti_lock = ENABLE;
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;
 	return state;
@@ -271,7 +270,7 @@ void Status_Init(void)
 #if REALY_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,Interface_Back);
 	DisplayDriver_DrawPic_Touch(REALY_ICO,Interface_Bar,15,35);
-	DisplayDriver_Text16_Touch(20,290,WHITE,WHITE,"Good Assistant For Doctor!");
+	DisplayDriver_Text16_Touch(8,290,WHITE,WHITE,"A good assistant for doctor!");
 #endif
 #if PROTZEK_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,WHITE);
@@ -282,11 +281,11 @@ void Status_Init(void)
 	DisplayDriver_DrawPic_Touch(HENGRUI_ICO,Interface_Bar,10,105);
 #endif
 
+	Set_Fixed_Parameter();
 	SystemManage_5V_Enabled();
 	ScanMotorDriver_SelfCheck_StepDrive();
 	RotationMotor_SelfCheck_StepDrive();
 	SystemManage_5V_Disabled();
-	Set_Fixed_Parameter();
 	Enter_Sleep = 1;
 	if(Check_Lock)
 	{

@@ -23,10 +23,10 @@ typedef struct {
 
 /******************************************************************************/
 typedef enum {
-	LANGUAGE_ENGLISH_OFF = 1,
-	LANGUAGE_ENGLISH_ON,
-	LANGUAGE_CHAINESE_OFF,
+	LANGUAGE_CHAINESE_OFF = 1,
 	LANGUAGE_CHAINESE_ON,
+	LANGUAGE_ENGLISH_OFF,
+	LANGUAGE_ENGLISH_ON,
 
 	LANGUAGE_SELECT_MAX_NUM,
 } LANGUAGE_SELECT;

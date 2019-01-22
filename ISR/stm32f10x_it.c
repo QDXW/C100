@@ -5,9 +5,10 @@
  * Date: 2014.12 ~ Now
  ******************************************************************************/
 #include "stm32f10x_it.h"
+#include "HumanInput_CapTS.h"
 
 /******************************************************************************/
-uint8 time_second = 60,Battery_Second = 0,Check_flag = 0;
+uint8 time_second = 60,Battery_Second = 0,Check_flag = 0,Bar_second = 0;
 
 /******************************************************************************/
 void Delay_ms_SW(__IO uint32 nCount)
@@ -91,7 +92,7 @@ void SysTick_Handler(void)
 			{
 				Power_Second = 0;
 				Power_Minute++;
-				if(Power_Minute > 59)
+				if(Power_Minute > 29)
 				{
 					Power_Minute = 0;
 					SystemManage_Sleep_Process();
@@ -263,7 +264,12 @@ void TIM4_IRQHandler(void)
 				Battery_Display();
 				Display_Time = 1;
 			}
-			UI_Draw_Status_Bar();
+
+			Bar_second++;
+			if(Bar_second > 10)
+				UI_Draw_Status_Bar();
+			else
+				Bar_second = 0;
 		}
 
 		/* 标准测试界面倒计时  */

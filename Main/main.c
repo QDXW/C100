@@ -12,9 +12,8 @@
 
 /******************************************************************************/
 static u32 TimingDelay;					/* Timer Delay Count */
-uint16 insk[4] = {0,0,0,65535};
-uint8 MBuffer[20] = {0};
-
+//uint16 insk[4] = {0,0,0,65535};
+//uint8 MBuffer[20] = {0};
 
 /******************************************************************************/
 void main(void)
@@ -99,23 +98,23 @@ void TimingDelay_Decrement(void)
 /******************************************************************************/
 void Debug_Function(void)
 {
-	memcpy(MBuffer,insk,8);
-
-	Storage_Write(MBuffer, 0x00, 8);
-
-	Storage_Read(MBuffer,0x00,8);
-	memcpy(insk,MBuffer,8);
-	sprintf(MBuffer,"%02d %02d %02d %02d",insk[0],insk[1],insk[2],insk[3]);
-	Display_Time = 0;
-	DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
-	Display_Time = 1;
-
-	SystemManage_5V_Enabled();
-	SignalSample_Sample_EnterCriticalArea();
-	RotationMotor_Input_StepDrive(Foreward_Rotation,Get_Start_Postion());
-	Delay_ms_SW(2000);
-	SignalSample_SampleStrip();
-	memset(SignalBuffer,0,500);
-	memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
-	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
+//	memcpy(MBuffer,insk,8);
+//
+//	Storage_Write(MBuffer, 0x00, 8);
+//
+//	Storage_Read(MBuffer,0x00,8);
+//	memcpy(insk,MBuffer,8);
+//	sprintf(MBuffer,"%02d %02d %02d %02d",insk[0],insk[1],insk[2],insk[3]);
+//	Display_Time = 0;
+//	DisplayDriver_Text16_Touch(60, 43, BLACK,WHITE,MBuffer);
+//	Display_Time = 1;
+//
+//	SystemManage_5V_Enabled();
+//	SignalSample_Sample_EnterCriticalArea();
+//	RotationMotor_Input_StepDrive(Foreward_Rotation,Get_Start_Postion());
+//	Delay_ms_SW(2000);
+//	SignalSample_SampleStrip();
+//	memset(SignalBuffer,0,500);
+//	memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], SignalSample_count<< 1);
+//	HostComm_Cmd_Send_RawData(SignalSample_count << 1, SignalBuffer);
 }

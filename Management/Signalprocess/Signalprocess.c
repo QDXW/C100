@@ -7,6 +7,7 @@
 
 /******************************************************************************/
 #include "Signalprocess.h"
+#include "QRCode.h"
 
 /******************************************************************************/
 ALG_DATA SignalProcess_Alg_data;
@@ -23,6 +24,7 @@ float Alg_CalcualteArea(uint16 src[], uint16 midIndex, uint16 halfWidth,
 		float *coefA, float *coefB);
 uint16 Alg_GetMin(uint16 *src, uint16 count);
 uint16 Alg_GetMax(uint16 *src, uint16 count);
+uint16 Search_T_HalfRadius(uint16 *src, uint16 count,uint16 HalfRadius);
 
 /******************************************************************************/
 void SignalProcess_Run(void)
@@ -35,6 +37,8 @@ void SignalProcess_Run(void)
     uint8 fitArraySize = 0;
     /* Clear */
     memset(&SignalProcess_Alg_data.calcInfo, 0, sizeof(ALG_CALCINFO));
+
+    SignalProcess_Alg_data.posInfo.areaT_HalfRadius = QR_Date.head.areaT_HalfRadius;
 
     /* Window average */
     SignalProcess_Alg_data.processNumder = Alg_WindowAverage(
@@ -125,28 +129,40 @@ void SignalProcess_Run(void)
             &SignalProcess_Alg_data.calcInfo.coefB);
 
     /* Calculate area */
-    SignalProcess_Alg_data.calcInfo.areaC = (uint32)Alg_CalcualteArea(
-            &SignalProcess_Alg_data.processBuffer[0],
-            SignalProcess_Alg_data.calcInfo.indexC,
-            SignalProcess_Alg_data.posInfo.areaC_HalfRadius,
-            &SignalProcess_Alg_data.calcInfo.coefA,
-            &SignalProcess_Alg_data.calcInfo.coefB);
+        SignalProcess_Alg_data.calcInfo.areaC = (uint32)Alg_CalcualteArea(
+                &SignalProcess_Alg_data.processBuffer[0],
+                SignalProcess_Alg_data.calcInfo.indexC,
+                SignalProcess_Alg_data.posInfo.areaC_HalfRadius,
+                &SignalProcess_Alg_data.calcInfo.coefA,
+                &SignalProcess_Alg_data.calcInfo.coefB);
 
-    SignalProcess_Alg_data.calcInfo.areaT = (uint32)Alg_CalcualteArea(
-            &SignalProcess_Alg_data.processBuffer[0],
-            SignalProcess_Alg_data.calcInfo.indexT,
-            SignalProcess_Alg_data.posInfo.areaT_HalfRadius,
-            &SignalProcess_Alg_data.calcInfo.coefA,
-            &SignalProcess_Alg_data.calcInfo.coefB);
-
-    if (SignalProcess_Alg_data.limitEnabled > 0)
-    {
-        if (SignalProcess_Alg_data.calcInfo.areaC < SignalProcess_Alg_data.limitInfo.C_MIN)
+        if (SignalProcess_Alg_data.limitEnabled > 0)
         {
-            SignalProcess_Alg_data.calcInfo.validity = ALG_RESULT_LOW_AREA_C;
-            return;
+            if (SignalProcess_Alg_data.calcInfo.areaC < SignalProcess_Alg_data.limitInfo.C_MIN)
+            {
+                SignalProcess_Alg_data.calcInfo.validity = ALG_RESULT_LOW_AREA_C;
+                return;
+            }
         }
-    }
+
+        SignalProcess_Alg_data.posInfo.areaT_HalfRadius = Search_T_HalfRadius(
+    			&SignalProcess_Alg_data.processBuffer[0],
+    			SignalProcess_Alg_data.calcInfo.indexT,
+    			SignalProcess_Alg_data.posInfo.areaT_HalfRadius);
+
+    	if(SignalProcess_Alg_data.posInfo.areaT_HalfRadius)
+    	{
+    		SignalProcess_Alg_data.calcInfo.areaT = (uint32)Alg_CalcualteArea(
+    				&SignalProcess_Alg_data.processBuffer[0],
+    				SignalProcess_Alg_data.calcInfo.indexT,
+    				SignalProcess_Alg_data.posInfo.areaT_HalfRadius,
+    				&SignalProcess_Alg_data.calcInfo.coefA,
+    				&SignalProcess_Alg_data.calcInfo.coefB);
+    	}
+    	else
+    	{
+    		SignalProcess_Alg_data.calcInfo.areaT == 0;
+    	}
 
     if (SignalProcess_Alg_data.calcInfo.areaT == 0)
     {
@@ -425,4 +441,33 @@ uint16 Alg_GetMax(uint16 *src, uint16 count)
 	}
 
 	return value;
+}
+
+/******************************************************************************/
+uint16 Search_T_HalfRadius(uint16 *src, uint16 count,uint16 HalfRadius)
+{
+	uint16 i = 0;
+	uint16 index1 = count - HalfRadius,index2 = count + HalfRadius;
+
+	for(i = (count - HalfRadius);i < (count - 2);i++)
+	{
+		if(src[i] <= src[i+1])
+		{
+			index1 = i+1;
+		}
+	}
+
+	index1 = count - index1;
+
+	for(i = (count + HalfRadius);i > (count + 2);i--)
+	{
+		if(src[i] <= src[i-1])
+		{
+			index2 = i-1;
+		}
+	}
+
+	index2 = index2 - count;
+
+	return (index1 > index2)?index2:index1;
 }

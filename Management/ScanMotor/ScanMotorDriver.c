@@ -72,7 +72,7 @@ void ScanMotorDriver_Control(uint8 enabled) {
 /******************************************************************************/
 void ScanMotorDriver_MoveOneStep(uint8 dir) {
 #define MOTOR_QUICK_DELAY	 0X2000
-#define MOTOR_SLOW_DELAY 	 0X3000
+#define MOTOR_SLOW_DELAY 	 0X4000
 
 	uint8 index = 0;
 	ScanMotorDriver_Control(MOTOR_ENABLED);

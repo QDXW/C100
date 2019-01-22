@@ -160,7 +160,7 @@ uint8 QRCode_Identify(void)
 
 		/* 产品头信息复制  */
 		memcpy(&QR_Date.head.Model, &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 2);
-		memcpy(&QR_Date_Analyze.head.name[0], &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 2);
+		memcpy(&QR_Date_Analyze.head.name[0], &QRCode_Buffer[2], sizeof(QRCODE_HEAD_STRUCT) - 3);
 
 		/* 结构体长度计算  */
 		singleLineSize = sizeof(QRCODE_SINGLE_LINE);

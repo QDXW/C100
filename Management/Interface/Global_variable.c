@@ -27,6 +27,7 @@ uint8 Action_time = 0,Interface_Reord = 0,Touch_Success = 0,MotorDriver_Ctr = 0;
 uint8 QRCode_existed = 0,ScanMotorDriver_InBasePosition = 0,Display_Battery = 1;
 uint8 Font_Switch = 1;
 
+uint16 Record_Max_Postion[17] = {0};
 uint16 UI_WindowBlocks = 0,Power_Second = 0,Power_Minute = 0;
 uint16 adcx = 0,xPos = 0, yPos = 0,Data_Boundary = 600,Stop_Mode_Second = 0;
 

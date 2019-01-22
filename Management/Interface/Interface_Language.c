@@ -205,17 +205,35 @@ void Touch_Language_Check(block_attr_Language* block,uint16* xpos,uint16* ypos)
 	endY = startY + block->pic_attr.height;
 	if(block->Interface_Status)
 	{
-		if((startX < *xpos) && (*xpos < endX) && (startY < *ypos) && (*ypos < endY) )
+		if((startX < *xpos) && (*xpos < endX) && (startY < *ypos) && (*ypos < endY) && (!(block->Language_select %2)))
 		{
 			UI_state = block->Interface_Status;
-//			block->pic_attr.count = 1;
-//			Pic_Count = block->Language_select;
+			block->pic_attr.count = 1;
+			Pic_Count = block->Language_select;
 			Touch_Success = 1;
-//			for (blockIndex = 0; blockIndex < UI_WindowBlocks; blockIndex++)
-//			{
-//				Update_Language_Interface(UI_WindowBlocksAttrArray_Language[blockIndex],xpos,ypos);
-//			}
+			if((block->Language_select > 0) && (block->Language_select < 100))
+			{
+				switch((block->Language_select/2 - 1))
+				{
+				case DISPLAY_FONT_CHINESE:
+					Font_Switch = DISPLAY_FONT_CHINESE;
+					Storage_Write(&Font_Switch, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),1);
+					break;
 
+				case DISPLAY_FONT_ENGLISH:
+					Font_Switch = DISPLAY_FONT_ENGLISH;
+					Storage_Write(&Font_Switch, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),1);
+					break;
+
+				default:
+					break;
+				}
+			}
+
+			for (blockIndex = 0; blockIndex < UI_WindowBlocks; blockIndex++)
+			{
+				Update_Language_Interface(UI_WindowBlocksAttrArray_Language[blockIndex],xpos,ypos);
+			}
 		}
 	}
 }
@@ -229,6 +247,15 @@ void Update_Language_Interface (block_attr_Language* block,uint16* xpos,uint16* 
 	{
 		DisplayDriver_DrawPic_Touch(block->pic_attr.src,Interface_Back,
 				block->pic_attr.offsetX,block->pic_attr.offsetY);
+	}
+
+	if (block->char_enabled)					/* 4. Draw character */
+	{
+		DisplayDriver_Text_Flex(
+				16,
+				block->char_attr.offsetX,block->char_attr.offsetY,
+				block->char_attr.color,block->char_attr.backColor,
+				block->char_attr.str);
 	}
 	Display_Time = 1;
 

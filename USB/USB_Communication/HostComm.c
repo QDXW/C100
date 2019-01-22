@@ -282,7 +282,6 @@ uint8 HostComm_Cmd_Process(void)
 			responseLength = HostComm_Cmd_Respond_APP_SET_5V();
 			break;
 
-
 		default:
 			responseLength = HostComm_Cmd_Respond_APP_Error(cmdCode);
 			break;
@@ -592,9 +591,9 @@ static uint16 HostComm_Cmd_Respond_APP_QRCode_Data(void)
 	/* 数据打包 */
 	if(Existed_Data)
 	{
-		cmdDataLength = 401;
+		cmdDataLength = sizeof(QR_Date.head);
 		respBuffer[OFFSET_CMD_DATA_RX] = 1;
-		memcpy(&respBuffer[OFFSET_CMD_DATA_RX +1],&QR_Date_Analyze,400);
+		memcpy(&respBuffer[OFFSET_CMD_DATA_RX +1],&QR_Date.head,cmdDataLength+1);
 	}
 	else
 	{

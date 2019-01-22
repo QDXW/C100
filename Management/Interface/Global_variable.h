@@ -26,7 +26,7 @@ extern uint8 Bluetooth_Connect,Touch_State_Update,Open_time,Display_Battery;
 extern uint8 key_fall_flag,short_key_flag,long_key_flag,Exti_lock,BLE_Remind;
 extern uint8 Power_Open,Power_Switch,Bluetooth_switch,Quick_Second,InvCode_Second;
 
-extern uint16 Power_Second,Power_Minute;
+extern uint16 Power_Second,Power_Minute,Record_Max_Postion[17];
 extern uint16 adcx,xPos, yPos,UI_WindowBlocks,Data_Boundary,Stop_Mode_Second;
 
 extern uint32 Data_SN;
