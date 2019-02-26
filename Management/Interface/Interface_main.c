@@ -15,6 +15,7 @@
 #include "statusbar_charging.pic"
 #include "Blutooth_Ico.pic"
 #include "Charger.pic"
+#include "start_picture_english.pic"
 
 /******************************************************************************/
 uint8 UI_state = UI_STATE_MAIN_WINDOW;
@@ -182,7 +183,7 @@ void UI_Draw_Status_Bar(void)					/* UI Draw Status Bar and Battery */
 /******************************************************************************/
 uint8 Interface_Main_Window_Process(uint16* xpos,uint16* ypos)
 {
-	Touch_Check (xpos,ypos);
+	return Touch_Check (xpos,ypos);
 }
 
 /******************************************************************************/
@@ -269,8 +270,8 @@ void Status_Init(void)
 	Display_Time = 0;
 #if REALY_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,Interface_Back);
-	DisplayDriver_DrawPic_Touch(REALY_ICO,Interface_Bar,15,35);
-	DisplayDriver_Text16_Touch(8,290,WHITE,WHITE,"A good assistant for doctor!");
+	DisplayDriver_DrawPic_Touch(start_picture_english,Interface_Bar,12,34);
+//	DisplayDriver_Text16_Touch(8,290,WHITE,WHITE,"A good assistant for doctor!");
 #endif
 #if PROTZEK_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,WHITE);
@@ -279,6 +280,11 @@ void Status_Init(void)
 #if HENGRUI_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,WHITE);
 	DisplayDriver_DrawPic_Touch(HENGRUI_ICO,Interface_Bar,10,105);
+#endif
+
+#if START_PIC_YEAR
+	DisplayDriver_Fill(0,0,240,320,WHITE);
+	DisplayDriver_DrawPic_Touch(start_picture_english,Interface_Bar,10,105);
 #endif
 
 	Set_Fixed_Parameter();
@@ -309,6 +315,30 @@ void Set_Fixed_Parameter(void)
 	ReadResistor_Valid();
 	ReadBoundary_Value();
 	Language_Valid();
+	ReadBlutooth_Status();
+}
+
+/******************************************************************************/
+void ReadBlutooth_Status(void)
+{
+	uint16 Blutooth_status = 0;
+	uint8 value[1] = {0};
+
+	/* Read from flash */
+	Storage_Read(value,(FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*4),1);
+	memcpy(&Blutooth_status,value,1);
+	Bluetooth_switch = Blutooth_status;
+	if(!Bluetooth_switch)
+	{
+		GPIO_SetBits(GPIOE, GPIO_Pin_4);
+		Bluetooth_switch = 1;
+	}
+	else
+	{
+		GPIO_ResetBits(GPIOE, GPIO_Pin_4);
+		GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+		Bluetooth_switch = 0;
+	}
 }
 
 /******************************************************************************/

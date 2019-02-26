@@ -10,6 +10,7 @@
 
 /******************************************************************************/
 RTC_DATA SystemManage_CurrentTime;
+RTC_DATA SystemManage_RecordTime;
 
 /******************************************************************************/
 /* Setting time */
@@ -201,6 +202,7 @@ void PCF8563_Init(void)
 
 	SCL_H();
 	SDA_H();
+	SystemManage_RTC_Get();
 }
 
 /******************************************************************************/
@@ -287,6 +289,8 @@ uint8 SystemManage_RTC_Set(uint16 syear, uint8 smon, uint8 sday, uint8 hour,
 
 	return 0;
 }
+
+
 
 /******************************************************************************/
 uint8 SystemManage_RTC_Get(void)

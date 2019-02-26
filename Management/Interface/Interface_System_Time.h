@@ -24,24 +24,27 @@ typedef struct {
 	uint8 Interface_Status;
 	uint8 pic_enabled;     				/* Support picture or not */
 	pic_attr pic_attr;					/* picture attribute */
-	uint8 pic1_enabled;     				/* Support picture or not */
-	pic_attr pic1_attr;					/* picture attribute */
+//	uint8 pic1_enabled;     				/* Support picture or not */
+//	pic_attr pic1_attr;					/* picture attribute */
 } block_attr_SetTime;
 
 /******************************************************************************/
 typedef struct
 {
-	uint8 invalue;
-	uint16 year;
 	uint8 month;
 	uint8 day;
 	uint8 hour;
 	uint8 min;
 	uint8 sec;
+	uint16 year;
 } SET_DATA;
+
+/******************************************************************************/
+extern SET_DATA start_data;
 
 /******************************************************************************/
 void UI_Draw_Window_System_Time(uint16 blockNum);
 void UI_Background_Plate_SetTime(void);
+extern void Time_Switch (void);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_SYSTEM_TIME_H_ */

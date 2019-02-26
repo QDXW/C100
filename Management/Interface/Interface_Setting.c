@@ -161,7 +161,7 @@ void UI_Language_Plate_Setting(void)
 			DisplayDriver_Text_Flex(16,21,204,WHITE,WHITE,"System Time");
 			DisplayDriver_Text_Flex(16,167,204,WHITE,WHITE,"ON");
 //			DisplayDriver_Text_Flex(16,21,300,WHITE,WHITE,"Calibration");
-			DisplayDriver_Text_Flex(16,21,300,WHITE,WHITE,"Language");
+			DisplayDriver_Text_Flex(16,28,300,WHITE,WHITE,"Language");
 		}
 		else
 		{
@@ -169,7 +169,7 @@ void UI_Language_Plate_Setting(void)
 			DisplayDriver_Text_Flex(16,21,204,WHITE,WHITE,"System Time");
 			DisplayDriver_Text_Flex(16,163,204,WHITE,WHITE,"OFF");
 //			DisplayDriver_Text_Flex(16,21,300,WHITE,WHITE,"Calibration");
-			DisplayDriver_Text_Flex(16,21,300,WHITE,WHITE,"Language");
+			DisplayDriver_Text_Flex(16,28,300,WHITE,WHITE,"Language");
 		}
 		break;
 

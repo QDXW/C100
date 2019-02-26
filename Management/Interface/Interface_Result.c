@@ -54,7 +54,7 @@ block_attr_Result block_Result_Result = {
 		Print,
 		98, 22,
 		45, 40,
-		1
+		3
 	},
 
 	ENABLE,									/* Display Picture */
@@ -62,7 +62,7 @@ block_attr_Result block_Result_Result = {
 		Print,
 		98, 22,
 		45, 40,
-		1
+		3
 	},
 
 	DISABLE,								/*Display HZ16X8*/
@@ -694,7 +694,7 @@ void UI_Language_Plate_Result (void)
 uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
-	if(1 == Pic_Count )
+	if(3 == Pic_Count )
 	{
 		if (Printer_isConnected())
 		{

@@ -51,10 +51,6 @@ extern const unsigned char Print[];
 extern const unsigned char Delete[];
 extern const unsigned char Delete_China[];
 
-#if REALY_ICO_C100
-extern const unsigned char REALY_ICO[];
-#endif
-
 #if PROTZEK_ICO_C100
 extern const unsigned char PROTZEK_ICO[];
 #endif

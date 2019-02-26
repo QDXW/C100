@@ -267,32 +267,22 @@ void TIM4_IRQHandler(void)
 
 			Bar_second++;
 			if(Bar_second > 10)
+			{
 				UI_Draw_Status_Bar();
-			else
 				Bar_second = 0;
+			}
 		}
 
 		/* 标准测试界面倒计时  */
-		if((Open_time) && Display_Time)
+		if(Open_time)
 		{
-			time_second--;
-			Display_Down_Time_second();
-			if(time_second < 1)
+			Action_time --;
+			Display_Down_Time_Msec();
+			if(Action_time < 1)
 			{
-				time_second = 60;
-				Action_time--;
-				Display_Down_Time_Msec();
-				if(Action_time < 1)
-				{
-					Action_time = 0;
-					Open_time = 0;
-					time_second = 60;
-				}
+				Action_time = 0;
+				Open_time = 0;
 			}
-		}
-		else
-		{
-			time_second = 60;
 		}
 
 		if(Check_motor)
@@ -458,9 +448,13 @@ void Display_Down_Time_second (void)
 /******************************************************************************/
 void Display_Down_Time_Msec (void)
 {
-	char tbuf[4] = {0};
-	sprintf((char*)tbuf,"%02d:",Action_time);
+	char tbuf[8] = {0};
+	uint8 time_second = 0,time_Minute = 0;
+	time_second = Action_time%60;
+	time_Minute = Action_time/60;
+
+	sprintf((char*)tbuf,"%02d:%02d",time_Minute,time_second);
 	Display_Time = 0;
-	DisplayDriver_Text16_Back(94,132,WHITE,LIGHTBLUE,tbuf);
+	DisplayDriver_Text16_Back(95,132,WHITE,LIGHTBLUE,tbuf);
 	Display_Time = 1;
 }

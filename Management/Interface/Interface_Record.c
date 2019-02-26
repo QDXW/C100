@@ -707,7 +707,6 @@ void UI_Language_Plate_Record (void)
 			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,Storage_Data.Product_name);
 			DisplayDriver_Text_Flex(16,12,64,BLACK,WHITE,"Time:");
 			DisplayDriver_Text_Flex(16,12,84,BLACK,WHITE,"  SN:");
-
 			DisplayDriver_Text_Flex(16,12, 104, BLACK,WHITE,"Item");
 			DisplayDriver_Text_Flex(16,62, 104, BLACK,WHITE,"Result");
 			DisplayDriver_Text_Flex(16,122, 104, BLACK,WHITE,"Item");
@@ -722,10 +721,9 @@ void UI_Language_Plate_Record (void)
 		}
 		else
 		{
-			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,"毒品检测");
+			DisplayDriver_Text_Flex(16,110,42,BLACK,WHITE,Storage_Data.Product_name);
 			DisplayDriver_Text_Flex(16,12,64,BLACK,WHITE,"时间:");
 			DisplayDriver_Text_Flex(16,12,84,BLACK,WHITE,"批号:");
-
 			DisplayDriver_Text_Flex(16,12, 104, BLACK,WHITE,"名称");
 			DisplayDriver_Text_Flex(16,74, 104, BLACK,WHITE,"结果");
 			DisplayDriver_Text_Flex(16,122, 104, BLACK,WHITE,"名称");

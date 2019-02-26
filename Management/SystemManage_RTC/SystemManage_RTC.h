@@ -41,11 +41,18 @@ typedef struct
 /******************************************************************************/
 /* Current time */
 extern RTC_DATA SystemManage_CurrentTime;
+
 /* Record time */
 extern RTC_DATA SystemManage_RecordTime;
+
 /* User setting time */
 extern RTC_DATA SystemManage_UserSetTime;
 
 extern RTC_DATA SystemManage_SetTime;
+
+extern uint8 SystemManage_RTC_Get(void);
+
+/******************************************************************************/
+
 
 #endif /* MANAGEMENT_SYSTEMMANAGE_RTC_SYSTEMMANAGE_RTC_H_ */

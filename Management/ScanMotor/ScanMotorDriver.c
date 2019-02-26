@@ -234,7 +234,7 @@ void ScanMotorDriver_Goto_CentrePosition(void)
 	/* Disable position sensor interrupt to avoid falsely trigger */
 	ScanMotorDriver_PositionSensor_Int_Disable();
 	/* Move to detection position */
-	ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT, 145);
+	ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT, 170);
 	/* Enable sensor position interrupt */
 	ScanMotorDriver_PositionSensor_Int_Enable();
 }
@@ -257,7 +257,7 @@ void ScanMotorDriver_SelfCheck_StepDrive(void)
 	{
 		ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_IN);
 		MoveStep_Num++;
-		if(MoveStep_Num > 175)
+		if(MoveStep_Num > 180)
 		{
 			Check_motor = 1;
 			Check_Lock = 1;
@@ -270,7 +270,7 @@ void ScanMotorDriver_SelfCheck_StepDrive(void)
 	{
 		ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_IN);
 		MoveStep_Num++;
-		if(MoveStep_Num > 170)
+		if(MoveStep_Num > 175)
 		{
 			Check_motor = 1;
 			Check_Lock = 1;

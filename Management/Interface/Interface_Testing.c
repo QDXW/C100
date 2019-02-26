@@ -126,11 +126,13 @@ void Acquisition_Signal(void)
 			/* 调试输出 */
 			if(UI_runMode)
 			{
-				memset(SignalBuffer,0,500);
-				memcpy(SignalBuffer, &SignalProcess_sampleBuffer[0], 300);
-				HostComm_Cmd_Send_RawData(300, SignalBuffer);
-				Delay_ms_SW(50);
+				memset(SignalProcess,0,sizeof(SignalProcess));
+				memcpy(SignalProcess,SignalProcess_sampleBuffer,1024);
+				HostComm_Cmd_Send_RawData((SignalSample_count - 20) << 1, &SignalProcess[2]);
+				Delay_ms_SW(30);
+				memset(SignalProcess,0,sizeof(SignalProcess));
 				HostComm_Cmd_Send_C_T(SignalProcess_Alg_data.calcInfo.areaC, SignalProcess_Alg_data.calcInfo.areaT);
+				Delay_ms_SW(40);
 			}
 		}
 
@@ -174,13 +176,14 @@ uint16 Get_Start_Postion(void)
 		/* 3.找到上升沿的位置 */
 		for(i = 0;i < 511;i++)
 		{
-			if((SignalProcess_sampleBuffer[i] < Data_Boundary) && (SignalProcess_sampleBuffer[i+1] >= Data_Boundary))
+			if((SignalProcess_sampleBuffer[i] <= Data_Boundary) && (SignalProcess_sampleBuffer[i+1] > Data_Boundary))
 			{
 				Trend_FLag = 1;
 				if(Check_Trend(&SignalProcess_sampleBuffer[0],i,Trend_FLag))
 				{
 					Postion_Up = i;
 					Judge_Trend = 1;
+					Confirm_CUP = 1;
 				}
 				else
 				{
@@ -201,6 +204,7 @@ uint16 Get_Start_Postion(void)
 			if(Calculate_StartPostion_Down(&SignalProcess_sampleBuffer[0],Start_Postion))
 			{
 				Judge_Flag = 0;
+				Confirm_CUP = 1;
 			}
 			else
 			{
@@ -290,7 +294,7 @@ uint8 Calculate_StartPostion_Down(uint16* Signal,uint16 Postion)
 			}
 
 			i += 1;
-			if(i >= (Postion+6))
+			if(i >= (Postion+5))
 			{
 				Confirm_Postion = 0;
 			}
@@ -314,7 +318,7 @@ uint8 Calculate_StartPostion_Down(uint16* Signal,uint16 Postion)
 			}
 
 			i += 1;
-			if(i >= (Postion+6))
+			if(i >= (Postion+5))
 			{
 				Confirm_Postion = 0;
 			}
@@ -334,9 +338,9 @@ uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
 	Start_Postion  = Postion;
 	if (Flag)
 	{
-		if((Start_Postion + 6) < 511)
+		if((Start_Postion + 5) < 511)
 		{
-			for(i = Start_Postion;i < (Start_Postion + 6);i++)
+			for(i = Start_Postion;i < (Start_Postion + 5);i++)
 			{
 				if(Signal[i] < Signal[i+1])
 				{
@@ -365,9 +369,9 @@ uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
 	}
 	else
 	{
-		if((Start_Postion + 6) < 511)
+		if((Start_Postion + 5) < 511)
 		{
-			for(i = Start_Postion;i < (Start_Postion + 6);i++)
+			for(i = Start_Postion;i < (Start_Postion + 5);i++)
 			{
 				if(Signal[i] > Signal[i+1])
 				{
@@ -431,11 +435,13 @@ void Acquisition_StartSignal(void)
 
 	Get_sampleBuffer_Boundary_Value();
 	Get_sampleBuffer_Max_Value();
+//	memcpy(SignalBuffer, &Data_Boundary, 2);
+//	HostComm_Cmd_Send_RawData(2, SignalBuffer);
 	/* 2.有无杯子判断 */
 	if((max < 1200) || (BOUNDARY_VALUE > 900))
 	{
 		Confirm_CUP = NO_CUP;
-		return ;
+		return;
 	}
 	else
 	{
@@ -473,10 +479,10 @@ void Calculate_Max_Postion(uint16 First_Postion)
 uint16 Judge_Max (uint16* Signal,uint16 New_Postion)
 {
 	uint16 Postion_Plus = New_Postion - 7,Postion_Add = New_Postion + 7;
-	uint16 max = Signal[New_Postion],i = New_Postion;
+	uint16 Max_Value = Signal[New_Postion],i = New_Postion;
 	for(i = Postion_Plus;i <= Postion_Add;i++)
 	{
-		if(Signal[i] > max)
+		if(Signal[i] > Max_Value)
 		{
 			New_Postion = i;
 		}
@@ -488,7 +494,7 @@ uint16 Judge_Max (uint16* Signal,uint16 New_Postion)
 /******************************************************************************/
 uint16 Get_sampleBuffer_Boundary_Value(void)
 {
-	uint16 Old_Record = 0,New_Record = 0;
+	uint16 Old_Record = 1,New_Record = 0;
 	uint16 i = 0,Old_Boundary = 0,New_Boundary = 0,Boundary_Count = 0;
 	BOUNDARY_VALUE = 2500;
 	for(i = 0;i < SIGNALSAMPLE_MAX_COUNT;i++)
@@ -505,46 +511,53 @@ uint16 Get_sampleBuffer_Boundary_Value(void)
 		return BOUNDARY_VALUE;
 	}
 
-//	Old_Boundary = BOUNDARY_VALUE;
-//	New_Boundary = BOUNDARY_VALUE;
-//
-//	for(Data_Boundary = BOUNDARY_VALUE;Data_Boundary < 1200;Data_Boundary += 10)
-//	{
-//		for(i = 0;i < 511;i++)
-//		{
-//			if(SignalProcess_sampleBuffer[i] >= SignalProcess_sampleBuffer[i+1])
-//			{
-//				Boundary_Count++;
-//			}
-//
-//			if(SignalProcess_sampleBuffer[i] <= SignalProcess_sampleBuffer[i+1])
-//			{
-//				Boundary_Count++;
-//			}
-//		}
-//
-//		New_Record = ((Boundary_Count < 3) && (Boundary_Count > 0))?1:0;
-//
-//		if(Old_Record && (!New_Record))
-//		{
-//			New_Boundary = Data_Boundary;
-//		}
-//
-//		if((!Old_Record) && New_Record)
-//		{
-//			Old_Boundary = Data_Boundary;
-//		}
-//
-//		Old_Record = New_Record;
-//	}
-//
-//	if(New_Boundary == Old_Boundary)
-//	{
-//		BOUNDARY_VALUE = 2500;
-//		return BOUNDARY_VALUE;
-//	}
-//
-//	Data_Boundary = (New_Boundary + Old_Boundary)/2;
+	Old_Boundary = BOUNDARY_VALUE;
+	New_Boundary = BOUNDARY_VALUE;
+
+	for(Data_Boundary = BOUNDARY_VALUE;Data_Boundary < 1000;Data_Boundary += 5)
+	{
+		Boundary_Count = 0;
+		for(i = 0;i < 511;i++)
+		{
+			if((Data_Boundary > SignalProcess_sampleBuffer[i+1]) && (Data_Boundary <= SignalProcess_sampleBuffer[i]))
+			{
+				Boundary_Count += 1;
+			}
+
+			if((Data_Boundary < SignalProcess_sampleBuffer[i+1]) && (Data_Boundary >= SignalProcess_sampleBuffer[i]) )
+			{
+				Boundary_Count += 1;
+			}
+		}
+
+		New_Record = ((Boundary_Count < 3) && (Boundary_Count > 0))?1:0;
+
+		if(Old_Record && (!New_Record))
+		{
+			New_Boundary = Data_Boundary;
+		}
+
+		if((!Old_Record) && New_Record)
+		{
+			Old_Boundary = Data_Boundary;
+		}
+
+		if(Old_Record && New_Record)
+		{
+			New_Boundary = Data_Boundary;
+		}
+
+		Old_Record = New_Record;
+	}
+
+	if(New_Boundary == Old_Boundary)
+	{
+		BOUNDARY_VALUE = 2500;
+		return BOUNDARY_VALUE;
+	}
+
+	Data_Boundary = (New_Boundary + Old_Boundary)/2;
+
 
 	return BOUNDARY_VALUE;
 }
@@ -684,8 +697,8 @@ uint8 Interface_Down_Time_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
 	Interface_Reord = 0;
+	Action_time = QR_Date.head.time*60;
 	Display_Down_Time_Plate();
-	Action_time = QR_Date.head.time;
 	memset(UI_WindowBlocksAttrArray,0,sizeof(UI_WindowBlocksAttrArray));
 	UI_WindowBlocks = sizeof(UI_WindowBlocksAttrArray_Down_Time) >> 2;
 	memcpy(UI_WindowBlocksAttrArray, UI_WindowBlocksAttrArray_Down_Time,sizeof(UI_WindowBlocksAttrArray_Down_Time));
@@ -699,11 +712,16 @@ uint8 Interface_Down_Time_Process(uint16* xpos,uint16* ypos)
 void Display_Down_Time_Plate (void)
 {
 	char tbuf[8] = {0};
+	uint8 time_second = 0,time_Minute = 0;
+
+	time_second = Action_time%60;
+	time_Minute = Action_time/60;
+
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(74,112,154,168,LIGHTBLUE);
-	sprintf((char*)tbuf,"%02d:%02d",(Action_time-1),59);
-	DisplayDriver_Text16_Back(94,132,WHITE,LIGHTBLUE,tbuf);
+	sprintf((char*)tbuf,"%02d:%02d",time_Minute,time_second);
+	DisplayDriver_Text16_Back(95,132,WHITE,LIGHTBLUE,tbuf);
 	Display_Time = 1;
 }
 
@@ -751,6 +769,7 @@ uint8 Interface_Down_Time_Touch_Process(uint16* xpos,uint16* ypos)
 /******************************************************************************/
 uint8 Down_Time_Touch_Check(Down_Time* block,uint16* xpos,uint16* ypos)
 {
+	uint8 stat = 0;
 	if((xpos != 0) || (ypos != 0))
 	{
 		if((0 < *xpos) && (*xpos < 45) && (22 < *ypos) && (*ypos < 65))
@@ -761,4 +780,5 @@ uint8 Down_Time_Touch_Check(Down_Time* block,uint16* xpos,uint16* ypos)
 			return UI_STATE_RERUN;
 		}
 	}
+	return stat;
 }

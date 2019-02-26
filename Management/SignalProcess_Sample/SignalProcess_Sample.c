@@ -530,25 +530,26 @@ void SignalSample_SampleStrip(void)
 			ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT,1);
 		}
 
-		SignalSample_count = 150;
+		SignalSample_count = 165;
 
 		/* 2.2 Move motor per interval, then sample */
 		while(SignalSample_count)
 		{
 			/* Move one step */
 			ScanMotorDriver_Move(ScanMotorDriver_DIR_OUT,1);
+
 			/* Sample one time */
 			SignalProcess_sampleBuffer[SignalSample_count--]
 									   = SignalProcess_Collecting_Data();
 		}
 
-		SignalSample_count = 150;
+		SignalSample_count = 175;
 	}
 	else
 	{
 		SignalSample_count = 0;
 		/* Move until slider reaches base position */
-		for (SignalSample_count = 0;SignalSample_count < 150;)
+		for (SignalSample_count = 0;SignalSample_count < 165;)
 		{
 			/* Timer notifies */
 			ScanMotorDriver_MoveOneStep(ScanMotorDriver_DIR_IN);

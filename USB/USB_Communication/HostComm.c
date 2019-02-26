@@ -25,6 +25,7 @@ uint16 recCount = 0,respLength = 0,UI_Language = 0,UI_MFG_SN = 0;
 uint16 UI_MFG_FW1 = 0,UI_MFG_FW2 = 0,UI_MFG_FW3 = 0;
 uint8 contReceive = 0,keyMatched = 0;
 uint32 HZK_count_bit = 0;
+static uint16 HostComm_Cmd_Respond_APP_Clear_Record(void);
 
 #define FONTINFOADDR 	20971520
 
@@ -245,41 +246,57 @@ uint8 HostComm_Cmd_Process(void)
 		case CMD_CODE_APP_SYSINFO:
 			responseLength = HostComm_Cmd_Respond_APP_SysInfo();
 			break;
+
 		case CMD_CODE_APP_SET_TIME:
 			responseLength = HostComm_Cmd_Respond_APP_SetTime();
 			break;
+
 		case CMD_CODE_APP_SET_MODE:
 			responseLength = HostComm_Cmd_Respond_APP_SetMode();
 			break;
+
 		case CMD_CODE_APP_SET_MFG:
 			responseLength = HostComm_Cmd_Respond_APP_SetMFG();
 			break;
+
 		case CMD_CODE_APP_SET_LANGUAGE:
 			responseLength = HostComm_Cmd_Respond_APP_SetLanguage();
 			break;
+
 //		case CMD_CODE_APP_SET_OUT_FAB:
 //			responseLength = HostComm_Cmd_Respond_APP_SetOutFab();
 //			break;
+
 		case CMD_CODE_APP_READ_RESISTOR:
 			responseLength = HostComm_Cmd_Respond_APP_ReadResistor();
 			break;
+
 		case CMD_CODE_APP_WRITE_RESISTOR:
 			responseLength = HostComm_Cmd_Respond_APP_WriteResistor();
 			break;
+
 		case CMD_CODE_APP_SEND_QRCODE_DATA:
 			responseLength = HostComm_Cmd_Respond_APP_QRCode_Data();
 			break;
+
 		case CMD_CODE_APP_READ_BOUNDARY:
 			responseLength = HostComm_Cmd_Respond_APP_ReadBoundary();
 			break;
+
 		case CMD_CODE_APP_WRITE_BOUNDARY:
 			responseLength = HostComm_Cmd_Respond_APP_WriteBoundary();
 			break;
+
 		case CMD_CODE_APP_CALIBRATION:
 			responseLength = HostComm_Cmd_Respond_APP_Calibration();
 			break;
+
 		case APP_SET_5V:
 			responseLength = HostComm_Cmd_Respond_APP_SET_5V();
+			break;
+
+		case APP_CLEAR_RECORD:
+			responseLength = HostComm_Cmd_Respond_APP_Clear_Record();
 			break;
 
 		default:
@@ -670,6 +687,29 @@ uint16 HostComm_Cmd_Respond_APP_SET_5V(void)
 }
 
 /******************************************************************************/
+uint16 HostComm_Cmd_Respond_APP_Clear_Record(void)
+{
+	uint16 totalPackageLength = SIZE_HEAD_TAIL; /* Include head and tail */
+	uint16 cmdDataLength = 0;
+	uint8 MBuffer[12] = {0};
+	uint16 insk[4] = {65535,65535,65535,65535};
+
+	cmdDataLength = 1;
+
+	respBuffer[OFFSET_CMD_DATA_RX] = 1;
+
+	memcpy(MBuffer,insk,8);
+
+	Storage_Write(MBuffer, 0x00, 8);
+
+	/* CRCÐ£Ñé */
+	totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, APP_CLEAR_RECORD);
+
+	return totalPackageLength;
+}
+
+/******************************************************************************/
 void HostComm_Send(USART_TypeDef* USARTx, uint8_t *Data,...)
 {
 	const char *s;
@@ -831,16 +871,9 @@ void HostComm_Cmd_Send_RawData(uint16 length, uint8 dataBuf[])
 
 	memcpy(&respBuffer[OFFSET_CMD_DATA], dataBuf, length);
 	cmdDataLength = length;
-	if(length >10)
-	{
-		totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
-							CMD_TYPE_APP, CMD_CODE_APP_SEND_RAWDATA);
-	}
-	else
-	{
-		totalPackageLength += HostComm_Cmd_Respond_Common(cmdDataLength,
+	totalPackageLength += (length >10)?HostComm_Cmd_Respond_Common(cmdDataLength,
+			CMD_TYPE_APP, CMD_CODE_APP_SEND_RAWDATA):HostComm_Cmd_Respond_Common(cmdDataLength,
 					CMD_TYPE_APP, CMD_CODE_APP_SEND_C_T);
-	}
 	HostComm_SendResp(&respBuffer[0], totalPackageLength);
 }
 

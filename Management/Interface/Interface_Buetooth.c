@@ -31,8 +31,10 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 			default:
 				break;
 			}
+			state = 0;
 			GPIO_SetBits(GPIOE, GPIO_Pin_4);
 			Bluetooth_switch = 1;
+			Storage_Write(&state, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*4),1);
 		}
 		else
 		{
@@ -51,11 +53,12 @@ uint8 Interface_Buetooth_Process (uint16* xpos,uint16* ypos)
 			default:
 				break;
 			}
-
+			state = 1;
 			GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 			GPIO_ResetBits(GPIOC, GPIO_Pin_9);
 			Bluetooth_Connect = 0;
 			Bluetooth_switch = 0;
+			Storage_Write(&state, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*4),1);
 		}
 	}
 	UI_state = UI_STATE_MAIN_WINDOW_PROCESS;

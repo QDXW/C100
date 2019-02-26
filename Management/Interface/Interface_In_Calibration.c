@@ -234,6 +234,15 @@ uint8 Dichotomy_Calculate (void)
 	Mid_Value = 20;
 	do
 	{
+		/* 大于15次退出，校验失败 */
+		Poll_Count++;
+		if(Poll_Count > 13)
+		{
+			Result_Judge = 0;
+			return Result_Judge;
+		}
+
+
 		if((Mid_Value < 1) && (Mid_Value > 254))
 		{
 			Result_Judge = 0;
@@ -272,14 +281,14 @@ uint8 Dichotomy_Calculate (void)
 		}
 
 		/* 限定条件  */
-		Result_Judge = (Max_Value > 1900)?1:0;
+		Result_Judge = (Max_Value > 1500)?1:0;
 		Right_Value = (!Result_Judge)?Mid_Value:Right_Value;
 		if(!Result_Judge)
 			continue;
 
 		for(i = 10;i < 135;i++)
 		{
-			Result_Judge = (SignalProcess_sampleBuffer[i] < 2100)?1:0;
+			Result_Judge = (SignalProcess_sampleBuffer[i] < 1800)?1:0;
 			Left_Value = (!Result_Judge)?Mid_Value:Left_Value;
 			if(!Result_Judge)
 				break;
@@ -307,14 +316,6 @@ uint8 Dichotomy_Calculate (void)
 				}
 				Start_Step += 20;
 			}
-		}
-
-		/* 大于15次退出，校验失败 */
-		Poll_Count++;
-		if(Poll_Count > 12)
-		{
-			Result_Judge = 0;
-			return Result_Judge;
 		}
 
 		Result = 1;
@@ -387,7 +388,7 @@ uint8 Dichotomy_Search(uint16 *Signal,uint8 Dichotomy_Value)
 
 			if(Data_Boundary > 200)
 			{
-				if(SignalProcess_sampleBuffer[i] < (Data_Boundary - 200))
+				if(SignalProcess_sampleBuffer[i] < Data_Boundary)
 				{
 					Boundary_Down += 1;
 				}
