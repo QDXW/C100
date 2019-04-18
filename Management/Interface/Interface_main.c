@@ -16,6 +16,8 @@
 #include "Blutooth_Ico.pic"
 #include "Charger.pic"
 #include "start_picture_english.pic"
+#include "ULTIMED.pic"
+#include "QuickSeal.pic"
 
 /******************************************************************************/
 uint8 UI_state = UI_STATE_MAIN_WINDOW;
@@ -238,32 +240,6 @@ void UI_Background_Plate_Main (void)
 }
 
 /******************************************************************************/
-void UI_Language_Plate_Main (void)
-{
-	Display_Time = 0;
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,28,138,WHITE,Interface_Back,"Standard");
-		DisplayDriver_Text_Flex(16,160,138,WHITE,Interface_Back,"Quick");
-		DisplayDriver_Text_Flex(16,36,297,WHITE,Interface_Back,"Record");
-		DisplayDriver_Text_Flex(16,148,297,WHITE,Interface_Back,"Settings");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(16,28,138,WHITE,Interface_Back,"标准检测");
-		DisplayDriver_Text_Flex(16,148,138,WHITE,Interface_Back,"快速检测");
-		DisplayDriver_Text_Flex(16,44,297,WHITE,Interface_Back,"记录");
-		DisplayDriver_Text_Flex(16,164,297,WHITE,Interface_Back,"设置");
-		break;
-
-	default:
-		break;
-	}
-	Display_Time = 1;
-}
-
-/******************************************************************************/
 void Status_Init(void)
 {
 	GPIO_SetBits(GPIOD, GPIO_Pin_2);
@@ -282,11 +258,15 @@ void Status_Init(void)
 	DisplayDriver_DrawPic_Touch(HENGRUI_ICO,Interface_Bar,10,105);
 #endif
 
-#if START_PIC_YEAR
+#if ULTIMED_ICO_C100
 	DisplayDriver_Fill(0,0,240,320,WHITE);
-	DisplayDriver_DrawPic_Touch(start_picture_english,Interface_Bar,10,105);
+	DisplayDriver_DrawPic_Touch(ULTIMED,Interface_Bar,40,80);
 #endif
 
+#if QUICKSEAL_ICO_C100
+	DisplayDriver_Fill(0,0,240,320,WHITE);
+	DisplayDriver_DrawPic_Touch(QuickSeal,Interface_Bar,20,130);
+#endif
 	Set_Fixed_Parameter();
 	SystemManage_5V_Enabled();
 	ScanMotorDriver_SelfCheck_StepDrive();

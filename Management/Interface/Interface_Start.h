@@ -28,7 +28,6 @@ typedef struct {
 void UI_Draw_Window_Start(uint16 blockNum);
 void UI_Draw_Window_Delete(uint16 blockNum);
 void UI_Background_Plate_Start (void);
-void UI_Language_Plate_Start (void);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_START_H_ */
 

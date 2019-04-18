@@ -48,27 +48,13 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 		{
 			Display_Time = 0;
 			DisplayDriver_Fill(0,22,240,320,Interface_Back);
-			switch(Font_Switch)
-			{
-			case DISPLAY_FONT_ENGLISH:
-				DisplayDriver_Text16_Touch(24, 80, RED,WHITE,"No Battery!");
-				break;
-
-			case DISPLAY_FONT_CHINESE:
-				DisplayDriver_Text_Flex(24,72, 155, RED,WHITE,"电量过低");
-				break;
-
-			default:
-				break;
-			}
-
+			UI_Background_Battery_Low_Display();
 			Display_Time = 1;
 			UI_state = UI_STATE_MAIN_WINDOW;
 			Delay_ms_SW(1500);
 			return state;
 		}
 	}
-
 	Exti_lock = DISABLE;
 	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Testing();
@@ -338,9 +324,9 @@ uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
 	Start_Postion  = Postion;
 	if (Flag)
 	{
-		if((Start_Postion + 5) < 511)
+		if((Start_Postion + 6) < 511)
 		{
-			for(i = Start_Postion;i < (Start_Postion + 5);i++)
+			for(i = Start_Postion;i < (Start_Postion + 6);i++)
 			{
 				if(Signal[i] < Signal[i+1])
 				{
@@ -369,9 +355,9 @@ uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
 	}
 	else
 	{
-		if((Start_Postion + 5) < 511)
+		if((Start_Postion + 2) < 511)
 		{
-			for(i = Start_Postion;i < (Start_Postion + 5);i++)
+			for(i = Start_Postion;i < (Start_Postion + 1);i++)
 			{
 				if(Signal[i] > Signal[i+1])
 				{
@@ -385,9 +371,9 @@ uint16 Check_Trend(uint16 *Signal,uint16 Postion,uint8 Flag)
 		}
 		else
 		{
-			for(i = Start_Postion;i < 511;i++)
+			for(i = Start_Postion;i < (Start_Postion + 1);i++)
 			{
-				if(Signal[i] > Signal[i+1])
+				if(Signal[1] > Signal[2])
 				{
 					state = 1;
 				}
@@ -667,29 +653,6 @@ void Result_Display(void)
 			memcpy(Storage_Data.CH_data[Storage_Data_Conut].Result, "Neg--",5);
 		}
 	}
-}
-
-/******************************************************************************/
-void UI_Background_Plate_Testing (void)
-{
-	Display_Time = 0;
-	DisplayDriver_Fill(0,22,240,320,Interface_Back);
-	DisplayDriver_Fill(36,130,205,150,WHITE);
-
-	switch(Font_Switch)
-		{
-		case DISPLAY_FONT_ENGLISH:
-			DisplayDriver_Text_Flex(16,80,160,WHITE,WHITE,"testing...");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-			DisplayDriver_Text_Flex(16,76,160,WHITE,WHITE,"正在测试...");
-			break;
-
-		default:
-			break;
-		}
-	Display_Time = 1;
 }
 
 /******************************************************************************/

@@ -234,19 +234,7 @@ void TIM4_IRQHandler(void)
 			}
 			else
 			{
-				switch(Font_Switch)
-				{
-				case DISPLAY_FONT_ENGLISH:
-					DisplayDriver_Text_Flex(16,24,294,WHITE,WHITE,"Bluetooth not connected!");
-					break;
-
-				case DISPLAY_FONT_CHINESE:
-					DisplayDriver_Text_Flex(16,80,294,WHITE,WHITE,"蓝牙未连接!");
-					break;
-
-				default:
-					break;
-				}
+				Interface_Bluetooth_not_connected_Process();
 			}
 			Display_Time = 1;
 		}
@@ -291,20 +279,7 @@ void TIM4_IRQHandler(void)
 			if(1 == Check_Lock)
 			{
 				DisplayDriver_Fill(0,0,240,320,Interface_Back);
-				switch(Font_Switch)
-				{
-				case DISPLAY_FONT_ENGLISH:
-					DisplayDriver_Text_Flex (16,28,160,RED,RED,"Error: 001 Screw motor!");
-					break;
-
-				case DISPLAY_FONT_CHINESE:
-					DisplayDriver_Text_Flex(16,28,160,BLACK,Interface_Bar,"错误:001   丝杆电机故障");
-					break;
-
-				default:
-					break;
-				}
-
+				Interface_Screw_motor_Process();
 				Check_flag = 1;
 			}
 
@@ -314,24 +289,10 @@ void TIM4_IRQHandler(void)
 				{
 					DisplayDriver_Fill(0,0,240,320,Interface_Back);
 				}
-				switch(Font_Switch)
-				{
-				case DISPLAY_FONT_ENGLISH:
-					DisplayDriver_Text_Flex (16,28,180,RED,RED,"Error: 002 Rotating motor!");
-					break;
-
-				case DISPLAY_FONT_CHINESE:
-					DisplayDriver_Text_Flex(16,28,180,BLACK,Interface_Bar,"错误:002  转动电机故障");
-					break;
-
-				default:
-					break;
-				}
-
+				Interface_Rotating_motor_Process();
+				Display_Time = 1;
+				Check_motor = 0;
 			}
-
-			Display_Time = 1;
-			Check_motor = 0;
 		}
 		else
 		{

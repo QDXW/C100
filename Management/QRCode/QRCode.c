@@ -237,7 +237,6 @@ uint8 QRCode_Identify(void)
 	{
 		status = 0;
 	}
-
 	QRCode_Trigger_Disabled();
 
 	return status;

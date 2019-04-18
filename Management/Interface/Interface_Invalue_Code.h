@@ -22,7 +22,6 @@ typedef struct {
 
 /******************************************************************************/
 void UI_Background_Plate_InvCode (void);
-void UI_Language_Plate_InvCode (void);
 void UI_Draw_Window_InvCode(uint16 blockNum);
 void Invalid_Touch_Check(block_attr_InvCode* block,uint16* xpos,uint16* ypos);
 

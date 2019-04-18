@@ -121,26 +121,6 @@ void UI_Background_Plate_InvCode (void)
 }
 
 /******************************************************************************/
-void UI_Language_Plate_InvCode (void)
-{
-	Display_Time = 0;
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,60,159,RED,WHITE,"Invalid QR Code");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(24,60,159,RED,WHITE,"ÎÞÐ§¶þÎ¬Âë");
-		break;
-
-	default:
-		break;
-	}
-	Display_Time = 1;
-}
-
-/******************************************************************************/
 uint8 Interface_Invalid_Touch_Process(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0,i = 0;

@@ -186,11 +186,9 @@ void Printer_BLE_Print(STORAGE_SINGLE_DATA_STRUCT *content)
 	uint8 index = 0,index1 = 0;
 	memset(buffer,0,sizeof(buffer));
 	memset(tbuf,0,sizeof(buffer));
-	PCF8563_Read(&SystemManage_CurrentTime);
-	sprintf(tbuf,"%d/%02d/%02d %02d:%02d:%02d",SystemManage_CurrentTime.year,
-			SystemManage_CurrentTime.month,SystemManage_CurrentTime.day,SystemManage_CurrentTime.hour,
-			SystemManage_CurrentTime.min,SystemManage_CurrentTime.sec);
-
+	sprintf(tbuf,"%d/%02d/%02d %02d:%02d",content->Product_Time.year,
+			content->Product_Time.month,content->Product_Time.day,content->Product_Time.hour,
+			content->Product_Time.min);
 	switch(Font_Switch)
 	{
 	case DISPLAY_FONT_ENGLISH:
@@ -279,6 +277,59 @@ void Printer_BLE_Print(STORAGE_SINGLE_DATA_STRUCT *content)
 
 		Printer_BLE_PrintOneLine("--------------------------------\r\n");
 		Printer_BLE_PrintOneLine("   Ãû³Æ          ½á¹û\r\n");
+		Printer_BLE_PrintOneLine("--------------------------------\r\n");
+
+		for (index = 0; index < Storage_Data.StripNum; index++)
+		{
+			buffer[23] = '\0';
+			memcpy(&buffer[0],"   ",sizeof("   "));
+			memcpy(&buffer[3],content->CH_data[index].TName,8);
+			for(index1 = 3;index1 < 11;index1++)
+			{
+				if(buffer[index1] == '\0')
+				{
+					buffer[index1] = ' ';
+				}
+			}
+			memcpy(&buffer[11],"      ",sizeof("      "));
+			memcpy(&buffer[17],content->CH_data[index].Result,sizeof(content->CH_data[index].Result));
+			Printer_BLE_PrintOneLine(&buffer[0]);
+			Printer_BLE_PrintOneLine("\r\n");
+			memset(buffer,0,sizeof(buffer));
+		}
+		break;
+
+	case DISPLAY_FONT_GERMAN:
+		/* Head */
+		Printer_BLE_PrintOneLine("----------------------------------\r\n");
+		Printer_BLE_PrintOneLine("-----------Ulti  Med  ----------\r\n");
+		Printer_BLE_PrintOneLine("--------------------------------\r\n");
+		/* Device type */
+		Printer_BLE_PrintOneLine("Typ: RB4000\r\n");
+
+		buffer[35] = '\0';
+		memcpy(&buffer[0], "Produkt name: ",14);
+		memcpy(&buffer[14], content->Product_name,20);
+		Printer_BLE_PrintOneLine(&buffer[0]);
+		Printer_BLE_PrintOneLine("\r\n");
+		memset(buffer,0,sizeof(buffer));
+
+		buffer[15] = '\0';
+		memcpy(&buffer[0], "LOT:",sizeof("LOT:"));
+		memcpy(&buffer[4], content->Product_SN,sizeof(content->Product_SN));
+		Printer_BLE_PrintOneLine(&buffer[0]);
+		Printer_BLE_PrintOneLine("\r\n");
+		memset(buffer,0,sizeof(buffer));
+
+		buffer[17] = '\0';
+		memcpy(&buffer[0], "Zeit: ",sizeof("Zeit: "));
+		memcpy(&buffer[6],tbuf,sizeof(tbuf));
+		Printer_BLE_PrintOneLine(&buffer[0]);
+		Printer_BLE_PrintOneLine("\r\n");
+		memset(buffer,0,sizeof(buffer));
+
+		Printer_BLE_PrintOneLine("--------------------------------\r\n");
+		Printer_BLE_PrintOneLine("   Analyt      Ergebnis\r\n");
 		Printer_BLE_PrintOneLine("--------------------------------\r\n");
 
 		for (index = 0; index < Storage_Data.StripNum; index++)

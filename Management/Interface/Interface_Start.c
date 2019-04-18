@@ -59,7 +59,8 @@ block_attr_Start block_Start_SN = {
 
 	ENABLE,							/* Interface Start rect */
 	{
-		Confirm_China,
+//		Confirm_China,
+		Notarize,
 		144,  270,
 		72,   54
 	},
@@ -92,7 +93,8 @@ block_attr_Start block_Start_CH1 = {
 
 	ENABLE,							/* Interface Start rect */
 	{
-		Delete_China,
+//		Delete_China,
+		Delete,
 		24,   270,
 		72,   54
 	},
@@ -610,6 +612,14 @@ void UI_Draw_block_Start(block_attr_Start* block)
 		}
 		break;
 
+	case DISPLAY_FONT_GERMAN:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
 	case DISPLAY_FONT_CHINESE:
 		if (block->pic1_enabled)						/* 2. Draw picture */
 		{
@@ -659,29 +669,5 @@ void UI_Background_Plate_Start (void)
 	DisplayDriver_DrawStraight_Line(0,82,229,82,Interface_Back);
 	DisplayDriver_DrawStraight_Line(0,102,229,102,Interface_Back);
 	DisplayDriver_DrawStraight_Line(120,102,120,256,Interface_Back);
-	Display_Time = 1;
-}
-
-/******************************************************************************/
-void UI_Language_Plate_Start (void)
-{
-	Display_Time = 0;
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,14,64,BLACK,Interface_Back,"Name:");
-		DisplayDriver_Text_Flex(16,60,64,BLACK,Interface_Back,QR_Date.head.name);
-		DisplayDriver_Text_Flex(16,14,84,BLACK,Interface_Back,"  SN:");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(16,14,64,BLACK,Interface_Back,"Ãû³Æ:");
-		DisplayDriver_Text_Flex(16,60,64,BLACK,Interface_Back,"¶¾Æ·²âÊÔ");
-		DisplayDriver_Text_Flex(16,14,84,BLACK,Interface_Back,"ÅúºÅ:");
-		break;
-
-	default:
-		break;
-	}
 	Display_Time = 1;
 }

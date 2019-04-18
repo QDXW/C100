@@ -46,7 +46,8 @@ block_attr_Insert_Cup block_Insert_Cup_Please = {
 
 	ENABLE,							/* Display HZ16X8 */
 	{
-		Confirm_China,
+//		Confirm_China,
+		Notarize,
 		84, 270,
 		72,  57
 	},
@@ -119,6 +120,14 @@ void UI_Draw_Block_Insert_Cup(block_attr_Insert_Cup* block)
 		}
 		break;
 
+	case DISPLAY_FONT_GERMAN:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -140,25 +149,5 @@ void UI_Background_Plate_Cup(void)
 	Display_Time = 0;
 	DisplayDriver_Fill(0,22,240,320,Interface_Back);
 	DisplayDriver_Fill(10,62,229,260,WHITE);
-	Display_Time = 1;
-}
-
-/******************************************************************************/
-void UI_Language_Plate_Cup(void)
-{
-	Display_Time = 0;
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,80,164,BLACK,WHITE,"Insert Cup");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(24,72,155,Interface_Back,WHITE,"²åÈë±­×Ó");
-		break;
-
-	default:
-		break;
-	}
 	Display_Time = 1;
 }

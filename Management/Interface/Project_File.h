@@ -13,6 +13,8 @@
 #define REALY_ICO_C100			1			/* 睿丽科技标识  */
 #define PROTZEK_ICO_C100 		0			/* 德国标识  */
 #define HENGRUI_ICO_C100		0			/* 中泰科技标识   */
+#define ULTIMED_ICO_C100	 	0			/* ULTIMED  */
+#define QUICKSEAL_ICO_C100	 	0			/* QUICKSEAL  */
 
 /******************************************************************************/
 #include "stm32f10x.h"
@@ -50,6 +52,8 @@ extern const unsigned char Confirm_China[];
 extern const unsigned char Print[];
 extern const unsigned char Delete[];
 extern const unsigned char Delete_China[];
+extern const unsigned char Notarize[];
+extern const unsigned char Spei[];
 
 #if PROTZEK_ICO_C100
 extern const unsigned char PROTZEK_ICO[];

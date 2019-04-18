@@ -113,12 +113,56 @@ block_attr_Language block_Language_China_ON = {
 };
 
 /******************************************************************************/
+block_attr_Language block_Language_German_OFF = {
+	UI_STATE_LANGUSGE_CONFIRM_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Language_OFF,
+		25,  90,
+		80,  22,
+		1,
+	},
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		"German",
+		45,   93,
+		WHITE,  Interface_Back,
+	},
+	LANGUAGE_GERMAN_OFF,
+};
+
+/******************************************************************************/
+block_attr_Language block_Language_German_ON = {
+	UI_STATE_LANGUSGE_CONFIRM_PROCESS,								/* Interface Quick rect */
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		Language_ON,
+		25,   90,
+		80,  22,
+		0
+	},
+
+	ENABLE,							/* Display HZ16X8 */
+	{
+		"German",
+		45,   93,
+		WHITE,  Interface_Back,
+	},
+	LANGUAGE_GERMAN_ON,
+};
+
+/******************************************************************************/
 block_attr_Language* UI_WindowBlocksAttrArray_Language[] = {/* Window: Standard entry */
 		&block_Language_return,
 		&block_Language_English_OFF,
 		&block_Language_English_ON,
-		&block_Language_China_OFF,
-		&block_Language_China_ON,
+//		&block_Language_China_OFF,
+//		&block_Language_China_ON,
+		&block_Language_German_OFF,
+		&block_Language_German_ON,
 };
 
 /******************************************************************************/
@@ -222,6 +266,11 @@ void Touch_Language_Check(block_attr_Language* block,uint16* xpos,uint16* ypos)
 
 				case DISPLAY_FONT_ENGLISH:
 					Font_Switch = DISPLAY_FONT_ENGLISH;
+					Storage_Write(&Font_Switch, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),1);
+					break;
+
+				case DISPLAY_FONT_GERMAN:
+					Font_Switch = DISPLAY_FONT_GERMAN;
 					Storage_Write(&Font_Switch, (FLASH_CALI_ADDR+FLASH_OFFSET_ADDR*3),1);
 					break;
 

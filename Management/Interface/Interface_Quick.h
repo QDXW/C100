@@ -22,7 +22,6 @@ typedef struct {
 extern void UI_Draw_Window_Quick(uint16 blockNum);
 void UI_Draw_Window_Quick_font(uint16 blockNum);
 void UI_Background_Plate_Quick (void);
-void UI_Language_Plate_Quick (void);
 uint8 Quick_Touch_Check(block_attr_Quick* block,uint16* xpos,uint16* ypos);
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_QUICK_H_ */

@@ -9,8 +9,7 @@
 
 /******************************************************************************/
 u16 W25QXX_TYPE = W25Q128;
-
-#define BUFFER_SIZE (sizeof(STORAGE_SINGLE_DATA_STRUCT))
+uint8 Storage_writeBuffer[BUFFER_SIZE] = {0};
 uint8 Storage_writeBuffer[BUFFER_SIZE];
 uint8 Storage_readBuffer[BUFFER_SIZE];
 uint16 reagent_Strip[4] = {0};

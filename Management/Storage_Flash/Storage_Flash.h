@@ -42,8 +42,11 @@
 #define W25X_JedecDeviceID		0x9F
 #define ITEM_MAX_ONEPAGE_EXTENSION1 10
 
+
+
 /******************************************************************************/
 extern uint16 reagent_Strip[4];
+
 
 /******************************************************************************/
 typedef struct {
@@ -83,6 +86,8 @@ typedef struct {
 
 /******************************************************************************/
 extern STORAGE_SINGLE_DATA_STRUCT Storage_Data;
+#define BUFFER_SIZE (sizeof(STORAGE_SINGLE_DATA_STRUCT))
+extern uint8 Storage_writeBuffer[BUFFER_SIZE];
 
 /******************************************************************************/
 extern void Printer_BLE_Print(STORAGE_SINGLE_DATA_STRUCT *content);

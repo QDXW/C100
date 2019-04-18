@@ -128,6 +128,8 @@ enum cmdCode {
 	CMD_CODE_APP_CALIBRATION = 0x76,
 	APP_SET_5V,
 	APP_CLEAR_RECORD,
+	APP_SEEK_RECORD,
+	APP_RECORD_COUNT,
 };
 
 /* Bin file attribute */

@@ -75,34 +75,3 @@ void UI_Draw_Block_About(block_attr_about* block)
 	}
 	Display_Time = 1;
 }
-/******************************************************************************/
-void UI_Background_Plate_About_Machine(void)
-{
-	Display_Time = 0;
-	DisplayDriver_Fill(0,22,240,320,Interface_Back);
-	DisplayDriver_Fill(20,72,220,250,LIGHTBLUE);
-
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,40,99,WHITE,WHITE,"Type: RL-C100");
-		DisplayDriver_Text_Flex(16,40,135,WHITE,WHITE,"SN  :");
-		DisplayDriver_Text_Flex(16,80,135,WHITE,WHITE,data_SN);
-		DisplayDriver_Text_Flex(16,40,171,WHITE,WHITE,"HW Version: 1.1");
-		DisplayDriver_Text_Flex(16,40,207,WHITE,WHITE,"FW Version: 1.9.0226");
-		break;
-
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(16,40,99,WHITE,WHITE,"型号: RL-C100");
-		DisplayDriver_Text_Flex(16,40,135,WHITE,WHITE,"批号:");
-		DisplayDriver_Text_Flex(16,88,135,WHITE,WHITE,data_SN);
-		DisplayDriver_Text_Flex(16,40,171,WHITE,WHITE,"固件版本: 1.1");
-		DisplayDriver_Text_Flex(16,40,207,WHITE,WHITE,"硬件版本: 1.9.0226");
-		break;
-
-	default:
-		break;
-	}
-
-	Display_Time = 1;
-}

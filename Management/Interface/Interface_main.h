@@ -96,6 +96,7 @@ typedef enum {
 typedef enum {
 	DISPLAY_FONT_CHINESE,
 	DISPLAY_FONT_ENGLISH,
+	DISPLAY_FONT_GERMAN,				/* µÂÓï */
 
 	DISPLAY_FONT,
 } FONT_DIASPLAY;
@@ -116,7 +117,6 @@ extern void UI_Draw_Window_Quick_font(uint16 blockNum);
 extern void SignalSample_Moving_Average_Data(uint16 *Data,uint16 Length,uint16 Period);
 
 void UI_Background_Plate_Main (void);
-void UI_Language_Plate_Main (void);
 void Touch_process(uint16* xpos,uint16* ypos);
 uint8 Touch_Check (uint16* xpos,uint16* ypos);
 uint8 Interface_Main(uint16* xpos,uint16* ypos);

@@ -30,7 +30,6 @@ void Acquisition_StartSignal(void);
 void Display_Down_Time_Plate (void);
 extern uint16 Get_Start_Postion(void);
 extern void Acquisition_Signal(void);
-void UI_Background_Plate_Testing (void);
 void Get_sampleBuffer_Start_Position(void);
 void QR_Date_SignalProcess_Alg_data (void);
 uint16 Get_sampleBuffer_Boundary_Value(void);

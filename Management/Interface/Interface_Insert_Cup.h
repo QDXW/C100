@@ -25,7 +25,6 @@ typedef struct {
 /******************************************************************************/
 void UI_Draw_Window_Insert_Cup(uint16 blockNum);
 void UI_Background_Plate_Cup(void);
-void UI_Language_Plate_Cup(void);
 
 
 #endif /* MANAGEMENT_INTERFACE_INTERFACE_INSERT_CUP_H_ */

@@ -94,7 +94,8 @@ block_attr_Result block_Result_CH1 = {
 
 	ENABLE,									/* Interface Result rect */
 	{
-		Save_China,
+//		Save_China,
+		Spei,
 		195, 22,
 		45,  45,
 		2
@@ -629,6 +630,13 @@ void UI_Draw_block_Result(block_attr_Result* block)
 		}
 		break;
 
+	case DISPLAY_FONT_GERMAN:
+		if (block->pic1_enabled)						/* 2. Draw picture */
+		{
+			DisplayDriver_DrawPic_Touch(block->pic1_attr.src,Interface_Back,
+					block->pic1_attr.offsetX,block->pic1_attr.offsetY);
+		}
+		break;
 	default:
 		break;
 	}
@@ -664,31 +672,7 @@ void UI_Background_Plate_Result (void)
 	Display_Time = 1;
 }
 
-/******************************************************************************/
-void UI_Language_Plate_Result (void)
-{
-	Display_Time = 0;
-	switch(Font_Switch)
-	{
-	case DISPLAY_FONT_ENGLISH:
-		DisplayDriver_Text_Flex(16,14,82,BLACK,WHITE,"Item");
-		DisplayDriver_Text_Flex(16,65,82,BLACK,WHITE,"Result");
-		DisplayDriver_Text_Flex(16,124,82,BLACK,WHITE,"Item");
-		DisplayDriver_Text_Flex(16,178,82,BLACK,WHITE,"Result");
-		break;
 
-	case DISPLAY_FONT_CHINESE:
-		DisplayDriver_Text_Flex(16,14,82,BLACK,WHITE,"名称");
-		DisplayDriver_Text_Flex(16,65,82,BLACK,WHITE,"结果");
-		DisplayDriver_Text_Flex(16,124,82,BLACK,WHITE,"名称");
-		DisplayDriver_Text_Flex(16,178,82,BLACK,WHITE,"结果");
-		break;
-
-	default:
-		break;
-	}
-	Display_Time = 1;
-}
 
 /******************************************************************************/
 uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
@@ -708,19 +692,7 @@ uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 		{
 			Storage_Record();
 			Display_Time = 0;
-			switch(Font_Switch)
-			{
-			case DISPLAY_FONT_ENGLISH:
-				DisplayDriver_Text_Flex(16,56, 275, WHITE,WHITE,"Has been stored!");
-				break;
 
-			case DISPLAY_FONT_CHINESE:
-				DisplayDriver_Text_Flex(16,92, 275, WHITE,WHITE,"已保存!");
-				break;
-
-			default:
-				break;
-			}
 			Display_Time = 1;
 			Stored_Record = 0;
 		}

@@ -725,6 +725,11 @@
               <FileType>1</FileType>
               <FilePath>.\Management\Interface\Interface_In_Calibration.c</FilePath>
             </File>
+            <File>
+              <FileName>Interface_Language.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Management\Interface\Interface_Language.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
