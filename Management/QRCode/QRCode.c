@@ -126,15 +126,22 @@ void USART3_IRQHandler(void)
 	uint8 value;
 	if(USART_GetITStatus(QRCODE_USART, USART_IT_RXNE) != RESET)
 	{
-		value=USART_ReceiveData(QRCODE_USART);
-
+		value = USART_ReceiveData(QRCODE_USART);
+														t
 		if (value != '\r')
 		{
 			QRCode_Buffer[QRCode_count++] = value;
 		}
 		else
 		{
-			QRCode_received = 1;
+			if(QRCode_count > 491)
+			{
+				QRCode_received = 1;
+			}
+			else
+			{
+				QRCode_Buffer[QRCode_count++] = value;
+			}
 		}
 	}
 }

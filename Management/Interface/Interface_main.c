@@ -75,7 +75,7 @@ block_attr* UI_WindowBlocksAttrArray_Main[] = {		/* Window: Main entry */
 };
 
 /******************************************************************************/
-block_attr* UI_WindowBlocksAttrArray[25] = {0};
+block_attr* UI_WindowBlocksAttrArray[30] = {0};
 
 /******************************************************************************/
 void UI_Draw_Block(block_attr* block);

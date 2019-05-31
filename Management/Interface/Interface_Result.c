@@ -672,8 +672,6 @@ void UI_Background_Plate_Result (void)
 	Display_Time = 1;
 }
 
-
-
 /******************************************************************************/
 uint8 Interface_Result_Touch_Process(uint16* xpos,uint16* ypos)
 {

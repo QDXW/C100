@@ -10,8 +10,8 @@
 
 /******************************************************************************/
 #define UI_STATE_RERUN 			(1u)
-#define REALY_ICO_C100			1			/* 睿丽科技标识  */
-#define PROTZEK_ICO_C100 		0			/* 德国标识  */
+#define REALY_ICO_C100			0			/* 睿丽科技标识  */
+#define PROTZEK_ICO_C100 		1			/* 德国标识  */
 #define HENGRUI_ICO_C100		0			/* 中泰科技标识   */
 #define ULTIMED_ICO_C100	 	0			/* ULTIMED  */
 #define QUICKSEAL_ICO_C100	 	0			/* QUICKSEAL  */

@@ -35,6 +35,14 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 {
 	uint8 state = 0;
 	uint16 Start_Postion=0;
+
+	QRCode_Trigger_Disabled();
+	if(Storage_Data.StripNum  == 0)
+	{
+		UI_state = UI_STATE_MAIN_WINDOW;
+		return state;
+	}
+
 	if(Interface_Reord)
 	{
 		UI_state = UI_STATE_DOWN_TIME_PROCESS;
@@ -56,7 +64,6 @@ uint8 Interface_Testing(uint16* xpos,uint16* ypos)
 		}
 	}
 	Exti_lock = DISABLE;
-	QRCode_Trigger_Disabled();
 	UI_Background_Plate_Testing();
 	SystemManage_5V_Enabled();
 	Start_Postion = Get_Start_Postion();
@@ -103,7 +110,6 @@ void Acquisition_Signal(void)
 			memcpy(&SignalProcess_Alg_data.sampleBuffer[0], SignalProcess_sampleBuffer, SignalSample_count << 1);
 			SignalProcess_Alg_data.sampleNumber = SignalSample_count;
 			SignalProcess_Run();
-
 
 			/* ÅÐ¶¨½á¹û */
 			Result_Display();
